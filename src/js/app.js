@@ -2,7 +2,7 @@
 document.addEventListener('DOMContentLoaded', function () {
     //Funciones
     slidebar();
-    //darkmode();
+    darkmode();
 })
 
 //CODE
@@ -11,11 +11,13 @@ function slidebar() {
     const menu = document.getElementById('menu');
     const sidebar = document.getElementById('sidebar');
     const main = document.getElementById('main');
+    const footer = document.getElementById('footer');
 
     menu.addEventListener('click', () => {
         sidebar.classList.toggle('menu-toggle');
         menu.classList.toggle('menu-toggle');
         main.classList.toggle('menu-toggle');
+        footer.classList.toggle('menu-toggle');
     });
 }
 

@@ -1,10 +1,20 @@
-main {
-    margin-top: 6rem;
-    margin-left: 6rem;
+#main {
+
+    margin-top: 8rem;
+    margin-left: 8rem;
     padding: 2rem;
     transition: margin-left .5s ease;
+    width: 92.5%;
+    border-radius: 1rem;
+    background-color: $blanco_ahumado;
+    // display: flex;
+    // flex-direction: column;
+    // align-items: center;
+    // justify-content: center;
 
     &.menu-toggle {
-        margin-left: 30rem;
+        transition: margin-left .5s ease;
+        margin-left: 32rem;
+        width: 75%;
     }
 }

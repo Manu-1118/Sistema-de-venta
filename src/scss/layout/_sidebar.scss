@@ -43,6 +43,15 @@
 
     }
 
+    ul {
+        margin-top: 1rem;
+    }
+
+    .logout {
+        border-top: 1px solid $blanco_ahumado;
+        border-radius: 0;
+    }
+
     &.menu-toggle {
         width: 30rem;
         

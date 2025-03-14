@@ -1,0 +1,20 @@
+#footer {
+    // margin-top: 6rem;
+    // margin-left: 6rem;
+    // padding: 2rem;
+    transition: margin-left .5s ease;
+
+    
+    margin-bottom: 0;
+    height: auto;
+    text-align: center;
+    padding: $separacion /2 0; 
+    
+    p {
+        font-size: 1.5rem;
+    }
+
+    &.menu-toggle {
+        margin-left: 30rem;
+    }
+}

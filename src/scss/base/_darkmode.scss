@@ -5,20 +5,48 @@ body {
 .dark-mode {
     background-color: $azul_marino_dm;
 
+    .contenido-derecha {
+
+        .buscador {
+            background-color: $azul_marino_dm;
+            border: 1px solid $blanco_ahumado;
+
+            .barra {
+                background-color: $negro;
+                &::placeholder {
+                    color: $blanco_ahumado;
+                }
+            }
+        }
+    }
+
     .header {
         background-color: $negro;
         border: 0;
 
     }
 
-    .icono-principal {
-        filter: invert(100%);
-        
-    }
-
     .contenedor-logo {
         .name {
             color: $blanco_ahumado;
+        }
+
+    }
+
+    .icono-principal-inverso {
+        filter: invert(100%);
+    }
+
+    .menu {
+        div {
+            background-color: $blanco_ahumado;
+        }
+    }
+
+    #footer {
+        p {
+            color: $blanco_ahumado;
+
         }
     }
 }
