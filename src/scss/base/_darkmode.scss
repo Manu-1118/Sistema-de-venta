@@ -1,0 +1,24 @@
+body {
+    transition: all 1s ease;
+}
+
+.dark-mode {
+    background-color: $azul_marino_dm;
+
+    .header {
+        background-color: $negro;
+        border: 0;
+
+    }
+
+    .icono-principal {
+        filter: invert(100%);
+        
+    }
+
+    .contenedor-logo {
+        .name {
+            color: $blanco_ahumado;
+        }
+    }
+}

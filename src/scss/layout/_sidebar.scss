@@ -1,0 +1,50 @@
+.sidebar {
+
+    margin-top: 2rem;
+    width: 6rem; //30rem
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    padding: 1.5rem 0;
+    overflow-y: auto;
+    background-color: $azul_marino;
+    transition: width 0.5s ease;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    
+    img {
+        width: 2.6rem;
+        padding-left: .3rem;
+    }
+
+    a {
+        display: flex;
+        align-items: center;
+        gap: 3rem;
+        padding: 1.3rem 1rem;
+        margin: 0 .5rem;
+        border-radius: 1rem;
+        white-space: nowrap;
+        overflow: hidden;
+        color: $blanco_ahumado;
+
+        &.seleccionado {
+            color: $azul_marino;
+            background-color: $gris_claro;
+        }
+
+        &:hover {
+            background-color: $azul_marino_oscuro;
+        }
+
+    }
+
+    &.menu-toggle {
+        width: 30rem;
+        
+    }
+}

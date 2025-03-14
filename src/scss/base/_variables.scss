@@ -1,0 +1,48 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
+
+//Fuentes
+$fuente_principal: "Nunito", sans-serif;
+
+//grosor de la fuente
+$delgada: 300;
+$regular: 400;
+$bold: 700;
+$black: 900;
+
+//paleta de colores
+
+$blanco: #ffffff;
+
+//light theme
+//PRIMARIOS
+$azul_marino: #265166;
+$azul_gris: #547C90;
+$blanco_ahumado: #F6FAFD;
+//SECUNDARIOS
+$beige_claro: #F1DCD0;
+$verde_menta_claro: #D0F1E6;
+$gris_claro: #BACFDA;
+$azul_marino_oscuro: #1E3745;
+$gris_oscuro: #414A4E;
+$rojo: #CA4C44;
+
+//dark theme
+//PRIMARIOS
+$negro: #121212;
+$azul_marino_dm: #193A4A;
+$azul_gris_dk: #2D6079;
+//SECUNDARIOS
+    //azul_gris
+    //gris_claro
+    //blanco_ahumado
+$gris: #C4CED3;
+$verde_dm: #84B8A7;
+    //rojo
+
+// Tamaño de Media Queries
+$telefono: 480px;
+$tablet: 768px;
+$desktop: 1024px;
+
+//otros
+$separacion: 5rem;

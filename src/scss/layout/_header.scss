@@ -1,0 +1,129 @@
+body {
+    width: 100%;
+    height: 100vh;
+}
+
+.header {
+
+    display: flex;
+    z-index: 200;
+    width: 100%;
+    justify-content: space-between;
+    padding: .45rem 2rem .45rem 1.27rem;
+    border-bottom: 1px solid $gris_claro;
+    position: fixed;
+    background-color: $blanco_ahumado;
+    top: 0;
+    left: 0;
+}
+
+.icono-principal {
+    filter: contrast($negro);   
+}
+
+.contenido-izquierda {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3rem;
+}
+
+.contenido-derecha {
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2.5rem;
+
+    img {
+        width: 3rem;
+        margin: 1rem;
+    }
+
+    a {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 1rem;
+        transition: background-color 0.2s ease-out;
+
+        &:hover {
+            background-color: $gris_claro;
+        }
+    }
+
+    .usuario {
+        width: 4rem;
+        margin: 0;
+        border-radius: 50%;
+    }
+
+    .busqueda {
+        color: $blanco_ahumado;
+        padding: 0 30rem 0 0;
+        border-bottom: 1px solid $azul_marino_oscuro;
+    }
+}
+
+//logo|
+.contenedor-logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+
+    .logo {
+        width: 3rem;
+    }
+
+    .name {
+        font-size: 2.3rem;
+        font-weight: $black;
+        color: $azul_marino;
+    }
+}
+
+//menu
+.menu-contenido {
+
+    height: 100%;
+    display: flex;
+    align-items: center;
+
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+.menu {
+    width: 2.2rem;
+    height: 40%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    div {
+        width: 100%;
+        height: 0.2rem;
+        background-color: $azul_marino;
+        margin-left: .4rem;
+        transition: all .2s ease-in-out;
+    }
+
+    /** Animacion de menu **/
+    &.menu-toggle {
+
+        div {
+
+            &:first-child {
+                width: 40%;
+                transform: rotate(-35deg) translate(-30%, 250%);
+            }
+
+            &:last-child {
+                width: 40%;
+                transform: rotate(35deg) translate(-30%, -250%);
+            }
+        }
+    }
+}
