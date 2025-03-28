@@ -5,8 +5,8 @@ incluirTemplate('header', true);
 
 ?>
 
-<main class="contenedor principal" id="main">
-    <h1>Categorías</h1>
+<main class="contenedor contenido-usuario main" id="main">
+    <h1>Categorías de Productos</h1>
     <div class="contenedor-categorias">
         <!--codigo php para mostrar las cat de la bd-->
         <div class="categoria">
@@ -41,33 +41,31 @@ incluirTemplate('header', true);
     <div class="alinear-derecha">
         <a href="categorias.php" class="boton-verde">Ver todas</a>
     </div>
-
-    <section class="imagen-lista">
-        <h2>Realice su lista de compras antes de salir de su casa</h2>
-        <p>Seleccione todos los productos que necesite para crear su lista de compras y calcular su total</p>
-        <a href="list.php" class="boton-azul">¡Crea tu lista!</a>
-
-    </section> <!--.lista-->
-
-    <div class="seccion-inferior">
-
-        <section>
-
-        </section>
-
-        <section class="testimoniales">
-            <h3>Testimoniales</h3>
-            <div class="testimonial">
-                <blockquote>
-                    Muy buena atención y las carnes ofrecidas son de buena calidad y a un precio bastante bueno.
-                </blockquote>
-                <p>- Alvaro Diaz</p>
-            </div>
-        </section>
-
-    </div>
-
 </main>
+
+<section class="imagen-lista principal menu-secundario">
+    <h2>Realice su lista de compras antes de salir de su casa</h2>
+    <p>Seleccione todos los productos que necesite para crear su lista de compras y calcular su total</p>
+    <a href="list.php" class="boton-azul">¡Crea tu lista!</a>
+
+</section> <!--.lista-->
+
+<div class="seccion-inferior principal menu-secundario">
+
+    <section>
+
+    </section>
+
+    <section class="testimoniales">
+        <h3>Testimoniales</h3>
+        <div class="testimonial">
+            <blockquote>
+                Muy buena atención y las carnes ofrecidas son de buena calidad y a un precio bastante bueno.
+            </blockquote>
+            <p>- Alvaro Diaz</p>
+        </div>
+    </section>
+</div>
 
 <?php
 incluirTemplate('footer');

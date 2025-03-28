@@ -1,0 +1,37 @@
+.main {
+    background-color: $blanco_ahumado;
+    margin-top: 8rem;
+}
+
+#main,
+.menu-secundario {
+
+    margin-left: 8rem;
+    padding: 2rem;
+    transition: margin-left .5s ease;
+    border-radius: 1rem;
+    width: 92.5%;
+
+    &.contenido-usuario {
+        //margin-left: 0;
+        margin: 8rem auto 0 auto;
+
+    }
+
+    &.menu-toggle {
+        transition: margin-left .5s ease;
+        margin-left: 32rem;
+        width: 75%;
+    }
+
+    &.principal {
+        margin: 0 auto;
+        margin-top: 8rem;
+        width: 89%;
+    }
+
+}
+
+.fondo {
+    background-color: $blanco_ahumado;
+}

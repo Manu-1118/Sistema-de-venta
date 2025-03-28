@@ -1,0 +1,42 @@
+.contenedor-grafico {
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    padding: 2rem;
+    border-radius: 1rem;
+
+
+    h2 {
+        font-size: 2rem;
+        font-weight: $bold;
+        margin: 0;
+    }
+
+    &#pie_menos_vendido {
+        grid-row: 2 / 3;
+        grid-column: 2 / 3;
+    }
+
+    &#barras_ventas_semana {
+        grid-row: 1 / 3;
+    }
+}
+
+.graficos {
+
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    margin-top: 1rem;
+    gap: 2rem;
+
+    .grafico1,
+    .grafico2,
+    .grafico3 {
+        svg {
+            width: 100%;
+            height: 100%;
+        }
+    }
+}

@@ -54,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 incluirTemplate('header', true);
 ?>
-<main class="contenedor principal main-login" id="main">
+<main class="contenedor principal main-login main" id="main">
     <h1>Iniciar Sesión</h1>
 
     <?php foreach ($errores as $error): ?>

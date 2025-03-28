@@ -11,7 +11,6 @@
 //layout
 @import 'layout/header';
 @import 'layout/sidebar';
-@import 'layout/main';
 @import 'layout/footer';
 @import 'layout/iconos';
 @import 'layout/menu-categorias';
@@ -20,6 +19,9 @@
 @import 'layout/testimoniales';
 @import 'layout/inferior';
 @import 'layout/formulario';
+@import 'layout/graficos';
 
 //internas
-@import 'internas/admin'
+@import 'internas/admin';
+@import 'internas/dashboard';
+@import 'internas/main';

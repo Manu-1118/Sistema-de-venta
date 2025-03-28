@@ -1,3 +1,5 @@
+//const graficos = require('./graficos');
+
 /** funcion para ejecutar las demas funciones cuando se
  * cargue el DOM el HTML para evitar problemas de carga **/
 document.addEventListener('DOMContentLoaded', () => {
@@ -8,12 +10,14 @@ document.addEventListener('DOMContentLoaded', () => {
     
 }); // Fin loadDOM
 
+//renderizarGraficos();
 /* Agrega el icono que despliega el menu de opciones del administrador */
 function slidebar() {
     const menu = document.querySelector('.menu');
     const sidebar = document.getElementById('sidebar');
     const main = document.getElementById('main');
     const footer = document.getElementById('footer');
+    const graficos_admin = document.querySelector('.graficos');
 
     // Obtener el estado del menú desde localStorage (si existe)
     let menuActivo = localStorage.getItem('menuActivo') === 'true';
@@ -24,6 +28,7 @@ function slidebar() {
         menu.classList.add('menu-toggle');
         main.classList.add('menu-toggle');
         footer.classList.add('menu-toggle');
+        graficos_admin.classList.add('menu-toggle');
     }
 
     menu.addEventListener('click', () => {
@@ -34,11 +39,14 @@ function slidebar() {
             menu.classList.add('menu-toggle');
             main.classList.add('menu-toggle');
             footer.classList.add('menu-toggle');
+            graficos_admin.classList.add('menu-toggle');
+
         } else {
             sidebar.classList.remove('menu-toggle');
             menu.classList.remove('menu-toggle');
             main.classList.remove('menu-toggle');
             footer.classList.remove('menu-toggle');
+            graficos_admin.classList.remove('menu-toggle');
         }
 
         // Guardar el estado en localStorage
@@ -70,41 +78,9 @@ function insertAdmin() {
     contenedor_btnMenu_desplegable.appendChild(btnMenu);
     /** FIN BOTON MENU **/
 
-    /** INICIO BARRA BUSCADORA **/
-    // Contenedor de todos los elementos de la barra buscadora
-    const contenedor_barra_buscadora = document.createElement('DIV');
-    contenedor_barra_buscadora.classList.add('buscador');
-
-    // contenedor para la imagen
-    const contenedor_img_lupa = document.createElement('DIV');
-    contenedor_img_lupa.classList.add('icono-lupa');
-    contenedor_img_lupa.classList.add('icono-principal-inverso');
-
-    // Imagen del buscador
-    const img_buscador = document.createElement('IMG');
-    img_buscador.src = "/build/img/icons/buscar.png";
-
-    // Input para insertar la busqueda
-    const input_buscador = document.createElement('INPUT');
-    input_buscador.type = "search";
-    input_buscador.placeholder = "Buscar algún producto";
-    input_buscador.classList.add('barra');
-
-    // Insertar la imagen a su contenedor
-    contenedor_img_lupa.appendChild(img_buscador);
-
-    // Insertar la imagen de la lupa y el input
-    contenedor_barra_buscadora.appendChild(contenedor_img_lupa);
-    contenedor_barra_buscadora.appendChild(input_buscador);
-
-    // Insertar la barra buscadora al contenedor derecho del menu superior y antes del boton darkmode
-    contenedor_derecho.appendChild(contenedor_barra_buscadora);
-    contenedor_derecho.insertBefore(contenedor_barra_buscadora, btnDarkMode);
-    /** FIN BARRA BUSCADORA **/
-
     /** INICIO IMAGEN PERFIL (luego se hara con php)**/
     const perfil = document.createElement('IMG');
-    perfil.src = '/build/img/usuario-default.png'
+    perfil.src = '/build/img/usuario-default.png';
     perfil.classList.add('usuario');
     perfil.alt = 'Foto user';
     // añadir la foto al menu superior derecho
@@ -115,11 +91,47 @@ function insertAdmin() {
 
 function insertCliente() {
 
-    var btnDarkMode = document.querySelector('.btnDarkMode'); // boton del darkmode
     var contenedor_derecho = document.querySelector('.contenido-derecha');
+    var btnDarkMode = document.querySelector('.btnDarkMode'); // boton del darkmode
+
+    /** HEADER **/
+    /** BOTON LISTA PRODUCTOS **/
+    // Imagen del boton
+    const img_lista = document.createElement('IMG');
+    img_lista.src = "/build/img/icons/lista.png";
+    img_lista.alt = "boton lista";
+    img_lista.classList.add('icono-principal-inverso');
+
+    // texto del boton
+    const texto_lista = document.createElement('SPAN');
+    texto_lista.textContent = "Lista de productos";
+
+    // Enlace del boton
+    const btn_lista = document.createElement('A');
+    btn_lista.classList.add('btn-lista');
+    btn_lista.appendChild(texto_lista);
+    btn_lista.appendChild(img_lista);
+
+    // Insertar el boton lista
+    contenedor_derecho.appendChild(btn_lista); // al contenedor derecho del menu superior
+    contenedor_derecho.insertBefore(btn_lista, btnDarkMode); // antes del boton darkmode
+    /** FIN BOTON LISTA PRODUCTOS**/
+
+    /** BOTON SOBRE NOSOTROS **/
+    // texto del boton
+    const texto_nosotros = document.createElement('SPAN');
+    texto_nosotros.textContent = "Sobre nosotros";
+
+    // Enlace del boton
+    const btn_nosotros = document.createElement('A');
+    btn_nosotros.classList.add('btn-nosotros');
+    btn_nosotros.appendChild(texto_nosotros);
+    contenedor_derecho.appendChild(btn_nosotros); // al contenedor derecho del menu superior
+    contenedor_derecho.insertBefore(btn_nosotros, btnDarkMode); // despues del boton de lista
+
+    /** FIN BOTON SOBRE NOSOTROS **/
     //Verificar si no estamos en el login:
     const login = document.getElementById('main');
-
     if (!login.classList.contains('main-login')) {
 
         // Crear el enlace hacia el login 
@@ -134,22 +146,22 @@ function insertCliente() {
         contenedor_derecho.appendChild(btn_sesion);
     } // fin if 'main-login'
 
-    /** BOTON LISTA PRODUCTOS **/
-    // Imagen del boton
-    const img_lista = document.createElement('IMG');
-    img_lista.src = "/build/img/icons/lista.png";
-    img_lista.alt = "boton lista";
-    img_lista.classList.add('icono-principal-inverso');
+    /** FOOTER **/
+    const contenedor_footer = document.querySelector('.navegacion-footer');
+    const nav2 = contenedor_derecho.cloneNode(true);
 
-    // Enlace del boton
-    const btn_lista = document.createElement('A');
-    btn_lista.classList.add('btn-lista');
-    btn_lista.appendChild(img_lista);
+    // Seleccionar los dos últimos elementos <a> en el clon
+    const elementosAEliminar = nav2.querySelectorAll('a');
+    let penultimoElemento = elementosAEliminar[elementosAEliminar.length - 2];
+    const ultimoElemento = elementosAEliminar[elementosAEliminar.length - 1];
+    
+    if (!login.classList.contains('main-login')) {
+        penultimoElemento.remove();
+    }
+    // Eliminar los elementos del clon
+    ultimoElemento.remove();
+    contenedor_footer.appendChild(nav2);
 
-    // Insertar el boton lista
-    contenedor_derecho.appendChild(btn_lista); // al contenedor derecho del menu superior
-    contenedor_derecho.insertBefore(btn_lista, btnDarkMode); // antes del boton darkmode
-    /** FIN BOTON LISTA PRODUCTOS**/
 } // Fin inserCLiente()
 
 /* Determina que funcion se va a ejecutar 

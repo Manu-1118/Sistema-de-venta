@@ -21,6 +21,13 @@
                 background-color: $azul_gris_dk;
             }
         }
+
+        .btn-lista,
+        .btn-nosotros {
+            span {
+                color: $blanco_ahumado;
+            }
+        }
     }
 
     .header {
@@ -43,6 +50,29 @@
     .menu {
         div {
             background-color: $blanco_ahumado;
+        }
+    }
+
+    /* Admin */
+    .main-admin, .fondo {
+        background-color: $negro;
+        color: $blanco_ahumado;
+
+        img {
+            filter: invert(30%)
+        }
+
+        .contenedor-icono {
+
+            &.verde {
+                border: 1px solid darken($verde_dm, 20);
+                background-color: darken($verde_dm, 0);
+            }
+        }
+
+        .vista-verde {
+            background-color: lighten($verde_dm, 10);
+            border: 1px solid darken($verde_dm, 20);
         }
     }
 
