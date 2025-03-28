@@ -1,0 +1,17 @@
+.alerta {
+
+    margin: 1rem 0;
+    padding: .2rem;
+    text-align: center;
+    color: $blanco;
+    font-weight: $bold;
+    border-radius: 2rem;
+
+    &.error {
+        background-color: $rojo;
+    }
+
+    &.exito {
+        background-color: $verde_dm;
+    }
+}

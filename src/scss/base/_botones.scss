@@ -1,0 +1,12 @@
+.boton-verde {
+    @include boton($verde_dm, inline-block);
+}
+
+.boton-azul-block {
+    width: 90%;
+    @include boton($azul_gris, block);
+}
+
+.boton-azul {
+    @include boton($azul-gris, inline-block);
+}

@@ -1,7 +1,3 @@
-body {
-    transition: all 1s ease;
-}
-
 .dark-mode {
     background-color: $azul_marino_dm;
 
@@ -13,9 +9,16 @@ body {
 
             .barra {
                 background-color: $negro;
+
                 &::placeholder {
                     color: $blanco_ahumado;
                 }
+            }
+        }
+
+        a {
+            &:hover {
+                background-color: $azul_gris_dk;
             }
         }
     }

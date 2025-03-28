@@ -1,10 +1,12 @@
 //base
 @import 'base/normalize';
 @import 'base/variables';
+@import 'base/mixins';
 
 @import 'base/globales';
 @import 'base/utilidades';
 @import 'base/darkmode';
+@import 'base/botones';
 
 //layout
 @import 'layout/header';
@@ -12,5 +14,12 @@
 @import 'layout/main';
 @import 'layout/footer';
 @import 'layout/iconos';
+@import 'layout/menu-categorias';
+@import 'layout/categorias';
+@import 'layout/lista';
+@import 'layout/testimoniales';
+@import 'layout/inferior';
+@import 'layout/formulario';
 
 //internas
+@import 'internas/admin'

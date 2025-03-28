@@ -1,0 +1,28 @@
+.contenedor-categorias {
+    @include grid(3, 2rem);
+}
+
+.categoria {
+
+    border-radius: 1rem;
+    background-color: lighten($beige_claro, 8);
+    border: 1px solid darken($beige_claro, 10);
+    margin-bottom: 2rem;
+    
+    .contenido-categoria {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 2rem;
+    }
+
+    h3,
+    p {
+        text-align: center;
+        margin: 0 0 2rem 0;
+    }
+    img {
+        margin: 2rem auto 0 auto;
+        width: 60%;
+    }
+}

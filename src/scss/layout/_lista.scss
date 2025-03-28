@@ -1,0 +1,26 @@
+.imagen-lista {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(../img/entrada-compras.png);
+}
+
+.imagen-lista {
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    padding: $separacion 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 3rem 0;
+
+
+    h2 {
+        color: $blanco_ahumado;
+        font-weight: $bold;
+        font-size: 4rem;
+    }
+
+    p {
+        color: $blanco_ahumado;
+        font-size: 1.8rem;
+    }
+}

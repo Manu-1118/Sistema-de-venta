@@ -1,0 +1,61 @@
+.formulario {
+
+    &.login {
+        
+        margin: 0 auto;
+        max-width: 90%;
+
+        input {
+            margin-top: 1rem;
+        }
+    }
+
+    p {
+        font-size: 1.4rem;
+        color: $gris_oscuro;
+        margin: 2rem 0 0 0;
+    }
+
+    legend {
+        font-size: 2rem;
+        color: $gris_oscuro;
+    }
+
+    label {
+        font-weight: $bold;
+        text-transform: uppercase;
+        display: block;
+    }
+
+    input:not([type="submit"]),
+    textarea,
+    select {
+        padding: .5rem 0 .5rem 1rem;
+        display: block;
+        width: 100%;
+        background-color: $blanco_ahumado;
+        border: 1px solid $gris_oscuro;
+        border-radius: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    textarea {
+        height: 20rem;
+    }
+
+    .forma-contacto {
+        max-width: 30rem;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+    }
+
+    input[type="radio"] {
+        margin: 0;
+        width: auto;
+    }
+}
+
+.main-login {
+    max-width: 50%;
+}

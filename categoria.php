@@ -1,5 +1,9 @@
-<!--Credito-->
-<?php include 'includes/template/header.php' ?>
+<?php
+require '../includes/app.php';
+
+
+incluirTemplate('header', false);
+?>
 
 <main id="main">
     <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Reiciendis debitis quisquam quis ipsum facere eos,
@@ -7,4 +11,4 @@
         atque.</p>
 </main><!--.main-->
 
-<?php include 'includes/template/footer.php' ?>
+<?php incluirTemplate('footer'); ?>
