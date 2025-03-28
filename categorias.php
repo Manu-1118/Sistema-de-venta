@@ -4,7 +4,7 @@ require 'includes/app.php';
 incluirTemplate('header', true);
 ?>
 
-<main class="contenedor section" id="main">
+<main class="contenedor section main" id="main">
 <h1>Categorías</h1>
     <div class="contenedor-categorias">
         <!--codigo php para mostrar las cat de la bd-->
