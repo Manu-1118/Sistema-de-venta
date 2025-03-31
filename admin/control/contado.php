@@ -5,7 +5,7 @@ require '../../includes/app.php';
 require '../../includes/data/clientes.php';
 require '../../includes/data/productos.php';
 
-$pagina_actual = basename($_SERVER['PHP_SELF']);
+estaAutenticado(); //verificar que $_SESSION sea true
 incluirTemplate('header');
 incluirTemplate('slidebar');
 ?>

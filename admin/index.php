@@ -1,6 +1,7 @@
 <?php
 require '../includes/app.php';
 
+estaAutenticado();
 incluirTemplate('header');
 incluirTemplate('slidebar');
 

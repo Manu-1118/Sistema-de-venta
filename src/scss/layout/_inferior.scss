@@ -4,3 +4,60 @@
     grid-template-columns: 2fr 1fr;
     column-gap: 2rem;
 }
+
+.testimoniales {
+
+    .testimonial {
+        background-color: lighten($gris_oscuro, 20);
+        font-size: 2.4rem;
+        padding: 5rem 2rem 2rem 2rem;
+        color: $blanco;
+        border-radius: 2rem;
+        height: 80%;
+    
+        blockquote {
+            padding: 5rem 0 0 5rem;
+        }
+    
+        p {
+            color: $blanco;
+            text-align: right;
+        }
+    }
+}
+
+.blog-carnes {
+    h3 {
+        margin-bottom: 0;
+    }
+}
+
+.entrada-blog {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    column-gap: 2rem;
+    align-items: center;
+
+    .texto-entrada {
+
+        p {
+            margin: 0;
+        }
+        
+        h4 {
+            margin: 0 0 2rem 0;
+            color: $negro;
+            font-weight: $bold;
+            line-height: 1.4;
+
+            &::after {
+                content: '';
+                display: block;
+                width: 20rem;
+                height: .5rem;
+                margin-top: 1rem;
+                background-color: $azul_gris;
+            }
+        }
+    }
+}

@@ -1,7 +1,7 @@
 <?php
 require '../../includes/app.php';
 
-$pagina_actual = basename($_SERVER['PHP_SELF']); // Obtiene el nombre del archivo actual
+estaAutenticado(); //verificar que $_SESSION sea true
 incluirTemplate('header');
 incluirTemplate('slidebar');
 

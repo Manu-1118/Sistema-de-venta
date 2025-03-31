@@ -14,13 +14,10 @@ body {
     background-color: $blanco_ahumado;
     top: 0;
     left: 0;
-
-    background-position: center center;
-    background-repeat: no-repeat;
 }
 
 .icono-principal {
-    filter: contrast($negro);
+    filter: invert(100%);
 }
 
 .contenido-izquierda {
@@ -54,50 +51,20 @@ body {
         }
     }
 
-    .buscador {
-        background-color: $gris_claro;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 3.5rem;
-        border: 1px solid $negro;
-        border-radius: 2rem;
-        padding-right: .2rem;
-
-
-        .icono-lupa {
-            column-gap: 2rem;
-        }
-
-        .barra {
-
-            height: 93%;
-            width: 30rem;
-            border: none;
-            border-radius: 0 2rem 2rem 0;
-
-            &::placeholder {
-                text-align: center;
-            }
-        }
-    }
-
     .usuario {
         width: 4rem;
         margin: 0;
         border-radius: 50%;
     }
 
-    .busqueda {
-        color: $blanco_ahumado;
-        padding: 0 30rem 0 0;
-        border-bottom: 1px solid $azul_marino_oscuro;
-    }
-
     .btn-lista,
     .btn-nosotros {
         img {
             margin: 0;
+        }
+
+        span {
+            color: $negro;
         }
 
         flex-direction: row-reverse;

@@ -2,6 +2,7 @@
 require '../../includes/app.php';
 require '../../includes/data/proveedores.php';
 
+estaAutenticado(); //verificar que $_SESSION sea true
 incluirTemplate('header');
 incluirTemplate('slidebar');
 ?>

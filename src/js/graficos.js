@@ -94,7 +94,7 @@ function total_ventas_semanal() {
                 color: color, // Color de la fuente del eje horizontal
                 fontSize: 12,
             },
-            title: 'Días de la semana',
+            title: 'Total ventas',
             titleTextStyle: {
                 color: color,
             }
@@ -104,7 +104,7 @@ function total_ventas_semanal() {
                 color: color, // Color de la fuente del eje vertical
                 fontSize: 12,
             },
-            title: 'Ventas',
+            title: 'Días de la semana',
             titleTextStyle: {
                 color: color,
             }

@@ -6,14 +6,15 @@
 #main,
 .menu-secundario {
 
-    margin-left: 8rem;
+    //margin-left: 8rem;
     padding: 2rem;
-    transition: margin-left .5s ease;
+    //transition: margin-left .5s ease;
     border-radius: 1rem;
-    width: 92.5%;
+    //width: 92.5%;
+    width: 95%;
+    box-shadow: 0px 5px 15px 0px rgba(112, 112, 112, 0.48);
 
     &.contenido-usuario {
-        //margin-left: 0;
         margin: 8rem auto 0 auto;
 
     }
@@ -26,11 +27,17 @@
 
     &.principal {
         margin: 0 auto;
+        margin-top: 2rem;
+        width: 95%;
+    }
+
+    &.main-login,
+    &.main-nosotros{ 
         margin-top: 8rem;
-        width: 89%;
     }
 
 }
+
 
 .fondo {
     background-color: $blanco_ahumado;

@@ -1,4 +1,5 @@
 <?php
+
 if (!isset($_SESSION)) {
     session_start();
 }
@@ -23,7 +24,6 @@ $auth = $_SESSION['login'] ?? false;
         <div class="contenido-izquierda">
 
             <div class="nav-admin menu-contenido"></div>
-
             <a href="/" class="enlace-logo">
                 <div class="contenedor-logo">
                     <img src="/build/img/icons/shop.png" alt="icono venta" class="logo icono-principal-inverso">
@@ -33,7 +33,7 @@ $auth = $_SESSION['login'] ?? false;
         </div><!--.contenido-left-->
 
         <div class="contenido-derecha">
-            <a href="#" class="btnDarkMode">
+            <a href="" class="btnDarkMode">
                 <img src="/build/img/icons/moon.png" alt="boton darkmode" class="icono-principal-inverso moon">
             </a>
         </div><!--.contenido-right-->

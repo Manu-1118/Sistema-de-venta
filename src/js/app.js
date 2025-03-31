@@ -1,5 +1,3 @@
-//const graficos = require('./graficos');
-
 /** funcion para ejecutar las demas funciones cuando se
  * cargue el DOM el HTML para evitar problemas de carga **/
 document.addEventListener('DOMContentLoaded', () => {
@@ -108,6 +106,7 @@ function insertCliente() {
 
     // Enlace del boton
     const btn_lista = document.createElement('A');
+    btn_lista.href = "lista.php";
     btn_lista.classList.add('btn-lista');
     btn_lista.appendChild(texto_lista);
     btn_lista.appendChild(img_lista);
@@ -125,6 +124,7 @@ function insertCliente() {
     // Enlace del boton
     const btn_nosotros = document.createElement('A');
     btn_nosotros.classList.add('btn-nosotros');
+    btn_nosotros.href = "nosotros.php";
     btn_nosotros.appendChild(texto_nosotros);
     contenedor_derecho.appendChild(btn_nosotros); // al contenedor derecho del menu superior
     contenedor_derecho.insertBefore(btn_nosotros, btnDarkMode); // despues del boton de lista

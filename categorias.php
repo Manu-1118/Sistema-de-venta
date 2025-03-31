@@ -36,7 +36,7 @@ incluirTemplate('header', true);
             </div>
         </div><!--.categoria-->
         <div class="categoria">
-            <img src="/build/img/categories/aceite-de-cocina.png" alt="categoria">
+            <img src="/build/img/categories/aceite.png" alt="categoria">
 
             <div class="contenido-categoria">
                 <h3>Aceites</h3>
