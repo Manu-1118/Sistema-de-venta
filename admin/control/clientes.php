@@ -2,7 +2,6 @@
 require '../../includes/app.php';
 require '../../includes/data/clientes.php';
 
-estaAutenticado(); //verificar que $_SESSION sea true
 incluirTemplate('header');
 incluirTemplate('slidebar');
 ?>
@@ -10,15 +9,15 @@ incluirTemplate('slidebar');
 <main id="main" class="main">
     <h1>Clientes</h1>
 
-    <div class="contenedor-clientes">
+    <div class="contenedor">
         <div class="barra-busqueda">
             <input type="text" id="busqueda" placeholder="Buscar cliente...">
-            <button id="agregarCliente">
+            <button id="agregar" onclick="window.location.href='clientesForm.php';">
                 <img src="/src/img/icons/agregar.png" width="40" height="45" alt="Agregar cliente">
             </button>
         </div>
         <div class="tabla-container">
-            <table class="tabla-clientes">
+            <table class="tabla">
                 <thead>
                     <tr>
                         <th>ID</th>
@@ -31,11 +30,11 @@ incluirTemplate('slidebar');
                     <?php foreach ($clientes as $cliente) : ?>
                         <tr>
                             <td><?php echo $cliente['id']; ?></td>
-                            <td><?php echo $cliente['nombre']; ?></td>
-                            <td><?php echo $cliente['apellido']; ?></td>
+                            <td><?php echo $cliente['nombres']; ?></td>
+                            <td><?php echo $cliente['apellidos']; ?></td>
                             <td>
                                 <a href="editar.php?id=<?php echo $cliente['id']; ?>" class="editar-btn">✏️ Editar</a>
-                                <a href="creditos.php?id=<?php echo $cliente['id']; ?>" class="creditos-btn">💰 Créditos</a>
+                                <a href="creditos.php?id=<?php echo $cliente['id']; ?>" class="accion-btn">💰 Créditos</a>
                             </td>
                         </tr>
                     <?php endforeach; ?>

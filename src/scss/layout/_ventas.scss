@@ -1,0 +1,116 @@
+.ventas-container { 
+    width: 90%;
+    margin: 50px auto; 
+    padding: 20px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+
+    h2 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .form-group {
+        display: flex;
+        align-items: center;
+        margin-bottom: 15px;
+        width: 100%;
+
+        label {
+            flex: 1;
+            font-weight: bold;
+        }
+
+        .form-control {
+            flex: 2;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+    }
+
+    .search-box {
+        position: relative;
+        display: flex;
+        width: 100%;
+
+        .search-btn {
+            background: #547C90;
+            color: #fff;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            margin-left: 5px;
+            cursor: pointer;
+        }
+    }
+
+    .btn-container {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        width: 100%;
+        margin-top: 20px;
+    }
+
+    .btn {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        &:hover {
+            background-color: $azul_marino_oscuro;
+        }
+    }
+
+    .btn-primary {
+        background: #366c8a;
+        color: white;
+        margin-left: auto;
+        display: block; 
+    }
+
+    .btn-success {
+        background: #265166;
+        color: white;
+        margin-top: 20px; 
+    }
+
+    .table {
+        width: 100%;
+        margin-top: 20px;
+        border-collapse: collapse;
+    }
+
+    .table th, .table td {
+        padding: 10px;
+        border: 1px solid #ccc;
+        text-align: center;
+    }
+
+    .table img {
+        width: 50px;
+        height: auto;
+    }
+
+    @media (max-width: 600px) {
+        .form-group {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .btn-container {
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .btn {
+            width: auto;
+        }
+    }
+}

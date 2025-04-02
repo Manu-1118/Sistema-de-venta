@@ -17,13 +17,13 @@
 @import 'layout/inferior';
 @import 'layout/formulario';
 @import 'layout/graficos';
-@import 'layout/productos';
-@import 'layout/cliente';
-@import 'layout/contado';
-@import 'layout/proveedor';
+@import 'layout/ventas';
+@import 'layout/tabla';
+@import 'layout/form';
 @import 'layout/nosotros';
+
 
 //internas
 @import 'internas/admin';
-@import 'internas/dashboard';
 @import 'internas/main';
+@import 'internas/dashboard';

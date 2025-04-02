@@ -1,0 +1,233 @@
+.compras-container {
+    width: 95%; /* Un poco más ancho para mejor aprovechamiento del espacio */
+    max-width: 1200px; /* Limita el ancho máximo en pantallas grandes */
+    margin: 40px auto; /* Reduce un poco el margen superior e inferior */
+    padding: 30px; /* Aumenta el padding para dar más espacio interior */
+    background: #f9f9f9; /* Un gris claro de fondo suele ser más suave que el blanco puro */
+    border-radius: 12px; /* Un radio de borde ligeramente mayor */
+    box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.08); /* Sombra más sutil y extendida */
+    display: flex;
+    flex-direction: column;
+    align-items: stretch; /* Estirar los elementos hijos a lo ancho del contenedor */
+
+    h2 {
+        text-align: center;
+        margin-bottom: 30px; /* Más espacio debajo del título */
+        color: #333; /* Un color de texto más oscuro para el título */
+    }
+
+    .top-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center; /* Alineación vertical para que los elementos estén centrados */
+        width: 100%;
+        margin-bottom: 25px; /* Más espacio debajo de la barra superior */
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        margin-bottom: 20px; /* Más espacio entre los grupos de formulario */
+
+        label {
+            margin-bottom: 5px; /* Espacio entre la etiqueta y el control */
+            color: #555; /* Color de texto para las etiquetas */
+            font-weight: bold; /* Resaltar un poco las etiquetas */
+        }
+    }
+
+    .form-control {
+        padding: 12px; /* Aumenta el padding para un control más grande */
+        border: 1px solid #ddd; /* Borde más ligero */
+        border-radius: 6px; /* Radio de borde ligeramente mayor */
+        font-size: 1rem; /* Tamaño de fuente base */
+        width: 100%; /* Asegurar que los controles ocupen todo el ancho disponible */
+        box-sizing: border-box; /* Incluir padding y border en el ancho */
+    }
+
+    .search-container {
+        display: flex;
+        gap: 10px; /* Usar gap para el espaciado entre elementos */
+        width: 100%;
+        margin-bottom: 20px; /* Espacio debajo del contenedor de búsqueda */
+
+        input {
+            flex-grow: 1; /* El input ocupa el espacio restante */
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+
+        .btn {
+            margin-left: 0; /* Eliminar el margen izquierdo innecesario con gap */
+        }
+    }
+
+    /*.producto-container {
+        display: flex;
+        align-items: center;
+        gap: 15px; /* Aumentar el gap para más espacio */
+        //margin-bottom: 15px; /* Espacio entre los productos añadidos */
+        //padding: 10px; /* Añadir un poco de padding alrededor de cada producto */
+        //border: 1px solid #eee; /* Borde muy ligero para separar visualmente */
+        //border-radius: 6px;
+        //background-color: #fff; /* Fondo blanco para resaltar cada producto 
+   // }*/
+
+    .table {
+        width: 100%;
+        margin-top: 25px; /* Más espacio encima de la tabla */
+        border-collapse: collapse;
+        box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.05); /* Sombra sutil para la tabla */
+        border-radius: 8px; /* Bordes redondeados para la tabla */
+        overflow: hidden; /* Para que los bordes redondeados funcionen correctamente con las celdas */
+    }
+
+    .table th, .table td {
+        padding: 12px 15px; /* Más padding en las celdas */
+        border-bottom: 1px solid #eee; /* Líneas divisorias más ligeras */
+        text-align: left; /* Alinear el texto a la izquierda para mejor legibilidad */
+    }
+
+    .table th {
+        background-color: #f2f2f2; /* Fondo gris claro para los encabezados */
+        font-weight: bold;
+        color: #333;
+    }
+
+    .table tbody tr:hover {
+        background-color: #f5f5f5; /* Un ligero cambio de color al pasar el ratón */
+    }
+
+    .total-compra {
+        text-align: right;
+        margin-top: 20px; /* Más espacio encima del total */
+        font-size: 1.1rem; /* Un poco más grande para destacar */
+        font-weight: bold;
+        color: #333;
+    }
+
+    .btn {
+        padding: 12px 20px; /* Más padding para botones más grandes */
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 1rem;
+        transition: background-color 0.3s ease; /* Transición suave para el hover */
+
+        &.btn-primary {
+            background: #366c8a;
+            color: white;
+
+            &:hover {
+                background: #2c5a74; /* Un tono más oscuro al pasar el ratón */
+            }
+        }
+
+        &.btn-success {
+            background: #265166;
+            color: white;
+
+            &:hover {
+                background: #1e4052; /* Un tono más oscuro al pasar el ratón */
+            }
+        }
+
+        /* Puedes añadir estilos para otros botones si los tienes */
+    }
+}
+.contenedorForm {
+    display: flex;
+    border-radius: 1rem;
+    flex-direction: column;
+    height: 70vh;
+    padding: 2rem;
+    background-color: #dbe6ec;
+    margin: 0 auto;
+    position: relative;
+    width: 90%;
+    max-width: 1000px;
+    overflow: hidden;
+    justify-content: center; // Centra los elementos verticalmente
+    align-items: center; // Centra los elementos horizontalmente
+  }
+  
+  .position-fixed {
+    background: white;
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    position: relative;
+    max-height: 100%;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; // Asegura que el contenido esté centrado dentro del contenedor
+    align-self: stretch; // Evita que quede flotando dentro del contenedor
+  }
+  
+
+  h1 {
+    text-align: center;
+    color: #6c757d;
+    margin-bottom: 1.5rem;
+  }
+  
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem; // Espacio uniforme entre elementos
+  }
+  
+  .input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem; // Espacio entre inputs dentro del grupo
+  }
+  
+  .input-group-text {
+    font-weight: bold;
+    color: #6c757d;
+    background-color: #e9ecef;
+    border: none;
+    padding: 0.75rem;
+    border-radius: 0.5rem 0.5rem 0 0;
+  }
+  
+  .form-control {
+    padding: 1rem;
+    border: 1px solid #ced4da;
+    border-radius: 0.5rem;
+  
+    &:focus {
+      outline: none;
+      box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    }
+}
+
+.btn-primary {
+    padding: 1rem;
+    border-radius: 0.5rem;
+    background-color: #265166;
+    border: none;
+    cursor: pointer;
+    width: 15%;
+    min-width: 150px; // Evita que el botón sea demasiado pequeño
+    transition: 0.3s ease;
+    font-size: 1.2rem; // Aumenta el tamaño del texto
+    font-weight: bold;
+    color: white; // Hace que el texto sea blanco
+    display: block;
+    margin: 0 auto; // Centra el botón horizontalmente
+
+    &:hover {
+    background-color: #1E3745;
+    }
+}
+ 
+
+
