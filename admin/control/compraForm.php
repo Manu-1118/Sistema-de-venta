@@ -8,7 +8,7 @@ incluirTemplate('header');
 incluirTemplate('slidebar'); // 🔹 Agregado correctamente
 ?>
 
-<main id="main" class="compras-container">
+<main id="main" class="main">
     <h2>Registrar Compra</h2>
 
     <!-- Contenedor de fecha y proveedor -->
