@@ -2,23 +2,23 @@
 require '../../includes/app.php';
 require '../../includes/data/proveedores.php';
 
-estaAutenticado(); //verificar que $_SESSION sea true
+estaAutenticado();
 incluirTemplate('header');
 incluirTemplate('slidebar');
 ?>
 
-<main class="main admin main-admin menu-toggle" id="main">
+<main id="main" class="main admin main-admin menu-toggle"  >
     <h1>Proveedores</h1>
 
-    <div class="contenedor-proveedores">
+    <div class="contenedor">
         <div class="barra-busqueda">
             <input type="text" id="busqueda" placeholder="Buscar Proveedor...">
-            <button id="agregarProveedor">
+            <button id="agregar" onclick=" window.location.href='proveedorForm.php';">
                 <img src="/src/img/icons/agregar.png" width="40" height="45" alt="Agregar Proveedor">
             </button>
         </div>
         <div class="tabla-container">
-            <table class="tabla-Proveedor">
+            <table class="tabla">
                 <thead>
                     <tr>
                         <th>ID</th>
@@ -33,8 +33,8 @@ incluirTemplate('slidebar');
                     <?php foreach ($proveedores as $proveedor) : ?>
                         <tr>
                             <td><?php echo $proveedor['id']; ?></td>
-                            <td><?php echo $proveedor['nombre']; ?></td>
-                            <td><?php echo $proveedor['apellido']; ?></td>
+                            <td><?php echo $proveedor['nombres']; ?></td>
+                            <td><?php echo $proveedor['apellidos']; ?></td>
                             <td><?php echo $proveedor['empresa']; ?></td>
                             <td><?php echo $proveedor['telefono']; ?></td>
                             <td>

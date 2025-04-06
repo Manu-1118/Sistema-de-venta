@@ -1,19 +1,12 @@
 <?php
-$clientes = [
-    [
-        'id' => 1,
-        'nombre' => 'Juan',
-        'apellido' => 'Pérez'
-    ],
-    [
-        'id' => 2,
-        'nombre' => 'María',
-        'apellido' => 'Gómez'
-    ],
-    [
-        'id' => 3,
-        'nombre' => 'Carlos',
-        'apellido' => 'Rodríguez'
-    ],
-];
+$db = conectarDB(); // Asegúrate de que esta función devuelve la conexión
+$query = "SELECT * FROM cliente";
+$resultado = mysqli_query($db, $query);
+
+$clientes = []; // Inicializa el array para evitar errores
+
+while ($cliente = mysqli_fetch_assoc($resultado)) {
+    $clientes[] = $cliente; // Guarda cada usuario en el array
+}
+
 ?>

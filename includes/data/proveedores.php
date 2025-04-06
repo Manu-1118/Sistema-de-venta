@@ -1,18 +1,14 @@
 <?php
-$proveedores = [
-    [
-        'id' => '875ABC09',
-        'nombre' => 'Ernesto',
-        'apellido' => 'Peralta',
-        'empresa' => 'Delmor',
-        'telefono' => '7856664'
-    ],
-    [
-        'id' => '95ABD09',
-        'nombre' => 'Gabriela',
-        'apellido' => 'Mendoza',
-        'empresa' => 'Disegsa',
-        'telefono' => '87456392'
-    ],
-];
+$db = conectarDB();
+$query = "SELECT * FROM proveedor";
+$resultado = mysqli_query($db, $query);
+
+while ($proveedor = mysqli_fetch_assoc($resultado)) {
+    $proveedores[] = $proveedor;
+}
+
+// echo "<script> var proveedores = " . json_encode($proveedores) . ";
+//     console.table(proveedores);
+// </script>";
+
 ?>

@@ -1,4 +1,5 @@
 <?php
+//productos data ya no se utiliza, eliminar
 $productos = [
     ["id" => 1, "imagen" => "aceite.png", "nombre" => "Aceite", "precio" => "$15.99", "descripcion" => "Aceite para cocinar"],
     ["id" => 2, "imagen" => "bebidas.png", "nombre" => "Bebidas", "precio" => "$12.50", "descripcion" => "Bebidas gaseosas de sabores"],
