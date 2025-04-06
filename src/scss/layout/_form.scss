@@ -1,216 +1,123 @@
-.contenedorForm {
-    display: flex;
-    border-radius: 1rem;
-    flex-direction: column;
-    height: 70vh;
-    padding: 2rem;
-    background-color: #dbe6ec;
-    margin: 0 auto;
-    position: relative;
-    width: 90%;
-    max-width: 1000px;
-    overflow: hidden;
-    justify-content: center;
-    align-items: center;
+$azul_marino: #265166;
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: $gris_claro;
+    margin: 0;
+    padding: 0;
 }
 
-.position-fixed {
-    background: white;
-    padding: 2rem;
-    border-radius: 1rem;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+.contenedor {
     width: 100%;
-    position: relative;
-    max-height: 100%;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-self: stretch;
+}
 
-    .error { // Estilo para los mensajes de error
-        background-color: #f8d7da;
-        color: #721c24;
-        border: 1px solid #f5c6cb;
-        padding: 1rem;
-        border-radius: 0.5rem;
-        margin-bottom: 1rem;
+/* Contenedor de la tabla */
+.tabla-container {
+    width: 100%;
+    overflow-x: auto;
+}
+
+/* Tabla de clientes */
+.tabla{
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    text-align: left;
+    border: 1px solid $gris_oscuro;
+
+    thead {
+        background: $azul_marino;
+        color: white;
+
+        th {
+            padding: 15px;
+            text-transform: uppercase;
+            text-align: center;
+        }
     }
-}
 
-h1 {
-    text-align: center;
-    color: #6c757d;
-    margin-bottom: 1.5rem;
-}
+    tbody {
+        tr {
+            border-bottom: 1px solid $gris_claro;
 
-form {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-}
-
-.input-group {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-}
-
-.input-group-text {
-    font-weight: bold;
-    color: #6c757d;
-    background-color: #e9ecef;
-    border: none;
-    padding: 0.75rem;
-    border-radius: 0.5rem 0.5rem 0 0;
-}
-
-.form-control {
-    padding: 1rem;
-    border: 1px solid #ced4da;
-    border-radius: 0.5rem;
-
-    &:focus {
-        outline: none;
-        box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-    }
-}
-
-.btn-primary {
-    padding: 1rem;
-    border-radius: 0.5rem;
-    background-color: #265166;
-    border: none;
-    cursor: pointer;
-    width: 15%;
-    min-width: 150px;
-    transition: 0.3s ease;
-    font-size: 1.2rem;
-    font-weight: bold;
-    color: white;
-    display: block;
-    margin: 0 auto;
-
-    &:hover {
-        background-color: #1E3745;
-    }
-}
-
-// -------------------
-.form-container {
-    display: flex;
-    flex-direction: column;
-    padding: 2rem;
-    background-color: #B8CDD8;
-    margin: 0 auto;
-    max-width: 1000px;
-    border-radius: 1rem;
-
-    .form-row {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 1rem;
-
-        .form-col {
-            flex: 1;
-            margin-right: 1rem;
-
-            &:last-child {
-                margin-right: 0;
+            &:nth-child(even) {
+                background: lighten($gris_claro, 10%);
             }
 
-            label {
-                display: block;
-                margin-bottom: 0.5rem;
-                color: #333;
+            &:hover {
+                background: darken($gris_claro, 5%);
             }
 
-            .form-control {
-                padding: 1rem;
-                border: 1px solid #ced4da;
-                border-radius: 0.5rem;
-                width: 100%;
+            td {
+                padding: 15px;
+                text-align: center;
 
-                &:focus {
-                    outline: none;
-                    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+                img {
+                    width: 80px;
+                    height: 80px;
+                    object-fit: cover;
+                    display: block;
+                    margin: auto;
                 }
             }
-
-            &:nth-child(3) {
-                display: flex;
-                align-items: flex-end;
-            }
         }
     }
+}
 
-    .btn-primary {
-        padding: 1rem;
-        border-radius: 0.5rem;
-        background-color: #265166;
+
+/* Botones de acción */
+.editar-btn, .accion-btn {
+    background: $azul_marino;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 5px;
+    text-decoration: none;
+    display: inline-block;
+    margin: 3px;
+
+    &:hover {
+        background: darken($azul_marino, 10%);
+    }
+}
+
+/* Barra de búsqueda */
+.barra-busqueda {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    width: 100%;
+
+    input {
+        flex-grow: 1;
+        padding: 10px;
+        border: 1px solid $gris_oscuro;
+        border-radius: 5px;
+    }
+
+    #agregar{
+        background: transparent;
         border: none;
+        width: 50px;
+        height: 50px;
         cursor: pointer;
-        color: white;
-        font-weight: bold;
-        transition: background-color 0.3s ease;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        img {
+            width: 45px;
+            height: 45px;
+            display: block;
+        }
+
+        &:focus {
+            outline: none;
+        }
 
         &:hover {
-            background-color: #1E3745;
+            opacity: 0.7;
         }
-    }
-
-    #generarCredito {
-        margin-top: 2rem;
-        align-self: center;
-    }
-}
-
-.total-compra-container {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    margin-top: 2rem;
-    margin-right: 1rem;
-    align-self: flex-end;
-    margin-bottom: 1rem;
-
-    label {
-        margin-right: 0.5rem;
-        color: #333;
-    }
-
-    #totalCompra {
-        width: 120px;
-        padding: 0.5rem;
-        border: 1px solid #ced4da;
-        border-radius: 0.5rem;
-    }
-}
-
-.fecha-sistema {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-
-    .fecha-input {
-        padding: 8px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        width: 150px;
-        background-color: #B8CDD8;
-        color: #333;
-
-        &:read-only {
-            cursor: not-allowed;
-        }
-    }
-}
-
-.cliente-container {
-    margin-left: 430px;
-    display: inline-block;
-
-    input#Credito_Cliente {
-        width: 330px;
     }
 }

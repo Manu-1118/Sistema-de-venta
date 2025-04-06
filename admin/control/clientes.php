@@ -100,7 +100,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_cliente_eliminar']
         </div>
     </div>
 </main>
-
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const botonesEliminar = document.querySelectorAll('.eliminar-cliente');

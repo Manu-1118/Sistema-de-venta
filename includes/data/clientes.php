@@ -8,5 +8,4 @@ $clientes = []; // Inicializa el array para evitar errores
 while ($cliente = mysqli_fetch_assoc($resultado)) {
     $clientes[] = $cliente; // Guarda cada usuario en el array
 }
-
 ?>

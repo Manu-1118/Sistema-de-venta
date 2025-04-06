@@ -9,8 +9,4 @@ while ($usuario = mysqli_fetch_assoc($resultado)) {
     $usuarios[] = $usuario; // Guarda cada usuario en el array
 }
 
-// echo "<script> var usuarios = " . json_encode($usuarios) . ";
-//     console.table(usuarios);
-// </script>";
-
 ?>

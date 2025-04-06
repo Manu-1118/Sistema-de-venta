@@ -6,7 +6,6 @@ estaAutenticado();
 incluirTemplate('header');
 incluirTemplate('slidebar');
 ?>
-
 <main id="main" class="main admin main-admin menu-toggle"  >
     <h1>Proveedores</h1>
 

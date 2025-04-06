@@ -33,7 +33,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 ?>
-
 <main id="main" class="main admin main-admin menu-toggle">
     <h1>Registrar Proveedor</h1>
     <div class="contenedorForm">

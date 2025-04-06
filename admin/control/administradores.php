@@ -8,7 +8,6 @@ incluirTemplate('slidebar');
 
 <main  id="main" class="main admin main-admin menu-toggle">
     <h1>usuarios</h1>
-
     <div class="contenedor">
         <div class="barra-busqueda">
             <input type="text" id="busqueda" placeholder="Buscar usuario...">

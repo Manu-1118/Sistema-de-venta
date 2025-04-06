@@ -42,7 +42,6 @@ function obtenerClientePorId($id_cliente, $db) {
         return null; // O manejar el error de otra manera
     }
 }
-
 // Función para obtener un crédito por su ID
 function obtenerCreditoPorId($id_credito, $db) {
     $query = "SELECT fecha_credito, monto_pendiente, total FROM credito WHERE id = $id_credito";
