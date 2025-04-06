@@ -2,10 +2,10 @@
  * cargue el DOM el HTML para evitar problemas de carga **/
 document.addEventListener('DOMContentLoaded', () => {
 
-    darkmode();
+    // darkmode();
     activarUser() ? insertAdmin() : insertCliente();
-    slidebar();
-    
+    // slidebar();
+
 }); // Fin loadDOM
 
 //renderizarGraficos();
@@ -61,21 +61,6 @@ function insertAdmin() {
     var contenedor_derecho = document.querySelector('.contenido-derecha'); // contenedor derecha del menu superior
     var btnDarkMode = document.querySelector('.btnDarkMode'); // boton del darkmode
 
-    /** INICIO BOTON MENU **/
-    // seleccionar el contenedor del boton del menu desplegable y añadirlo
-    const contenedor_btnMenu_desplegable = document.querySelector('.nav-admin');
-    const btnMenu = document.createElement('DIV');
-    btnMenu.classList.add('menu');
-    btnMenu.id = 'menu';
-
-    // Crear el diseño del boton del menu desplegable
-    for (let i = 0; i < 3; i++) {
-        const contenido_btnMenu = document.createElement('DIV');
-        btnMenu.appendChild(contenido_btnMenu);
-    }
-    contenedor_btnMenu_desplegable.appendChild(btnMenu);
-    /** FIN BOTON MENU **/
-
     /** INICIO IMAGEN PERFIL (luego se hara con php)**/
     const perfil = document.createElement('IMG');
     perfil.src = '/build/img/usuario-default.png';
@@ -90,6 +75,7 @@ function insertAdmin() {
 function insertCliente() {
 
     var contenedor_derecho = document.querySelector('.contenido-derecha');
+
     var btnDarkMode = document.querySelector('.btnDarkMode'); // boton del darkmode
 
     /** HEADER **/
@@ -113,7 +99,8 @@ function insertCliente() {
 
     // Insertar el boton lista
     contenedor_derecho.appendChild(btn_lista); // al contenedor derecho del menu superior
-    contenedor_derecho.insertBefore(btn_lista, btnDarkMode); // antes del boton darkmode
+    //contenedor_derecho.insertBefore(btn_lista, btnDarkMode); // antes del boton darkmode
+
     /** FIN BOTON LISTA PRODUCTOS**/
 
     /** BOTON SOBRE NOSOTROS **/
@@ -127,7 +114,7 @@ function insertCliente() {
     btn_nosotros.href = "nosotros.php";
     btn_nosotros.appendChild(texto_nosotros);
     contenedor_derecho.appendChild(btn_nosotros); // al contenedor derecho del menu superior
-    contenedor_derecho.insertBefore(btn_nosotros, btnDarkMode); // despues del boton de lista
+    //contenedor_derecho.insertBefore(btn_nosotros, btnDarkMode); // despues del boton de lista
 
     /** FIN BOTON SOBRE NOSOTROS **/
     //Verificar si no estamos en el login:
@@ -152,14 +139,12 @@ function insertCliente() {
 
     // Seleccionar los dos últimos elementos <a> en el clon
     const elementosAEliminar = nav2.querySelectorAll('a');
-    let penultimoElemento = elementosAEliminar[elementosAEliminar.length - 2];
     const ultimoElemento = elementosAEliminar[elementosAEliminar.length - 1];
-    
+
     if (!login.classList.contains('main-login')) {
-        penultimoElemento.remove();
+        ultimoElemento.remove();
     }
-    // Eliminar los elementos del clon
-    ultimoElemento.remove();
+    // // Eliminar los elementos del clon
     contenedor_footer.appendChild(nav2);
 
 } // Fin inserCLiente()

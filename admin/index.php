@@ -7,7 +7,7 @@ incluirTemplate('slidebar');
 
 ?>
 
-<main id="main" class="main admin main-admin">
+<main id="main" class="main admin main-admin menu-toggle">
     <h2>Descripción General</h2>
 
     <div class="descripcion-general">
@@ -50,7 +50,7 @@ incluirTemplate('slidebar');
     </div>
 </main><!--.main (Descripcion general)-->
 
-<section class="menu-secundario graficos">
+<section class="graficos menu-secundario menu-toggle admin">
     <div class="contenedor-grafico fondo" id="barras_ventas_semana">
         <h2>Totales de ventas de la ultima semana</h2>
         <div class="grafico1"></div>

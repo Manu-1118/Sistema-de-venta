@@ -7,7 +7,7 @@ incluirTemplate('header');
 incluirTemplate('slidebar');
 ?>
 
-<main id="main" class="main">
+<main id="main" class="main admin main-admin menu-toggle">
     <h1>Clientes</h1>
 
     <div class="contenedor-clientes">

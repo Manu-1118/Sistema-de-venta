@@ -11,6 +11,17 @@
     justify-content: flex-end;
 }
 
+.separar-margin {
+    column-gap: 2rem;
+    margin: 2rem 0;
+}
+
 .w-100 {
     width: 100%;
+}
+
+.disabled {
+    &:hover {
+        cursor: no-drop;
+    }
 }

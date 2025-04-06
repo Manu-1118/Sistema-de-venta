@@ -12,17 +12,13 @@
     border-radius: 1rem;
     //width: 92.5%;
     width: 95%;
-    box-shadow: 0px 5px 15px 0px rgba(112, 112, 112, 0.48);
+    //box-shadow: 0px 5px 15px 0px rgba(112, 112, 112, 1);
+    //rgba(181, 216, 255, 0.83);
+    box-shadow: 0px 0px 20px 0px rgba(40,82,128,1);
 
     &.contenido-usuario {
         margin: 8rem auto 0 auto;
 
-    }
-
-    &.menu-toggle {
-        transition: margin-left .5s ease;
-        margin-left: 32rem;
-        width: 75%;
     }
 
     &.principal {
@@ -32,8 +28,14 @@
     }
 
     &.main-login,
-    &.main-nosotros{ 
+    &.main-nosotros {
         margin-top: 8rem;
+    }
+
+    &.admin {
+        max-width: 108.5rem;
+        min-width: 108.5rem;
+        margin: 7rem 0 0 26rem;
     }
 
 }

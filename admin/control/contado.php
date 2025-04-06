@@ -1,113 +1,100 @@
 <?php
 require '../../includes/app.php';
-
-// Incluir datos estáticos
-require '../../includes/data/clientes.php';
 require '../../includes/data/productos.php';
-
 estaAutenticado(); //verificar que $_SESSION sea true
+
+//Conectar la bd
+$db = conectarDB();
+
+//escribir el query
+$query_mostrar = "SELECT * FROM Producto limit 5;";
+
+//consultar la bd y obtener resultado
+$resultado_mostrar = mysqli_query($db, $query_mostrar);
+
+
+// verificar que se mando informacion al post
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+    //debuguear($_POST);
+
+    $id = $_POST['id'];
+    $id = filter_var($id, FILTER_VALIDATE_INT);
+
+    if ($id) {
+
+        $query_eliminar = "DELETE FROM Producto WHERE codigo = $id;";
+        $resultado_eliminar = mysqli_query($db, $query_eliminar);
+
+        if ($resultado_eliminar) {
+            header('Location: /admin/control/productos.php');
+        }
+    }
+}
+
+$resultado_mensaje = $_GET['resultado'] ?? null;
+
 incluirTemplate('header');
 incluirTemplate('slidebar');
 ?>
 
-<main id="main" class="ventas-container main">
-    <h2>Registrar Venta</h2>
+<!-- class="main admin menu-toggle" -->
 
-    <div class="form-group">
-        <label for="cliente">Cliente:</label>
-        <select id="cliente" class="form-select">
-            <option value="">Seleccione un cliente</option>
-            <?php foreach ($clientes as $cliente) { ?>
-                <option value="<?php echo $cliente['id']; ?>">
-                    <?php echo $cliente['nombre'] . ' ' . $cliente['apellido']; ?>
-                </option>
-            <?php } ?>
-        </select>
+<main id="main" class="main admin main-admin menu-toggle">
+
+    <?php if (intval($resultado_mensaje) === 1): ?>
+        <p class="alerta exito">La venta al contado se realizó con exito</p>
+    <?php endif; ?>
+
+    <div class="contenedor-productos">
+
+        <div class="contenedor-herramientas">
+
+            <div class="contenedor-busqueda">
+
+                <form method="POST" class="formulario busqueda">
+                    <label for="campo">Buscar</label>
+                    <input type="text" name="campo" id="campo" placeholder="Venta al contado...">
+                </form>
+
+            </div>
+
+            <a href="contado_crear.php" class="btn-agregar boton-azul">
+                <img src="/build/img/icons/agregar.png" alt="+" class="icono-principal">
+                <span>Nuevo</span>
+            </a>
+
+        </div>
+
+        <div class="tabla-containe">
+            <table class="tabla-productos">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Código</th>
+                        <th>Fecha venta</th>
+                        <th>Total</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php $i = 1;
+                    while ($producto = mysqli_fetch_assoc($resultado_mostrar)): ?>
+                        <tr>
+                            <td><?php echo $i ?></td>
+                            <td><?php echo $producto['codigo']; ?></td>
+                            <td><?php echo $producto['cantidad']; ?></td>
+                            <td><?php echo $producto['categoria']; ?></td>
+                            <td>
+                                <a href="contado_detalles.php" class="boton-azul">Ver detalles</a>
+                            </td>
+                        </tr>
+                    <?php $i++;
+                    endwhile; ?>
+                </tbody>
+            </table>
+        </div>
     </div>
-
-    <div class="form-group search-box">
-        <label for="producto">Producto:</label>
-        <input type="text" id="producto" class="form-control" placeholder="Buscar producto...">
-        <!--<button class="search-btn">🔍</button>-->
-    </div>
-
-    <div class="form-group">
-        <label for="cantidad">Cantidad:</label>
-        <input type="number" id="cantidad" class="form-control" min="1" value="1">
-    </div>
-
-    <div class="form-group">
-        <label for="total">Total por producto:</label>
-        <input type="text" id="total" class="form-control" readonly>
-    </div>
-
-    <button id="agregar" class="btn btn-primary">Agregar Producto</button>
-
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Nombre</th>
-                <th>Código</th>
-                <th>Precio</th>
-                <th>Cantidad</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody id="detalle-venta">
-            <!-- Productos agregados dinámicamente -->
-        </tbody>
-    </table>
-
-    <button id="generar" class="btn btn-success">Generar</button>
 </main>
 
 <?php incluirTemplate('footer'); ?>
-
-<script>
-    let productos = <?php echo json_encode($productos); ?>;
-
-    document.addEventListener("DOMContentLoaded", function () {
-        document.getElementById('producto').addEventListener('input', function () {
-            let query = this.value.toLowerCase();
-            let resultado = productos.find(p => p.nombre.toLowerCase().includes(query));
-
-            if (resultado) {
-                document.getElementById('cantidad').value = 1;
-                document.getElementById('total').value = (resultado.precio * 1).toFixed(2);
-            }
-        });
-
-        document.getElementById('cantidad').addEventListener('input', function () {
-            let cantidad = parseInt(this.value) || 1;
-            let producto = productos.find(p => p.nombre.toLowerCase() === document.getElementById('producto').value.toLowerCase());
-
-            if (producto) {
-                document.getElementById('total').value = (producto.precio * cantidad).toFixed(2);
-            }
-        });
-
-        document.getElementById('agregar').addEventListener('click', function () {
-            let producto = productos.find(p => p.nombre.toLowerCase() === document.getElementById('producto').value.toLowerCase());
-            let cantidad = document.getElementById('cantidad').value;
-
-            if (producto && cantidad > 0) {
-                let tabla = document.getElementById('detalle-venta');
-                let fila = document.createElement('tr');
-                fila.innerHTML = `
-                    <td>${producto.nombre}</td>
-                    <td>${producto.categoria}</td>
-                    <td>$${producto.precio.toFixed(2)}</td>
-                    <td>${cantidad}</td>
-                    <td><button class="btn btn-danger btn-sm eliminar">Eliminar</button></td>
-                `;
-                tabla.appendChild(fila);
-            }
-        });
-
-        document.addEventListener('click', function (event) {
-            if (event.target.classList.contains('eliminar')) {
-                event.target.closest('tr').remove();
-            }
-        });
-    });
-</script>

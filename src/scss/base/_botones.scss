@@ -10,3 +10,28 @@
 .boton-azul {
     @include boton($azul-gris, inline-block);
 }
+
+.boton-rojo {
+    @include boton($rojo, inline-block);
+}
+
+/** NOTIFICACIONES TOAST **/
+.contenedor-notificacion {
+    
+    z-index: 500;
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    min-width: 50rem;
+    min-height: 5rem;
+}
+
+.notificacion {
+    background-color: $beige_claro;
+    color: $negro;
+    border-radius: 1.5rem;
+    padding: 1rem 2rem;
+    margin: 1rem;
+    font-size: 1.8rem;
+}

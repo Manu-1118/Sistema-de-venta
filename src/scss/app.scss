@@ -10,7 +10,6 @@
 
 //layout
 @import 'layout/header';
-@import 'layout/sidebar';
 @import 'layout/footer';
 @import 'layout/categorias';
 @import 'layout/lista';
@@ -24,6 +23,7 @@
 @import 'layout/nosotros';
 
 //internas
+@import 'internas/sidebar';
 @import 'internas/admin';
 @import 'internas/dashboard';
 @import 'internas/main';
