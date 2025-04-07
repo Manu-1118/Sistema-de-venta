@@ -1,6 +1,6 @@
 <?php
-require '../../includes/app.php'; // Incluye la configuración principal
-require '../../includes/data/credito.php'; // Incluye la consulta de los créditos
+require '../../includes/app.php'; 
+require '../../includes/data/credito.php'; 
 
 incluirTemplate('header');
 incluirTemplate('slidebar');
@@ -31,15 +31,21 @@ incluirTemplate('slidebar');
                 </thead>
                 <tbody>
                     <?php foreach ($creditos as $credito) : ?>
+                        <?php 
+                        // Calcula el monto pendiente :total - monto pagado
+                        $montoPendiente = $credito['total'] - $credito['monto_pagado']; 
+                        ?>
                         <tr>
-                            <td><?php echo $credito['id_cliente'] . " - " . $credito['nombres'] . " " . $credito['apellidos']; ?></td>
+                            <td><?php echo $credito['nombres'] . " " . $credito['apellidos']; ?></td>
                             <td><?php echo $credito['fecha_credito']; ?></td>
-                            <td><?php echo $credito['monto_pendiente']; ?></td>
-                            <td><?php echo $credito['monto_pagado']; ?></td>
-                            <td><?php echo $credito['cantidad'];?></td> <!-- Placeholder para cantidad -->
-                            <td><?php echo $credito['total']; ?></td>
+                            <!-- se muestra el monto pendiente calculado -->
+                            <td><?php echo number_format($montoPendiente ?? 0, 2); ?></td>
+                            <td><?php echo number_format($credito['monto_pagado'] ?? 0, 2); ?></td>
+                            <td><?php echo $credito['cantidad_total']; ?></td>
+                            <td><?php echo number_format($credito['total'] ?? 0, 2); ?></td>
                             <td>
-                            <a href="abonarForm.php?id_credito=<?php echo $credito['id_credito']; ?>&id_cliente=<?php echo $credito['id_cliente']; ?>" class="editar-btn">💰 Abonar</a>                            </td>
+                                <a href="abonarForm.php?id_credito=<?php echo $credito['id_credito']; ?>&id_cliente=<?php echo $credito['id_cliente']; ?>" class="editar-btn">💰 Abonar</a>
+                            </td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>
@@ -47,6 +53,5 @@ incluirTemplate('slidebar');
         </div>
     </div>
 </main>
-
 
 <?php incluirTemplate('footer'); ?>

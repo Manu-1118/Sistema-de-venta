@@ -13,13 +13,11 @@ $query = "
         cr.monto_pagado, 
         cr.monto_pendiente, 
         cr.total,
-        dc.codigo_detalle,
-        dc.cantidad,
-        dc.codigo_producto,
-        dc.id_credito
+        SUM(dc.cantidad) AS cantidad_total  
     FROM cliente c
     INNER JOIN credito cr ON c.id = cr.id_cliente
-    INNER JOIN detallecredito dc ON cr.id=dc.id_credito;
+    INNER JOIN detallecredito dc ON cr.id = dc.id_credito
+    GROUP BY cr.id;  
 ";
 
 // Ejecuta la consulta y obtiene los resultados
