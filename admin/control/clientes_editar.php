@@ -1,77 +1,92 @@
 <?php
 require '../../includes/app.php';
+require '../../includes/data/productos.php';
+estaAutenticado(); //verificar que $_SESSION sea true
 
-estaAutenticado();
-incluirTemplate('header');
-incluirTemplate('slidebar');
-
+//Conectar la bd
 $db = conectarDB();
+//Arreglo para validacion
 $errores = [];
-
-$id_cliente = $_GET['id'] ?? null;
-
-if (!$id_cliente) {
-    header('Location: clientes.php');
-    exit;
+// validar que no se digite cualquier id
+$id = filter_var($_GET['id'], FILTER_VALIDATE_INT);
+if (!$id) {
+    header('Location: /admin/control/clientes.php');
 }
 
-$query_cliente = "SELECT * FROM cliente WHERE id = $id_cliente";
-$resultado_cliente = mysqli_query($db, $query_cliente);
-$cliente = mysqli_fetch_assoc($resultado_cliente);
+// Consulta
+$query_modi_proveedor = "SELECT * FROM Cliente WHERE id = $id;";
+$resultado_proveedor = mysqli_fetch_assoc(mysqli_query($db, $query_modi_proveedor));
 
-if (!$cliente) {
-    header('Location: clientes.php');
-    exit;
-}
+// debuguear($resultado_proveedor);
 
+$codigo = $resultado_proveedor['id'];
+$nombres = $resultado_proveedor['nombres'];
+$apellidos = $resultado_proveedor['apellidos'];
+
+// verificar que se mando informacion al post
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $primer_nombre = mysqli_real_escape_string($db, $_POST['primer_nombre']);
-    $segundo_nombre = mysqli_real_escape_string($db, $_POST['segundo_nombre']);
-    $primer_apellido = mysqli_real_escape_string($db, $_POST['primer_apellido']);
-    $segundo_apellido = mysqli_real_escape_string($db, $_POST['segundo_apellido']);
 
-    if (!$primer_nombre || !$primer_apellido) {
-        $errores[] = "El primer nombre y el primer apellido son obligatorios.";
+    //debuguear($_POST);
+    // Obtener los valores del POST y escapar las cadenas de texto para evitar inyecciones sql
+
+    $nombres = mysqli_real_escape_string($db, $_POST['txtNombre']);
+    $apellidos = mysqli_real_escape_string($db, $_POST['txtApellido']);
+
+    // si un campo esta vacio, mandar error
+    if (!$nombres || !$apellidos) {
+        $errores[] = "Todos los campos son obligatorios";
     }
 
+    // si el arreglo de errores esta vacio, hacer la insercion
     if (empty($errores)) {
-        $query_actualizar = "UPDATE cliente SET nombres = '$primer_nombre $segundo_nombre', apellidos = '$primer_apellido $segundo_apellido' WHERE id = $id_cliente";
-        $resultado_actualizar = mysqli_query($db, $query_actualizar);
 
-        if ($resultado_actualizar) {
-            header('Location: clientes.php');
-            exit;
-        } else {
-            $errores[] = "Error al actualizar el cliente.";
+        // Crear consulta con los valores
+        $query_modificar = "UPDATE Cliente SET nombres = '$nombres', apellidos = '$apellidos' WHERE id = $id;";
+        $resultado_modificar = mysqli_query($db, $query_modificar);
+
+        // si el resultado devolvio una fila modificada mostrar que si se inserto
+        if ($resultado_modificar) {
+            header('Location: /admin/control/clientes.php?resultado=2');
         }
     }
 }
+
+incluirTemplate('header');
+incluirTemplate('slidebar');
 ?>
+
 <main id="main" class="main admin main-admin menu-toggle">
-    <h1>Editar Cliente</h1>
-    <div class="contenedorForm">
-        <div class="position-fixed">
-            <?php foreach ($errores as $error) : ?>
-                <div class="error"><?php echo $error; ?></div>
-            <?php endforeach; ?>
-
-            <form method="POST">
-                <div class="input-group">
-                    <span class="input-group-text">Nombres: </span>
-                    <input type="text" name="primer_nombre" class="form-control" placeholder="Primer nombre" value="<?php echo htmlspecialchars(explode(' ', $cliente['nombres'])[0]); ?>" required>
-                    <input type="text" name="segundo_nombre" class="form-control" placeholder="Segundo nombre" value="<?php echo htmlspecialchars(explode(' ', $cliente['nombres'])[1] ?? ''); ?>">
-                </div>
-
-                <div class="input-group">
-                    <span class="input-group-text">Apellidos: </span>
-                    <input type="text" name="primer_apellido" class="form-control" placeholder="Primer apellido" value="<?php echo htmlspecialchars(explode(' ', $cliente['apellidos'])[0]); ?>" required>
-                    <input type="text" name="segundo_apellido" class="form-control" placeholder="Segundo apellido" value="<?php echo htmlspecialchars(explode(' ', $cliente['apellidos'])[1] ?? ''); ?>">
-                </div>
-
-                <button type="submit" class="btn btn-primary">Guardar Cambios</button>
-            </form>
+    <?php foreach ($errores as $error): ?>
+        <div class="alerta error">
+            <?php echo $error; ?>
         </div>
-    </div>
+    <?php endforeach; ?>
+
+    <form method="POST" class="formulario">
+        <fieldset>
+            <legend>Editar Cliente</legend>
+
+            <label for="txtCodigo">Codigo</label>
+            <input disabled type="text" name="txtCodigo" id="txtCodigo" value="<?php echo $codigo; ?>">
+
+            <label for="txtNombre">Nombres</label>
+            <input type="text" name="txtNombre" placeholder="Nombre de cliente" id="txtNombre" value="<?php echo $nombres; ?>">
+
+            <label for="txtApellido">Apellidos</label>
+            <input type="text" name="txtApellido" placeholder="Apellido de cliente" id="txtApellido" value="<?php echo $apellidos; ?>">
+
+        </fieldset>
+        <div class="alinear-derecha separar-margin">
+
+            <a class="boton-rojo" href="clientes.php">
+                <span>Cancelar</span>
+            </a>
+
+            <input type="submit" value="Editar" class="boton-azul">
+
+        </div>
+
+    </form>
 </main>
 
 <?php incluirTemplate('footer'); ?>

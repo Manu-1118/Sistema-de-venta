@@ -30,27 +30,33 @@
             <li>
                 <a href="/admin/control/devueltos.php" class="<?php echo ($pagina === "devueltos.php") ? 'seleccionado' : ''; ?>">
                     <img class="icono-principal" src="/build/img/icons/dañado.png" alt="icono">
-                    <span>Dañados</span>
+                    <span>Devueltos</span>
                 </a>
             </li><!--.opcion 5-->
+            <li>
+                <a href="/admin/control/consumidos.php" class="<?php echo ($pagina === "consumidos.php") ? 'seleccionado' : ''; ?>">
+                    <img class="icono-principal" src="/build/img/icons/consumido.png" alt="icono">
+                    <span>Consumidos</span>
+                </a>
+            </li><!--.opcion 6-->
             <li>
                 <a href="/admin/control/clientes.php" class="<?php echo ($pagina === "clientes.php") ? 'seleccionado' : ''; ?>">
                     <img class="icono-principal" src="/build/img/icons/cliente.png" alt="icono">
                     <span>Clientes</span>
                 </a>
-            </li><!--.opcion 6-->
+            </li><!--.opcion 7-->
             <li>
                 <a href="/admin/control/proveedores.php" class="<?php echo ($pagina === "proveedores.php") ? 'seleccionado' : ''; ?>">
                     <img class="icono-principal" src="/build/img/icons/proveedor.png" alt="icono">
                     <span>Proveedores</span>
                 </a>
-            </li><!--.opcion 7-->
+            </li><!--.opcion 8-->
             <li>
                 <a href="/admin/control/administradores.php" class="<?php echo ($pagina === "administradores.php") ? 'seleccionado' : ''; ?>">
                     <img class="icono-principal" src="/build/img/icons/admin.png" alt="icono">
                     <span>Administradores</span>
                 </a>
-            </li><!--.opcion 8-->
+            </li><!--.opcion 9-->
         </ul>
     </nav>
 

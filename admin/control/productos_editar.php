@@ -1,9 +1,13 @@
 <?php
 require '../../includes/app.php';
+require '../../includes/data/productos.php';
 estaAutenticado(); //verificar que $_SESSION sea true
 
 //Conectar la bd
 $db = conectarDB();
+
+$categorias = ['Botanas', 'Lacteos', 'Carnes', 'Embutidos', 'Aceites', 'Verduras', 'Farmacia', 'Panadería', 'Enlatados', 'Higiene y Hogar'];
+
 //Arreglo para validacion
 $errores = [];
 // validar que no se digite cualquier id
@@ -90,7 +94,9 @@ incluirTemplate('slidebar');
             <label for="cbCategoria">Categoría</label>
             <select name="cbCategoria">
                 <option disabled selected>-- Seleccionar Categoría --</option>
-                <option value="1">Lacteos</option>
+                <?php foreach ($categorias as $categoria): ?>
+                    <option value="<?php echo $categoria ?>"><?php echo $categoria ?></option>
+                <?php endforeach; ?>
             </select>
 
         </fieldset>

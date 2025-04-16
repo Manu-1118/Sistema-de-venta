@@ -3,34 +3,21 @@ require '../../includes/app.php';
 require '../../includes/data/productos.php';
 estaAutenticado(); //verificar que $_SESSION sea true
 
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && $_GET['cancelado'] == true) {
+
+    if (isset($_SESSION['lista_productos'])) {
+        $_SESSION['lista_productos'] = [];
+    }
+}
+
 //Conectar la bd
 $db = conectarDB();
 
 //escribir el query
-$query_mostrar = "SELECT * FROM Producto limit 5;";
+$query_mostrar = "SELECT * FROM Contado limit 5;";
 
 //consultar la bd y obtener resultado
 $resultado_mostrar = mysqli_query($db, $query_mostrar);
-
-
-// verificar que se mando informacion al post
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-    //debuguear($_POST);
-
-    $id = $_POST['id'];
-    $id = filter_var($id, FILTER_VALIDATE_INT);
-
-    if ($id) {
-
-        $query_eliminar = "DELETE FROM Producto WHERE codigo = $id;";
-        $resultado_eliminar = mysqli_query($db, $query_eliminar);
-
-        if ($resultado_eliminar) {
-            header('Location: /admin/control/productos.php');
-        }
-    }
-}
 
 $resultado_mensaje = $_GET['resultado'] ?? null;
 
@@ -44,7 +31,8 @@ incluirTemplate('slidebar');
 
     <?php if (intval($resultado_mensaje) === 1): ?>
         <p class="alerta exito">La venta al contado se realizó con exito</p>
-    <?php endif; ?>
+    <?php endif;
+    $_SESSION['lista_productos'] = []; ?>
 
     <div class="contenedor-productos">
 
@@ -71,7 +59,7 @@ incluirTemplate('slidebar');
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>Código</th>
+                        <th>N° factura</th>
                         <th>Fecha venta</th>
                         <th>Total</th>
                         <th>Acciones</th>
@@ -79,14 +67,14 @@ incluirTemplate('slidebar');
                 </thead>
                 <tbody>
                     <?php $i = 1;
-                    while ($producto = mysqli_fetch_assoc($resultado_mostrar)): ?>
+                    while ($contado = mysqli_fetch_assoc($resultado_mostrar)): ?>
                         <tr>
                             <td><?php echo $i ?></td>
-                            <td><?php echo $producto['codigo']; ?></td>
-                            <td><?php echo $producto['cantidad']; ?></td>
-                            <td><?php echo $producto['categoria']; ?></td>
+                            <td><?php echo $contado['id']; ?></td>
+                            <td><?php echo $contado['fecha_registro']; ?></td>
+                            <td><?php echo $contado['total']; ?></td>
                             <td>
-                                <a href="contado_detalles.php" class="boton-azul">Ver detalles</a>
+                                <a href="/admin/control/contado_detalle.php?id=<?php echo $contado['id']; ?>" class="boton-azul">Ver detalles</a>
                             </td>
                         </tr>
                     <?php $i++;

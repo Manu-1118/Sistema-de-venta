@@ -14,7 +14,7 @@
     width: 95%;
     //box-shadow: 0px 5px 15px 0px rgba(112, 112, 112, 1);
     //rgba(181, 216, 255, 0.83);
-    box-shadow: 0px 0px 20px 0px rgba(40,82,128,1);
+    box-shadow: 0px 0px 20px 0px rgba(40, 82, 128, 1);
 
     &.contenido-usuario {
         margin: 8rem auto 0 auto;
@@ -27,15 +27,22 @@
         width: 95%;
     }
 
-    &.main-login,
     &.main-nosotros {
         margin-top: 8rem;
+    }
+
+    &.main-login {
+        margin: 8% 25% 5% 25%;
     }
 
     &.admin {
         max-width: 108.5rem;
         min-width: 108.5rem;
         margin: 7rem 0 0 26rem;
+
+        &.graficos {
+            margin-top: 2.5rem;
+        }
     }
 
 }

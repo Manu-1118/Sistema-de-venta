@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && $_GET['cancelado'] == true) {
 $db = conectarDB();
 
 //escribir el query
-$query_mostrar = "SELECT * FROM Dañado limit 5;";
+$query_mostrar = "SELECT * FROM Consumido limit 10;";
 
 //consultar la bd y obtener resultado
 $resultado_mostrar = mysqli_query($db, $query_mostrar);
@@ -31,7 +31,7 @@ incluirTemplate('slidebar');
 <main id="main" class="main admin main-admin menu-toggle">
 
     <?php if (intval($resultado_mensaje) === 1): ?>
-        <p class="alerta exito">Los productos dañados se agendaron con exito</p>
+        <p class="alerta exito">Los productos consumidos se agendaron con exito</p>
     <?php endif;
     $_SESSION['lista_productos'] = []; ?>
 
@@ -43,12 +43,12 @@ incluirTemplate('slidebar');
 
                 <form method="POST" class="formulario busqueda">
                     <label for="campo">Buscar</label>
-                    <input type="text" name="campo" id="campo" placeholder="Productos dañados...">
+                    <input type="text" name="campo" id="campo" placeholder="Productos consumidos...">
                 </form>
 
             </div>
 
-            <a href="devueltos_crear.php" class="btn-agregar boton-azul">
+            <a href="consumidos_crear.php" class="btn-agregar boton-azul">
                 <img src="/build/img/icons/agregar.png" alt="+" class="icono-principal">
                 <span>Nuevo</span>
             </a>
@@ -61,21 +61,19 @@ incluirTemplate('slidebar');
                     <tr>
                         <th>#</th>
                         <th>Fecha registro</th>
-                        <th>Descripción</th>
                         <th>Total</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php $i = 1;
-                    while ($devuelto = mysqli_fetch_assoc($resultado_mostrar)): ?>
+                    while ($consumido = mysqli_fetch_assoc($resultado_mostrar)): ?>
                         <tr>
                             <td><?php echo $i ?></td>
-                            <td><?php echo $devuelto['fecha_registro']; ?></td>
-                            <td><?php echo $devuelto['descripcion']; ?></td>
-                            <td><?php echo $devuelto['total']; ?></td>
+                            <td><?php echo $consumido['fecha_registro']; ?></td>
+                            <td><?php echo $consumido['total']; ?></td>
                             <td>
-                                <a href="devueltos_detalles.php?id=<?php echo $devuelto['id']; ?>" class="boton-azul">Ver detalles</a>
+                                <a href="consumidos_detalles.php?id=<?php echo $consumido['id']; ?>" class="boton-azul">Ver detalles</a>
                             </td>
                         </tr>
                     <?php $i++;

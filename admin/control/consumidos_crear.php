@@ -14,7 +14,7 @@ $errores = [];
 /** RELLENANDO PARA LA TABLA CONTADO **/
 //obtener fecha actual y generar el numero de la factura
 $fecha_actual = date("Y-m-d");
-$query_cantidad_facturas = mysqli_fetch_assoc(mysqli_query($db, "SELECT COUNT(id) as 'cantidad' FROM Contado;"));
+$query_cantidad_facturas = mysqli_fetch_assoc(mysqli_query($db, "SELECT COUNT(id) as 'cantidad' FROM Consumido;"));
 $num_factura = intval($query_cantidad_facturas['cantidad']) + 1;
 /** FIN TABLA CONTADO **/
 
@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && $_GET['lista'] == 'true') {
         $resultado_busqueda['codigo'] = $_GET['cbProductos'];
         $resultado_busqueda['cantidad'] = $_GET['txtCantidad'];
         $_SESSION['lista_productos'][] = $resultado_busqueda;
-        header('location: /admin/control/contado_crear.php');
+        header('location: /admin/control/consumidos_crear.php');
     }
 }
 
@@ -52,12 +52,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($errores)) {
 
         /**INSERTAR DATOS EN LA TABLA CONTADO**/
-        $query_insertar_contado = "INSERT INTO Contado (id, fecha_registro, total) VALUES ('$num_factura', '$fecha_actual', '$total');";
-        $resultado_contado = mysqli_query($db, $query_insertar_contado);
+        $query_insertar_devuelto = "INSERT INTO Consumido (id, fecha_registro, total) VALUES('$num_factura', '$fecha_actual', '$total');";
+        $resultado_devuelto = mysqli_query($db, $query_insertar_devuelto);
         /**FIN DE LA TABLA CONTADO**/
 
         /** INSERTAR DATOS EN LA TABLA DETALLE **/
-        $query_insertar_detalle = "INSERT INTO DetalleContado (cantidad, codigo_producto, id_contado) VALUES ";
+        $query_insertar_detalle = "INSERT INTO DetalleConsumido (cantidad, codigo_producto, id_consumido) VALUES ";
         $datos_value = "";
         $contador = 0;
         $total_productos = count($lista_productos);
@@ -77,8 +77,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         /** FIN TABLA DETALLE **/
 
         // si el resultado devolvio una fila modificada mostrar que si se inserto
-        if ($resultado_contado && $resultado_detalle) {
-            header('Location: /admin/control/contado.php?resultado=1');
+        if ($resultado_devuelto && $resultado_detalle) {
+            header('Location: /admin/control/consumidos.php?resultado=1');
         }
     }
 }
@@ -94,10 +94,10 @@ incluirTemplate('slidebar');
         </div>
     <?php endforeach; ?>
 
-    <form method="GET" class="formulario" action="contado_crear.php">
+    <form method="GET" class="formulario" action="consumidos_crear.php">
         <fieldset>
 
-            <legend>Detalles de la Venta</legend>
+            <legend>Detalles de los productos consumidos</legend>
 
             <label for="cbProductos">Producto</label>
             <select name="cbProductos" id="cbProductos">
@@ -115,11 +115,11 @@ incluirTemplate('slidebar');
         </fieldset>
     </form>
 
-    <form method="POST" class="formulario" action="contado_crear.php">
+    <form method="POST" class="formulario" action="consumidos_crear.php">
         <fieldset>
-            <legend>Venta al Contado</legend>
+            <legend>Registro Consumidos</legend>
 
-            <label for="txtId">Número de factura</label>
+            <label for="txtId">Número de registro</label>
             <input type="text" name="txtId" id="txtId" value="<?php echo $num_factura; ?>">
 
             <label for="dtRegistro">Fecha de registro</label>
@@ -132,7 +132,7 @@ incluirTemplate('slidebar');
 
         <div class="alinear-derecha separar-margin">
 
-            <a class="boton-rojo" href="contado.php?cancelado='true'">
+            <a class="boton-rojo" href="consumidos.php?cancelado='true'">
                 <span>Cancelar</span>
             </a>
 

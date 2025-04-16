@@ -14,7 +14,7 @@ $errores = [];
 /** RELLENANDO PARA LA TABLA CONTADO **/
 //obtener fecha actual y generar el numero de la factura
 $fecha_actual = date("Y-m-d");
-$query_cantidad_facturas = mysqli_fetch_assoc(mysqli_query($db, "SELECT COUNT(id) as 'cantidad' FROM Contado;"));
+$query_cantidad_facturas = mysqli_fetch_assoc(mysqli_query($db, "SELECT COUNT(id) as 'cantidad' FROM Compra;"));
 $num_factura = intval($query_cantidad_facturas['cantidad']) + 1;
 /** FIN TABLA CONTADO **/
 
@@ -24,6 +24,12 @@ $query_obtener_productos = "SELECT * FROM Producto;";
 //consultar la bd y obtener resultado
 $resultado_obtener_productos = mysqli_query($db, $query_obtener_productos);
 /** FIN TABLA PRODUCTOS **/
+
+/** MOSTRAR DATOS DE LA TABLA PROVEEDORES**/
+$query_obtener_proveedores = "SELECT * FROM Proveedor;";
+$resultado_obtener_proveedores = mysqli_query($db, $query_obtener_proveedores);
+/** FIN DE LA TABLA PROVEEDORES**/
+
 $total = 0;
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && $_GET['lista'] == 'true') {
@@ -35,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && $_GET['lista'] == 'true') {
         $resultado_busqueda['codigo'] = $_GET['cbProductos'];
         $resultado_busqueda['cantidad'] = $_GET['txtCantidad'];
         $_SESSION['lista_productos'][] = $resultado_busqueda;
-        header('location: /admin/control/contado_crear.php');
+        header('location: /admin/control/compras_crear.php');
     }
 }
 
@@ -51,13 +57,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // si el arreglo de errores esta vacio, hacer la insercion
     if (empty($errores)) {
 
-        /**INSERTAR DATOS EN LA TABLA CONTADO**/
-        $query_insertar_contado = "INSERT INTO Contado (id, fecha_registro, total) VALUES ('$num_factura', '$fecha_actual', '$total');";
+        /**INSERTAR DATOS EN LA TABLA Compra**/
+        $query_insertar_contado = "INSERT INTO Compra (id, fecha, total, id_proveedor) VALUES ('$num_factura', '$fecha_actual', '$total', '{$_POST['cbProveedor']}');";
+        // debuguear($query_insertar_contado);
         $resultado_contado = mysqli_query($db, $query_insertar_contado);
         /**FIN DE LA TABLA CONTADO**/
 
         /** INSERTAR DATOS EN LA TABLA DETALLE **/
-        $query_insertar_detalle = "INSERT INTO DetalleContado (cantidad, codigo_producto, id_contado) VALUES ";
+        $query_insertar_detalle = "INSERT INTO DetalleCompra (cantidad, codigo_producto, id_compra) VALUES ";
         $datos_value = "";
         $contador = 0;
         $total_productos = count($lista_productos);
@@ -73,12 +80,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
         $query_insertar_detalle = $query_insertar_detalle . $datos_value;
+        // debuguear($query_insertar_detalle);
         $resultado_detalle = mysqli_query($db, $query_insertar_detalle);
         /** FIN TABLA DETALLE **/
 
         // si el resultado devolvio una fila modificada mostrar que si se inserto
         if ($resultado_contado && $resultado_detalle) {
-            header('Location: /admin/control/contado.php?resultado=1');
+            header('Location: /admin/control/compras.php?resultado=1');
         }
     }
 }
@@ -94,10 +102,10 @@ incluirTemplate('slidebar');
         </div>
     <?php endforeach; ?>
 
-    <form method="GET" class="formulario" action="contado_crear.php">
+    <form method="GET" class="formulario" action="compras_crear.php">
         <fieldset>
 
-            <legend>Detalles de la Venta</legend>
+            <legend>Detalles de la Compra</legend>
 
             <label for="cbProductos">Producto</label>
             <select name="cbProductos" id="cbProductos">
@@ -115,24 +123,32 @@ incluirTemplate('slidebar');
         </fieldset>
     </form>
 
-    <form method="POST" class="formulario" action="contado_crear.php">
+    <form method="POST" class="formulario" action="compras_crear.php">
         <fieldset>
-            <legend>Venta al Contado</legend>
+            <legend>Datos de la Compra</legend>
 
             <label for="txtId">Número de factura</label>
-            <input type="text" name="txtId" id="txtId" value="<?php echo $num_factura; ?>">
+            <input disabled type="text" name="txtId" id="txtId" value="<?php echo $num_factura; ?>">
 
             <label for="dtRegistro">Fecha de registro</label>
-            <input type="date" name="dtRegistro" id="dtRegistro" value="<?php echo $fecha_actual; ?>">
+            <input disabled type="date" name="dtRegistro" id="dtRegistro" value="<?php echo $fecha_actual; ?>">
 
             <label for="txtTotal">Total</label>
-            <input type="number" name="txtTotal" id="txtTotal" value="<?php echo $total; ?>">
+            <input disabled type="number" name="txtTotal" id="txtTotal" value="<?php echo $total; ?>">
+
+            <label for="cbProveedor">Proveedor</label>
+            <select name="cbProveedor" id="cbProveedor">
+                <option disabled selected value="">-- Seleccionar Proveedor --</option>
+                <?php while ($proveedor = mysqli_fetch_assoc($resultado_obtener_proveedores)): ?>
+                    <option value="<?php echo $proveedor['id']; ?>"> <?php echo $proveedor['nombres']; ?> </option>
+                <?php endwhile; ?>
+            </select>
 
         </fieldset>
 
         <div class="alinear-derecha separar-margin">
 
-            <a class="boton-rojo" href="contado.php?cancelado='true'">
+            <a class="boton-rojo" href="compras.php?cancelado='true'">
                 <span>Cancelar</span>
             </a>
 

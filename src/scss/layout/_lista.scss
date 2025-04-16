@@ -1,7 +1,7 @@
 .imagen-encabezado {
 
     @include imagen_banner;
-    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.85)), url(../img/banner-encabezado2.jpg);
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.85)), url(../img/banner-encabezado2.png);
     justify-content: center;
 
 }

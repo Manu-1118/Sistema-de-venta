@@ -1,9 +1,18 @@
 <?php
-$db = conectarDB();
-$query = "SELECT * FROM proveedor";
-$resultado = mysqli_query($db, $query);
-
-while ($proveedor = mysqli_fetch_assoc($resultado)) {
-    $proveedores[] = $proveedor;
-}
+$proveedores = [
+    [
+        'id' => '875ABC09',
+        'nombre' => 'Ernesto',
+        'apellido' => 'Peralta',
+        'empresa' => 'Delmor',
+        'telefono' => '7856664'
+    ],
+    [
+        'id' => '95ABD09',
+        'nombre' => 'Gabriela',
+        'apellido' => 'Mendoza',
+        'empresa' => 'Disegsa',
+        'telefono' => '87456392'
+    ],
+];
 ?>

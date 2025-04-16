@@ -1,12 +1,15 @@
 <?php
 require '../../includes/app.php';
+require '../../includes/data/productos.php';
 estaAutenticado(); //verificar que $_SESSION sea true
 
 //Conectar la bd
 $db = conectarDB();
 
+$categorias = ['Botanas', 'Lacteos', 'Carnes', 'Embutidos', 'Aceites', 'Verduras', 'Farmacia', 'Panadería', 'Enlatados', 'Higiene y Hogar'];
+
 //escribir el query
-$query_mostrar = "SELECT * FROM Producto limit 5;";
+$query_mostrar = "SELECT * FROM Producto";
 
 //consultar la bd y obtener resultado
 $resultado_mostrar = mysqli_query($db, $query_mostrar);
@@ -109,7 +112,9 @@ incluirTemplate('slidebar');
             <label for="cbCategoria">Categoría</label>
             <select name="cbCategoria">
                 <option disabled selected>-- Seleccionar Categoría --</option>
-                <option value="1">Lacteos</option>
+                <?php foreach ($categorias as $categoria): ?>
+                    <option value="<?php echo $categoria ?>"><?php echo $categoria ?></option>
+                <?php endforeach; ?>
             </select>
 
         </fieldset>

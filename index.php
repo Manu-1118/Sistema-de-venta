@@ -2,7 +2,6 @@
 require './includes/app.php';
 
 incluirTemplate('header', true);
-
 ?>
 
 <section class="imagen-encabezado">

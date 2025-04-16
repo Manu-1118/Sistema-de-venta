@@ -1,98 +1,102 @@
 <?php
 require '../../includes/app.php';
+require '../../includes/data/productos.php';
+estaAutenticado(); //verificar que $_SESSION sea true
 
-estaAutenticado();
-incluirTemplate('header');
-incluirTemplate('slidebar');
-
+//Conectar la bd
 $db = conectarDB();
+//Arreglo para validacion
 $errores = [];
-
-$id_proveedor = $_GET['id'] ?? null;
-
-if (!$id_proveedor) {
-    header('Location: proveedores.php');
-    exit;
+// validar que no se digite cualquier id
+$id = filter_var($_GET['id'], FILTER_VALIDATE_INT);
+if (!$id) {
+    header('Location: /admin/control/proveedores.php');
 }
 
-$query_proveedor = "SELECT * FROM proveedor WHERE id = $id_proveedor";
-$resultado_proveedor = mysqli_query($db, $query_proveedor);
-$proveedor = mysqli_fetch_assoc($resultado_proveedor);
+// Consulta
+$query_modi_proveedor = "SELECT * FROM Proveedor WHERE id = $id;";
+$resultado_proveedor = mysqli_fetch_assoc(mysqli_query($db, $query_modi_proveedor));
 
-if (!$proveedor) {
-    header('Location: proveedores.php');
-    exit;
-}
+//debuguear($resultado_proveedor);
 
+$codigo = $resultado_proveedor['id'];
+$nombres = $resultado_proveedor['nombres'];
+$apellidos = $resultado_proveedor['apellidos'];
+$empresa = $resultado_proveedor['empresa'];
+$telefono = $resultado_proveedor['telefono'];
+
+// verificar que se mando informacion al post
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $nombres = mysqli_real_escape_string($db, $_POST['nombres']);
-    $apellidos = mysqli_real_escape_string($db, $_POST['apellidos']);
-    $empresa = mysqli_real_escape_string($db, $_POST['empresa']);
-    $telefono = mysqli_real_escape_string($db, $_POST['telefono']);
 
-    // Validaciones
-    if (empty($nombres)) {
-        $errores[] = "El nombre es obligatorio.";
+    //debuguear($_POST);
+    // Obtener los valores del POST y escapar las cadenas de texto para evitar inyecciones sql
+    //$codigo = mysqli_real_escape_string($db, $_POST['txtNombre']);
+    $nombres = mysqli_real_escape_string($db, $_POST['txtNombre']);
+    $apellidos = mysqli_real_escape_string($db, $_POST['txtApellido']);
+    $empresa = mysqli_real_escape_string($db, $_POST['txtEmpresa']);
+    $telefono = mysqli_real_escape_string($db, $_POST['txtTelefono']);
+
+    // si un campo esta vacio, mandar error
+    if (!$nombres || !$apellidos || !$empresa) {
+        $errores[] = "Los campos nombre, apellidos y empresa son obligatorios";
     }
 
-    if (empty($apellidos)) {
-        $errores[] = "El apellido es obligatorio.";
-    }
-
-    if (empty($empresa)) {
-        $errores[] = "La empresa es obligatoria.";
-    }
-
+    // si el arreglo de errores esta vacio, hacer la insercion
     if (empty($errores)) {
-        $query_actualizar = "UPDATE proveedor SET nombres = '$nombres', apellidos = '$apellidos', empresa = '$empresa', telefono = '$telefono' WHERE id = $id_proveedor";
-        $resultado_actualizar = mysqli_query($db, $query_actualizar);
 
-        if ($resultado_actualizar) {
-            header('Location: proveedores.php');
-            exit;
-        } else {
-            $errores[] = "Error al actualizar el proveedor.";
+        // Crear consulta con los valores
+        $query_modificar = "UPDATE Proveedor SET nombres = '$nombres', apellidos = '$apellidos', empresa = '$empresa', telefono = '$telefono' WHERE id = $id;";
+        $resultado_modificar = mysqli_query($db, $query_modificar);
+
+        // si el resultado devolvio una fila modificada mostrar que si se inserto
+        if ($resultado_modificar) {
+            header('Location: /admin/control/proveedores.php?resultado=2');
         }
     }
 }
+
+incluirTemplate('header');
+incluirTemplate('slidebar');
 ?>
 
 <main id="main" class="main admin main-admin menu-toggle">
-    <h1>Editar Proveedor</h1>
-    <div class="contenedorForm">
-        <div class="position-fixed">
-            <?php foreach ($errores as $error) : ?>
-                <div class="error"><?php echo $error; ?></div>
-            <?php endforeach; ?>
-
-            <form method="POST">
-                <div class="input-group">
-                    <span class="input-group-text">Nombres: </span> 
-                    <input type="text" name="nombres" class="form-control" value="<?php echo htmlspecialchars($proveedor['nombres']); ?>" required>
-                </div>
-
-                <div class="input-group">
-                    <span class="input-group-text">Apellidos: </span>
-                    <input type="text" name="apellidos" class="form-control" value="<?php echo htmlspecialchars($proveedor['apellidos']); ?>" required>
-                </div>
-
-                <div class="input-group">
-                    <span class="input-group-text">Empresa: </span>
-                    <input type="text" name="empresa" class="form-control" value="<?php echo htmlspecialchars($proveedor['empresa']); ?>" required>
-                </div>
-
-                <div class="input-group">
-                    <span class="input-group-text">Teléfono: </span>
-                    <input type="text" name="telefono" class="form-control" value="<?php echo htmlspecialchars($proveedor['telefono']); ?>">
-                </div>
-                
-                <div class="d-flex justify-content-center">
-                    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
-                    <a class="btn btn-secondary" href="proveedores.php?">Cancelar</a>
-                </div>
-            </form>
+    <?php foreach ($errores as $error): ?>
+        <div class="alerta error">
+            <?php echo $error; ?>
         </div>
-    </div>
+    <?php endforeach; ?>
+
+    <form method="POST" class="formulario">
+        <fieldset>
+            <legend>Editar Proveedor</legend>
+
+            <label for="txtCodigo">Codigo</label>
+            <input disabled type="text" name="txtCodigo" placeholder="Nombre de usuario" id="txtCodigo" value="<?php echo $codigo; ?>">
+
+            <label for="txtNombre">Nombres</label>
+            <input type="text" name="txtNombre" placeholder="Nombre de usuario" id="txtNombre" value="<?php echo $nombres; ?>">
+
+            <label for="txtApellido">Apellidos</label>
+            <input type="text" name="txtApellido" placeholder="Apellido de usuario" id="txtApellido" value="<?php echo $apellidos; ?>">
+
+            <label for="txtEmpresa">Empresa</label>
+            <input type="text" name="txtEmpresa" placeholder="Disegsa" id="txtEmpresa" value="<?php echo $empresa; ?>">
+
+            <label for="txtTelefono">Teléfono</label>
+            <input type="number" name="txtTelefono" placeholder="76789865" id="txtTelefono" value="<?php echo $telefono; ?>">
+
+        </fieldset>
+        <div class="alinear-derecha separar-margin">
+
+            <a class="boton-rojo" href="proveedores.php">
+                <span>Cancelar</span>
+            </a>
+
+            <input type="submit" value="Editar" class="boton-azul">
+
+        </div>
+
+    </form>
 </main>
 
 <?php incluirTemplate('footer'); ?>
