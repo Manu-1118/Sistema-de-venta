@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($errores)) {
 
         // Crear consulta con los valores
-        $query_insertar = "INSERT INTO Cliente(nombres, apellidos) VALUES ('$nombres', '$apellidos');";
+        $query_insertar = "INSERT INTO cliente(nombres, apellidos) VALUES ('$nombres', '$apellidos');";
 
 
         $resultado_insertar = mysqli_query($db, $query_insertar);
@@ -57,10 +57,10 @@ incluirTemplate('slidebar');
             <legend>Agregar Cliente</legend>
 
             <label for="txtNombres">Nombres</label>
-            <input type="text" name="txtNombres" placeholder="Nombres del cliente" id="txtNombres" value="<?php echo $nombre; ?>">
+            <input type="text" name="txtNombres" placeholder="Nombres del cliente" id="txtNombres" value="">
 
             <label for="txtApellidos">Apellidos</label>
-            <input type="text" name="txtApellidos" placeholder="Apellidos del cliente" id="txtApellidos" value="<?php echo $apellido; ?>">
+            <input type="text" name="txtApellidos" placeholder="Apellidos del cliente" id="txtApellidos" value="">
 
         </fieldset>
 

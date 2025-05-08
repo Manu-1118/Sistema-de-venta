@@ -1,20 +1,15 @@
 <?php
 require '../../includes/app.php';
 require '../../includes/data/productos.php';
-estaAutenticado(); //verificar que $_SESSION sea true
+estaAutenticado();
 
-//Conectar la bd
 $db = conectarDB();
 
 $categorias = ['Botanas', 'Lacteos', 'Carnes', 'Embutidos', 'Aceites', 'Verduras', 'Farmacia', 'Panadería', 'Enlatados', 'Higiene y Hogar'];
 
-//escribir el query
 $query_mostrar = "SELECT * FROM Producto";
-
-//consultar la bd y obtener resultado
 $resultado_mostrar = mysqli_query($db, $query_mostrar);
 
-//Arreglo para validacion
 $errores = [];
 
 $codigo = '';
@@ -23,67 +18,53 @@ $precio = '';
 $descripcion = '';
 $categoria = '';
 
-
-// verificar que se mando informacion al post
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-    // Obtener los valores del POST y escapar las cadenas de texto para evitar inyecciones sql
     $codigo = mysqli_real_escape_string($db, $_POST['txtCodigo']);
     $nombre = mysqli_real_escape_string($db, $_POST['txtNombre']);
     $precio = mysqli_real_escape_string($db, $_POST['txtPrecio']);
     $descripcion = mysqli_real_escape_string($db, $_POST['txtDescripcion']);
     $categoria = mysqli_real_escape_string($db, $_POST['cbCategoria']);
 
-    // si un campo esta vacio, mandar error
     if (!$codigo || !$nombre || !$precio || !$descripcion || !$categoria) {
         $errores[] = "Todos los campos son obligatorios";
     }
-    // Validar precio
+
     if (!is_numeric($precio)) {
         $errores[] = "El precio debe ser un número válido.";
     }
 
-    // if (!$codigo==='') {
+    // Validar si el código ya existe
+    $query_codigo = "SELECT * FROM Producto WHERE codigo = '$codigo'";
+    $resultado_buscar_codigo = mysqli_query($db, $query_codigo);
+    if (mysqli_num_rows($resultado_buscar_codigo) > 0) {
+        $errores[] = "Ya existe un producto con ese código.";
+    }
 
-    //     $query_codigo = "SELECT * FROM Producto WHERE codigo = $codigo;";
-    //     $resultado_buscar_codigo = mysqli_query($db, $query_insertar);
-
-    //     if ($resultado_buscar_codigo) {
-    //         $errores[] = "Ya existe un producto con ese código";
-    //     }
-    // }
-
-
-    //debuguear($errores);
-
-    // si el arreglo de errores esta vacio, hacer la insercion
     if (empty($errores)) {
-
-        // Crear consulta con los valores
-        $query_insertar = "INSERT INTO Producto (codigo, nombre, precio_unitario, descripcion, categoria) VALUES ('$codigo', '$nombre', '$precio', '$descripcion', '$categoria');";
-
+        $query_insertar = "INSERT INTO Producto (codigo, nombre, precio_unitario, descripcion, categoria)
+                           VALUES ('$codigo', '$nombre', '$precio', '$descripcion', '$categoria')";
         $resultado_insertar = mysqli_query($db, $query_insertar);
 
-        //debuguear($resultado_insertar);
-
-        // si el resultado devolvio una fila modificada mostrar que si se inserto
         if ($resultado_insertar) {
             header('Location: /admin/control/productos.php?resultado=1');
+            exit;
         } else {
-
-            //header('Location: ' . $_SERVER['PHP_SELF'] . '?resultado=2');
-            //header('Location: admin/control/productos.php?mensaje=Error al Añadir el Producto');
+            $errores[] = "Error al insertar: " . mysqli_error($db);
         }
     }
 }
 
-$resultado_mensaje = $_GET['resultado'];
+$resultado_mensaje = $_GET['resultado'] ?? null;
 
 incluirTemplate('header');
 incluirTemplate('slidebar');
 ?>
 
 <main id="main" class="main admin main-admin menu-toggle">
+    <?php if ($resultado_mensaje == 1): ?>
+        <p class="alerta exito">Producto agregado correctamente</p>
+    <?php endif; ?>
+
     <?php foreach ($errores as $error): ?>
         <div class="alerta error">
             <?php echo $error; ?>
@@ -95,40 +76,35 @@ incluirTemplate('slidebar');
             <legend>Agregar Producto</legend>
 
             <label for="txtCodigo">Código</label>
-            <input type="text" name="txtCodigo" placeholder="358685" id="txtCodigo" value="<?php echo $codigo; ?>">
+            <input type="text" name="txtCodigo" id="txtCodigo" value="<?php echo $codigo; ?>" placeholder="358685">
 
             <label for="txtNombre">Nombre</label>
-            <input type="text" name="txtNombre" placeholder="Leche Eskimo" id="txtNombre" value="<?php echo $nombre; ?>">
+            <input type="text" name="txtNombre" id="txtNombre" value="<?php echo $nombre; ?>" placeholder="Leche Eskimo">
 
             <label for="txtPrecio">Precio unitario</label>
-            <input type="number" name="txtPrecio" placeholder="40.00" id="txtPrecio" value="<?php echo $precio; ?>">
+            <input type="number" name="txtPrecio" id="txtPrecio" value="<?php echo $precio; ?>" step="0.01" placeholder="40.00">
 
             <label for="imagen">Imagen:</label>
             <input type="file" name="imagen" id="imagen" accept="image/jpeg, image/png" disabled class="disabled">
 
             <label for="txtDescripcion">Descripción</label>
-            <input type="text" name="txtDescripcion" placeholder="Leche Eskimo entera de 900ml..." id="txtDescripcion" value="<?php echo $descripcion; ?>">
+            <input type="text" name="txtDescripcion" id="txtDescripcion" value="<?php echo $descripcion; ?>" placeholder="Descripción del producto...">
 
             <label for="cbCategoria">Categoría</label>
-            <select name="cbCategoria">
+            <select name="cbCategoria" id="cbCategoria">
                 <option disabled selected>-- Seleccionar Categoría --</option>
-                <?php foreach ($categorias as $categoria): ?>
-                    <option value="<?php echo $categoria ?>"><?php echo $categoria ?></option>
+                <?php foreach ($categorias as $cat): ?>
+                    <option value="<?php echo $cat; ?>" <?php echo ($cat === $categoria) ? 'selected' : ''; ?>>
+                        <?php echo $cat; ?>
+                    </option>
                 <?php endforeach; ?>
             </select>
-
         </fieldset>
 
         <div class="alinear-derecha separar-margin">
-
-            <a class="boton-rojo" href="productos.php">
-                <span>Cancelar</span>
-            </a>
-
+            <a class="boton-rojo" href="productos.php">Cancelar</a>
             <input type="submit" value="Agregar" class="boton-azul">
-
         </div>
-
     </form>
 </main>
 

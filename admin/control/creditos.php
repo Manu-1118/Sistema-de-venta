@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && $_GET['cancelado'] == true) {
 $db = conectarDB();
 
 //escribir el query
-$query_mostrar = "SELECT cd.id, CONCAT(c.nombres, c.apellidos) AS 'cliente', cd.fecha_credito, cd.fecha_cancelacion, cd.total, cd.monto_pendiente, cd.monto_pagado FROM Cliente c JOIN Credito cd on c.id = cd.id_cliente;";
+$query_mostrar = "SELECT cd.id, CONCAT(c.nombres, c.apellidos) AS 'cliente', cd.fecha_credito, cd.fecha_cancelacion, cd.total, cd.monto_pendiente, cd.monto_pagado FROM Cliente c JOIN Credito cd on c.id = cd.id_cliente WHERE cd.monto_pendiente > 0";
 
 //consultar la bd y obtener resultado
 $resultado_mostrar = mysqli_query($db, $query_mostrar);
@@ -81,6 +81,7 @@ incluirTemplate('slidebar');
                             <td><?php echo $credito['monto_pendiente']; ?></td>
                             <td>
                                 <a href="/admin/control/creditos_detalles.php?id=<?php echo $credito['id']; ?>" class="boton-azul">Ver detalles</a>
+                                <a href="/admin/control/credito_abonar.php?id=<?php echo $credito['id']; ?>" class="boton-azul">Abonar</a>
                             </td>
                         </tr>
                     <?php $i++;

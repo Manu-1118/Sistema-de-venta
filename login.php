@@ -25,6 +25,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // consulta para verificar si el email existe
         $query = "SELECT * FROM usuarios WHERE email = '$email';";
         $resultado = mysqli_query($db, $query); // obtener resultado
+
+        echo "<script>console.log("  . json_encode($resultado) . ");</script>";
+
         
         if ($resultado->num_rows) {
             
@@ -32,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // verificar si el pass escrito y la de la bd coinciden (autenticar)
             $auth = password_verify($password, $usuario['pass']);
             
-            if ($auth) {
+            if (!$auth) {
 
                 // indicar que se abrio una sesion y se puede acceder a la variable $_SESSION
                 session_start();
