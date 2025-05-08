@@ -5,16 +5,15 @@ estaAutenticado();
 
 $db = conectarDB();
 
+// Categorías disponibles
 $categorias = ['Botanas', 'Lacteos', 'Carnes', 'Embutidos', 'Aceites', 'Verduras', 'Farmacia', 'Panadería', 'Enlatados', 'Higiene y Hogar'];
-
-$query_mostrar = "SELECT * FROM Producto";
-$resultado_mostrar = mysqli_query($db, $query_mostrar);
 
 $errores = [];
 
 $codigo = '';
 $nombre = '';
 $precio = '';
+$cantidad = '';
 $descripcion = '';
 $categoria = '';
 
@@ -22,27 +21,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $codigo = mysqli_real_escape_string($db, $_POST['txtCodigo']);
     $nombre = mysqli_real_escape_string($db, $_POST['txtNombre']);
     $precio = mysqli_real_escape_string($db, $_POST['txtPrecio']);
+    $cantidad = mysqli_real_escape_string($db, $_POST['txtCantidad']);
     $descripcion = mysqli_real_escape_string($db, $_POST['txtDescripcion']);
     $categoria = mysqli_real_escape_string($db, $_POST['cbCategoria']);
 
-    if (!$codigo || !$nombre || !$precio || !$descripcion || !$categoria) {
-        $errores[] = "Todos los campos son obligatorios";
+    // Validación
+    if (!$codigo || !$nombre || !$precio || !$cantidad || !$descripcion || !$categoria) {
+        $errores[] = "Todos los campos son obligatorios.";
     }
 
-    if (!is_numeric($precio)) {
-        $errores[] = "El precio debe ser un número válido.";
+    if (!is_numeric($precio) || $precio < 0) {
+        $errores[] = "El precio debe ser un número positivo.";
     }
 
-    // Validar si el código ya existe
+    if (!ctype_digit($cantidad) || intval($cantidad) < 0) {
+        $errores[] = "La cantidad debe ser un número entero no negativo.";
+    }
+
+    // Verificar si ya existe un producto con ese código
     $query_codigo = "SELECT * FROM Producto WHERE codigo = '$codigo'";
     $resultado_buscar_codigo = mysqli_query($db, $query_codigo);
     if (mysqli_num_rows($resultado_buscar_codigo) > 0) {
         $errores[] = "Ya existe un producto con ese código.";
     }
 
+    // Insertar si no hay errores
     if (empty($errores)) {
-        $query_insertar = "INSERT INTO Producto (codigo, nombre, precio_unitario, descripcion, categoria)
-                           VALUES ('$codigo', '$nombre', '$precio', '$descripcion', '$categoria')";
+        $query_insertar = "INSERT INTO Producto (codigo, nombre, precio_unitario, cantidad, categoria, descripcion)
+                           VALUES ('$codigo', '$nombre', '$precio', '$cantidad', '$categoria', '$descripcion')";
+
         $resultado_insertar = mysqli_query($db, $query_insertar);
 
         if ($resultado_insertar) {
@@ -66,9 +73,7 @@ incluirTemplate('slidebar');
     <?php endif; ?>
 
     <?php foreach ($errores as $error): ?>
-        <div class="alerta error">
-            <?php echo $error; ?>
-        </div>
+        <div class="alerta error"><?php echo $error; ?></div>
     <?php endforeach; ?>
 
     <form method="POST" class="formulario">
@@ -82,7 +87,10 @@ incluirTemplate('slidebar');
             <input type="text" name="txtNombre" id="txtNombre" value="<?php echo $nombre; ?>" placeholder="Leche Eskimo">
 
             <label for="txtPrecio">Precio unitario</label>
-            <input type="number" name="txtPrecio" id="txtPrecio" value="<?php echo $precio; ?>" step="0.01" placeholder="40.00">
+            <input type="number" step="0.01" name="txtPrecio" id="txtPrecio" value="<?php echo $precio; ?>" placeholder="40.00">
+
+            <label for="txtCantidad">Cantidad</label>
+            <input type="number" name="txtCantidad" id="txtCantidad" value="<?php echo $cantidad; ?>" placeholder="10">
 
             <label for="imagen">Imagen:</label>
             <input type="file" name="imagen" id="imagen" accept="image/jpeg, image/png" disabled class="disabled">

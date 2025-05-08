@@ -1,34 +1,43 @@
 <?php
 require '../../includes/app.php';
 require '../../includes/data/productos.php';
-estaAutenticado(); //verificar que $_SESSION sea true
+estaAutenticado();
 
-//Conectar la bd
+// Conectar a la BD
 $db = conectarDB();
 
-//escribir el query
-$query_mostrar = "SELECT * FROM Producto limit 10;";
+// Variables para búsqueda y paginación
+$campo = $_GET['campo'] ?? '';
+$pagina_actual = isset($_GET['pagina']) ? (int) $_GET['pagina'] : 1;
+$limite = 10;
+$offset = ($pagina_actual - 1) * $limite;
 
-//consultar la bd y obtener resultado
+// Preparar cláusula WHERE si hay búsqueda
+$where = '';
+if (!empty($campo)) {
+    $campo_escapado = mysqli_real_escape_string($db, $campo);
+    $where = "WHERE nombre LIKE '%$campo_escapado%' OR categoria LIKE '%$campo_escapado%'";
+}
+
+// Obtener total de productos para paginación
+$query_total = "SELECT COUNT(*) as total FROM Producto $where";
+$resultado_total = mysqli_query($db, $query_total);
+$total_productos = mysqli_fetch_assoc($resultado_total)['total'];
+$total_paginas = ceil($total_productos / $limite);
+
+// Obtener productos según búsqueda y paginación
+$query_mostrar = "SELECT * FROM Producto $where LIMIT $limite OFFSET $offset";
 $resultado_mostrar = mysqli_query($db, $query_mostrar);
 
-
-// verificar que se mando informacion al post
+// Eliminar producto si se envía POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-    // debuguear($_POST);
-
-    $id = $_POST['id'];
-    $id = filter_var($id, FILTER_VALIDATE_INT);
-    
+    $id = filter_var($_POST['id'], FILTER_VALIDATE_INT);
     if ($id) {
-        
         $query_eliminar = "DELETE FROM Producto WHERE codigo = $id;";
-        debuguear($query_eliminar);
         $resultado_eliminar = mysqli_query($db, $query_eliminar);
-
         if ($resultado_eliminar) {
             header('Location: /admin/control/productos.php');
+            exit;
         }
     }
 }
@@ -39,10 +48,7 @@ incluirTemplate('header');
 incluirTemplate('slidebar');
 ?>
 
-<!-- class="main admin menu-toggle" -->
-
 <main id="main" class="main admin main-admin menu-toggle">
-
     <?php if (intval($resultado_mensaje) === 1): ?>
         <p class="alerta exito">El producto se agregó correctamente</p>
     <?php elseif (intval($resultado_mensaje) === 2): ?>
@@ -52,21 +58,17 @@ incluirTemplate('slidebar');
     <div class="contenedor-productos">
 
         <div class="contenedor-herramientas">
-
             <div class="contenedor-busqueda">
-
-                <form method="POST" class="formulario busqueda">
+                <form method="GET" class="formulario busqueda">
                     <label for="campo">Buscar</label>
-                    <input type="text" name="campo" id="campo" placeholder="Producto...">
+                    <input type="text" name="campo" id="campo" placeholder="Producto..." value="<?php echo htmlspecialchars($campo); ?>">
                 </form>
-
             </div>
 
             <a href="productos_crear.php" class="btn-agregar boton-azul">
                 <img src="/build/img/icons/agregar.png" alt="+" class="icono-principal">
                 <span>Nuevo</span>
             </a>
-
         </div>
 
         <div class="tabla-containe">
@@ -74,23 +76,19 @@ incluirTemplate('slidebar');
                 <thead>
                     <tr>
                         <th>#</th>
-                        <!-- <th>imagen</th> -->
                         <th>Código</th>
                         <th>Nombre</th>
                         <th>Descripción</th>
                         <th>Cantidad</th>
                         <th>Categoría</th>
                         <th>Precio</th>
-                        <!-- <th>Imagen</th> -->
                         <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php $i = 1;
-                    while ($producto = mysqli_fetch_assoc($resultado_mostrar)): ?>
+                    <?php $i = 1 + $offset; while ($producto = mysqli_fetch_assoc($resultado_mostrar)): ?>
                         <tr>
                             <td><?php echo $i ?></td>
-                            <!-- <td><?php echo "imagen producto" ?></td> -->
                             <td><?php echo $producto['codigo']; ?></td>
                             <td><?php echo $producto['nombre']; ?></td>
                             <td><?php echo $producto['descripcion']; ?></td>
@@ -98,138 +96,36 @@ incluirTemplate('slidebar');
                             <td><?php echo $producto['categoria']; ?></td>
                             <td><?php echo $producto['precio_unitario']; ?></td>
                             <td class="acciones-tabla">
-
                                 <a href="productos_editar.php?id=<?php echo $producto['codigo']; ?>" class="boton-azul">✏️</a>
-
-                                <!-- <form method="POST">
+                                <form method="POST" style="display:inline;" onsubmit="return confirmarEliminacion();">
                                     <input type="hidden" name="id" value="<?php echo $producto['codigo']; ?>">
-                                    <input type="submit" class="boton-rojo" value="🗑️">
-                                </form> -->
-
+                                    <button type="submit" class="boton-rojo">🗑️</button>
+                                </form>
                             </td>
                         </tr>
-                    <?php $i++;
-                    endwhile; ?>
+                    <?php $i++; endwhile; ?>
                 </tbody>
             </table>
         </div>
+
+        <!-- Paginación -->
+        <?php if ($total_paginas > 1): ?>
+            <div class="paginacion">
+                <?php for ($p = 1; $p <= $total_paginas; $p++): ?>
+                    <a class="paginacion-link <?php if ($p == $pagina_actual) echo 'activo'; ?>" 
+                       href="?campo=<?php echo urlencode($campo); ?>&pagina=<?php echo $p; ?>">
+                        <?php echo $p; ?>
+                    </a>
+                <?php endfor; ?>
+            </div>
+        <?php endif; ?>
     </div>
 </main>
 
-<!-- ventana modal agregar -->
-<!-- <input type="checkbox" id="btn-modal">
-<div class="contenedor-modal">
-
-
-    <div class="contenido-modal">
-
-        <?php foreach ($errores as $error): ?>
-            <div class="alerta error">
-                <?php echo $error; ?>
-            </div>
-        <?php endforeach; ?>
-
-        <form method="POST" class="formulario">
-            <fieldset>
-                <legend>Agregar Producto</legend>
-
-                <label for="txtCodigo">Código</label>
-                <input type="text" name="txtCodigo" placeholder="358685" id="txtCodigo" value="<?php echo $codigo; ?>">
-
-                <label for="txtNombre">Nombre</label>
-                <input type="text" name="txtNombre" placeholder="Leche Eskimo" id="txtNombre" value="<?php echo $nombre; ?>">
-
-                <label for="txtPrecio">Precio unitario</label>
-                <input type="number" name="txtPrecio" placeholder="40.00" id="txtPrecio" value="<?php echo $precio; ?>">
-
-                <label for="imagen">Imagen:</label>
-                <input type="file" name="imagen" id="imagen" accept="image/jpeg, image/png" disabled class="disabled">
-
-                <label for="txtDescripcion">Descripción</label>
-                <input type="text" name="txtDescripcion" placeholder="Leche Eskimo entera de 900ml..." id="txtDescripcion" value="<?php echo $descripcion; ?>">
-
-                <label for="cbCategoria">Categoría</label>
-                <select name="cbCategoria">
-                    <option disabled selected>-- Seleccionar Categoría --</option>
-                    <option value="1">Lacteos</option>
-                </select>
-
-            </fieldset>
-
-            <div class="alinear-derecha separar-margin">
-
-                <label class="boton-rojo" for="btn-modal">
-                    <span>Cancelar</span>
-                </label>
-
-                <input type="submit" value="Agregar" class="boton-azul">
-
-            </div>
-
-        </form>
-
-    </div>
-
-    <label for="btn-modal" class="cerrar-modal"></label>
-</div> -->
-<!-- fin ventana modal -->
-
-<!-- ventana modal editar -->
-<!-- <input type="checkbox" id="btn-modal-editar">
-<div class="contenedor-modal-editar">
-
-
-    <div class="contenido-modal-editar">
-
-        <?php foreach ($errores as $error): ?>
-            <div class="alerta error">
-                <?php echo $error; ?>
-            </div>
-        <?php endforeach; ?>
-
-        <form method="POST" class="formulario">
-            <fieldset>
-                <legend>Editar Producto</legend>
-
-                <label for="txtCodigo">Código</label>
-                <input type="text" name="txtCodigo" placeholder="358685" id="txtCodigo" value="<?php echo $codigo; ?>">
-
-                <label for="txtNombre">Nombre</label>
-                <input type="text" name="txtNombre" placeholder="Leche Eskimo" id="txtNombre" value="<?php echo $nombre; ?>">
-
-                <label for="txtPrecio">Precio unitario</label>
-                <input type="number" name="txtPrecio" placeholder="40.00" id="txtPrecio" value="<?php echo $precio; ?>">
-
-                <label for="imagen">Imagen:</label>
-                <input type="file" name="imagen" id="imagen" accept="image/jpeg, image/png" disabled class="disabled">
-
-                <label for="txtDescripcion">Descripción</label>
-                <input type="text" name="txtDescripcion" placeholder="Leche Eskimo entera de 900ml..." id="txtDescripcion" value="<?php echo $descripcion; ?>">
-
-                <label for="cbCategoria">Categoría</label>
-                <select name="cbCategoria">
-                    <option disabled selected>-- Seleccionar Categoría --</option>
-                    <option value="1">Lacteos</option>
-                </select>
-
-            </fieldset>
-
-            <div class="alinear-derecha separar-margin">
-
-                <label class="boton-rojo" for="btn-modal-editar">
-                    <span>Cancelar</span>
-                </label>
-
-                <input type="submit" value="Agregar" class="boton-azul">
-
-            </div>
-
-        </form>
-
-    </div>
-
-    <label for="btn-modal-editar" class="cerrar-modal-editar"></label>
-</div> -->
-<!-- fin ventana modal editar -->
-
 <?php incluirTemplate('footer'); ?>
+
+<script>
+function confirmarEliminacion() {
+    return confirm("¿Estás segura de que deseas eliminar este producto?");
+}
+</script>

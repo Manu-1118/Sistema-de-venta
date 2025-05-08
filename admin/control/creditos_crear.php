@@ -53,6 +53,25 @@ foreach ($lista_productos as $producto) {
 
 // verificar que se mando informacion al post
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    
+    //validar que los campos no esten vacios
+    $fecha_cancelacion = $_POST['dtCancelacion'] ?? '';
+$cliente_id = $_POST['cbClientes'] ?? '';
+
+// Validar fecha de cancelación
+if (!$fecha_cancelacion) {
+    $errores[] = "Debes ingresar una fecha de cancelación.";
+}
+
+// Validar cliente
+if (!$cliente_id) {
+    $errores[] = "Debes seleccionar un cliente.";
+}
+
+// Validar que la lista de productos no esté vacía
+if (empty($lista_productos)) {
+    $errores[] = "Debes agregar al menos un producto a la lista.";
+}
 
     // si el arreglo de errores esta vacio, hacer la insercion
     if (empty($errores)) {

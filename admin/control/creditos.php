@@ -80,7 +80,7 @@ incluirTemplate('slidebar');
                             <td><?php echo $credito['monto_pagado']; ?></td>
                             <td><?php echo $credito['monto_pendiente']; ?></td>
                             <td>
-                                <a href="/admin/control/creditos_detalles.php?id=<?php echo $credito['id']; ?>" class="boton-azul">Ver detalles</a>
+                                <a href="/admin/control/creditos_detalles.php?id=<?php echo $credito['id']; ?>" class="boton-azul">Detalles</a>
                                 <a href="/admin/control/credito_abonar.php?id=<?php echo $credito['id']; ?>" class="boton-azul">Abonar</a>
                             </td>
                         </tr>
