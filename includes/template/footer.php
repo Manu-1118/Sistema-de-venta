@@ -1,4 +1,4 @@
-<footer id="footer" class="">
+<footer id="footer">
     <div class="navegacion-footer"></div>
     <p class="copyright">El Pilar Nicaragua. Todos los derechos reservados <?php echo date('Y'); ?> &copy;</p>
 </footer><!--.footer-->

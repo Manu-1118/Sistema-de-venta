@@ -34,9 +34,6 @@ $auth = $_SESSION['login'] ?? false;
         </div><!--.contenido-left-->
 
         <div class="contenido-derecha">
-            <!-- <a href="" class="btnDarkMode">
-                <img src="/build/img/icons/moon.png" alt="boton darkmode" class="icono-principal-inverso moon">
-            </a> -->
         </div><!--.contenido-right-->
 
     </header><!--.header-->

@@ -1,7 +1,7 @@
 .imagen-encabezado {
 
     @include imagen_banner;
-    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.85)), url(../img/banner-encabezado2.png);
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.85)), url(../img/banner-encabezado.png);
     justify-content: center;
 
 }
@@ -24,28 +24,46 @@
 
 .imagen-lista-compras {
     
-    margin: 8rem 0 2rem 0;
+    margin: 6rem 0 2rem 0;
 
 }
 
-.contenedor-busqueda {
-    
-    margin: 5rem auto;
-    width: 50%;
-}
+.contenedor-lista {
+    .CA2 {
+        display: flex;
+        justify-content: space-evenly;
 
-.btn-generar-lista {
-    
-    display: flex;
-    background-color: darken($verde_dm, 30);
-    justify-content: space-between;
-    align-items: center;
-    width: 20rem;
-    height: 5rem;
+        input {
+            width: 40rem;
+        }
+    }
 
-    img {
-        width: 3rem;
-        filter: invert(100%);
-        //margin: 1rem;
+    .CA3 {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 3rem;
     }
 }
+
+// .contenedor-busqueda {
+    
+//     margin: 5rem auto;
+//     width: 50%;
+// }
+
+// .btn-generar-lista {
+    
+//     display: flex;
+//     background-color: darken($verde_dm, 30);
+//     justify-content: space-between;
+//     align-items: center;
+//     width: 20rem;
+//     height: 5rem;
+
+//     img {
+//         width: 3rem;
+//         filter: invert(100%);
+//         //margin: 1rem;
+//     }
+// }

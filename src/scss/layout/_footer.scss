@@ -6,7 +6,7 @@
     margin-bottom: 0;
     height: auto;
     text-align: center;
-    padding: $separacion /2 0; 
+    padding: calc($separacion /2) 0; 
     
     p {
         font-size: 1.5rem;

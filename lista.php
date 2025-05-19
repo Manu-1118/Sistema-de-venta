@@ -1,18 +1,22 @@
 <?php
-
-require './includes/app.php';
+require 'includes/app.php';
+estaAutenticado(true); //verificar que $_SESSION sea true
 incluirTemplate('header', true);
 
 //Conectar la bd
 $db = conectarDB();
+$encabezados = ['Imagen', 'Nombre', 'Descripción', 'Cant.', 'Precio']; //encabezados de la tabla correspondiente
+// variables para añadirlas al archivo "/data/obtener_datos.php"
+$columnas = ['imagen', 'nombre', 'descripcion', 'cantidad', 'precio_unitario'];
+$tabla = 'Producto';
+$btn_texto = 'Añadir';
+$ruta_imagen = 'productos';
 
-//escribir el query
-$query = "SELECT nombre, descripcion, precio_unitario FROM Producto limit 10;";
-
-//consultar la bd y obtener resultado
-$resultadoConsulta = mysqli_query($db, $query);
-
-//debuguear(mysqli_fetch_assoc($resultadoConsulta));
+$_SESSION['encabezados'] = $encabezados;
+$_SESSION['columnas'] = $columnas;
+$_SESSION['tabla'] = $tabla;
+$_SESSION['btn_texto'] = $btn_texto;
+$_SESSION['ruta'] = $ruta_imagen;
 
 ?>
 
@@ -22,69 +26,11 @@ $resultadoConsulta = mysqli_query($db, $query);
 
 <main id="main" class="principal fondo">
 
-    <div class="contenedor-busqueda">
-        <form action="" method="POST" class="formulario busqueda">
-            <label for="campo">Buscar producto</label>
-            <input type="text" name="campo" id="campo" placeholder="Producto...">
-        </form>
+    <div class="contenedor-lista">
+        <?php incluirTemplate('tabla_datos'); ?>
     </div>
-    <div class="tabla-container">
-        <table class="tabla-productos">
-            <thead>
-                <tr>
-                    <!-- <th>Imagen</th> -->
-                    <th>Nombre</th>
-                    <th>Descripción</th>
-                    <th>Precio</th>
-                    <th>Acción</th>
-                </tr>
-            </thead>
 
-            <tbody>
-                <?php while ($producto = mysqli_fetch_assoc($resultadoConsulta)): ?>
-                    <tr>
-                        <td><?php echo $producto['nombre']; ?></td>
-                        <td><?php echo $producto['descripcion']; ?></td>
-                        <td><?php echo $producto['precio_unitario']; ?></td>
-                        <td>
-                            <a href="#" class="boton boton-azul">
-                                <span>Añadir</span>
-                                <!-- <img class="icono-principal-inverso" src="/build/img/icons/compra.png" alt="compra"> -->
-                            </a>
-                        </td>
-                    </tr>
-                <?php endwhile; ?>
-            </tbody>
-        </table>
-    </div>
 </main>
-
-<section class="principal menu-secundario fondo">
-    <h3>Productos Seleccionados</h3>
-    <div class="tabla-container">
-        <table class="tabla-productos">
-            <thead>
-                <tr>
-                    <th>Imagen</th>
-                    <th>Nombre</th>
-                    <th>Descripción</th>
-                    <th>Cantidad</th>
-                    <th>Precio</th>
-                    <th>Acción</th>
-                </tr>
-            </thead>
-            <tbody>
-            </tbody>
-        </table>
-    </div>
-    <div class="alinear-derecha">
-        <a href="" class="boton-verde btn-generar-lista">
-            <img src="/build/img/icons/pdf.png" alt="pdf">
-            <span>Generar lista</span>
-        </a>
-    </div>
-
-</section>
 
 <?php
 incluirTemplate('footer');

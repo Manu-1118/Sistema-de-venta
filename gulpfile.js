@@ -1,4 +1,4 @@
-const { src, dest, watch, series, parallel } = require('gulp');
+const { src, dest, watch, parallel } = require('gulp');
 const sass = require('gulp-sass')(require('sass'));
 const autoprefixer = require('autoprefixer');
 const postcss = require('gulp-postcss')
@@ -8,9 +8,8 @@ const concat = require('gulp-concat');
 const terser = require('gulp-terser-js');
 const rename = require('gulp-rename');
 const imagemin = require('gulp-imagemin'); // Minificar imagenes 
-const notify = require('gulp-notify');
+//const notify = require('gulp-notify');
 const cache = require('gulp-cache');
-//const clean = require('gulp-clean');
 const webp = require('gulp-webp');
 
 const paths = {
@@ -24,7 +23,6 @@ function css() {
         .pipe(sourcemaps.init())
         .pipe(sass())
         .pipe(postcss([autoprefixer(), cssnano()]))
-        // .pipe(postcss([autoprefixer()]))
         .pipe(sourcemaps.write('.'))
         .pipe(dest('build/css'));
 }
@@ -42,15 +40,15 @@ function javascript() {
 function imagenes() {
     return src(paths.imagenes)
         .pipe(cache(imagemin({ optimizationLevel: 3 })))
-        .pipe(dest('build/img'))
-        .pipe(notify('Imagen Completada'));
+        .pipe(dest('build/img'));
+        //.pipe(notify('Imagen Completada'));
 }
 
 function versionWebp() {
     return src(paths.imagenes)
         .pipe(webp())
-        .pipe(dest('build/img'))
-        .pipe(notify({ message: 'Imagen Completada' }));
+        .pipe(dest('build/img'));
+        //.pipe(notify({ message: 'Imagen Completada' }));
 }
 
 

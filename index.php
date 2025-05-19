@@ -1,6 +1,7 @@
 <?php
-require './includes/app.php';
-
+require 'includes/app.php';
+// estaAutenticado(true);
+// $_SESSION['intentos'] = 3;
 incluirTemplate('header', true);
 ?>
 
@@ -16,51 +17,27 @@ incluirTemplate('header', true);
     <a class="boton boton-azul" href="nosotros.php">Saber más</a>
 </section><!--.Imagen principal del encabezado-->
 
-<main class="principal menu-secundario fondo" id="main">
+<main class="principal menu-secundario fondo sombra" id="main">
+
     <h1>Categorías de Productos</h1>
-    <div class="contenedor-categorias">
-        <!--codigo php para mostrar las cat de la bd-->
-        <div class="categoria">
-            <img src="/build/img/categories/lacteos.png" alt="categoria">
-
-            <div class="contenido-categoria">
-                <h3>Lacteos</h3>
-                <p>Leches, cremas, yogures...</p>
-                <a href="categoria.php" class="boton-azul-block">Ver categoría</a>
-            </div>
-        </div><!--.categoria-->
-        <div class="categoria">
-            <img src="/build/img/categories/embutidos.png" alt="categoria">
-
-            <div class="contenido-categoria">
-                <h3>Embutidos</h3>
-                <p>Salchichas, mortadelas, Jamón...</p>
-                <a href="categoria.php" class="boton-azul-block">Ver categoría</a>
-            </div>
-        </div><!--.categoria-->
-        <div class="categoria">
-            <img src="/build/img/categories/carnes.png" alt="categoria">
-
-            <div class="contenido-categoria">
-                <h3>Carnes</h3>
-                <p>Bistec, desmenuzar, cerdo, alitas...</p>
-                <a href="categoria.php" class="boton-azul-block">Ver categoría</a>
-            </div>
-        </div><!--.categoria-->
-    </div><!--.contenedor-categorias-->
+    <?php
+    $n = 3;
+    include 'includes/template/categorias.php'
+    ?>
 
     <div class="alinear-derecha">
         <a href="categorias.php" class="boton-verde">Ver todas</a>
     </div>
+
 </main><!--.Panel de las categorias-->
 
-<section class="imagen-lista principal menu-secundario">
+<section class="imagen-lista principal menu-secundario sombra">
     <h2>Realice su lista de compras antes de salir de su casa</h2>
     <p>Seleccione todos los productos que necesite para crear su lista de compras y calcular su total</p>
     <a href="lista.php" class="boton-azul">¡Crea tu lista!</a>
 </section> <!--.Acceder al carrito virtual-->
 
-<div class="seccion-inferior menu-secundario principal fondo">
+<div class="seccion-inferior menu-secundario principal fondo sombra">
 
     <section class="blog-carnes">
 
@@ -71,8 +48,8 @@ incluirTemplate('header', true);
             </div>
 
             <div class="texto-entrada">
-                    <h4>Posta de corona</h4>
-                    <p>Corte semiesférico, no tiene venas y es un corte suave, excelente para asar a la parrilla, asar en bistec o guisado.</p>
+                <h4>Posta de corona</h4>
+                <p>Corte semiesférico, no tiene venas y es un corte suave, excelente para asar a la parrilla, asar en bistec o guisado.</p>
             </div>
         </article>
 
@@ -82,8 +59,8 @@ incluirTemplate('header', true);
             </div>
 
             <div class="texto-entrada">
-                    <h4>Posta de gallina</h4>
-                    <p>Situado en el cuarto delantero, debajo del hueso de la paleta (parte lateral del tórax), es un corte muy limpio sin grasa superficial.</p>
+                <h4>Posta de gallina</h4>
+                <p>Situado en el cuarto delantero, debajo del hueso de la paleta (parte lateral del tórax), es un corte muy limpio sin grasa superficial.</p>
             </div>
         </article>
 

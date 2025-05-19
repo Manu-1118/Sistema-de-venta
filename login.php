@@ -1,6 +1,6 @@
 <?php
 require 'includes/app.php';
-
+// estaAutenticado(true);
 $db = conectarDB(); // obtener la conexion de la bd
 
 $errores = []; // arreglo para mostrar los errores
@@ -23,29 +23,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($errores)) {
 
         // consulta para verificar si el email existe
-        $query = "SELECT * FROM usuarios WHERE email = '$email';";
+        $query = "SELECT * FROM Administrador WHERE correo = '$email';";
         $resultado = mysqli_query($db, $query); // obtener resultado
-        
+
         if ($resultado->num_rows) {
-            
+
             $usuario = mysqli_fetch_assoc($resultado); // convertir la consulta
             // verificar si el pass escrito y la de la bd coinciden (autenticar)
-            $auth = password_verify($password, $usuario['pass']);
-            
+            $auth = password_verify($password, $usuario['clave']);
+
             if ($auth) {
 
                 // indicar que se abrio una sesion y se puede acceder a la variable $_SESSION
                 session_start();
 
                 // indicar quien inicio sesion
-                $_SESSION['usuario'] = $usuario['email'];
+                $_SESSION['usuario'] = $usuario['correo'];
                 $_SESSION['nombre'] = $usuario['nombre'];
+                $_SESSION['imagen'] = $usuario['imagen'];
                 $_SESSION['login'] = true; // indicar que la sesion esta abierta
 
                 //redireccionar al panel ADMIN
                 header('Location: /admin');
             } else {
                 $errores[] = "La contraseña es incorrecta";
+
+                // $_SESSION['intentos'] = $_SESSION['intentos'] - 1;
+
             } // Fin autentificacion
 
         } else {
@@ -59,6 +63,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 incluirTemplate('header', true);
 ?>
 <main class="principal main-login fondo" id="main">
+
+    <!-- <div class="contador-login">
+        <span><?php echo $_SESSION['intentos']; ?></span>
+    </div> -->
+
     <h1>Iniciar Sesión</h1>
 
 
@@ -80,8 +89,10 @@ incluirTemplate('header', true);
 
         </fieldset>
 
-        <input type="submit" value="Iniciar Sesión" class="alinear-derecha boton boton-azul">
-
+        <div class="inferior-login">
+            <a href="/recuperacion.php">¿Olvidó su contraseña?</a>
+            <input type="submit" value="Iniciar Sesión" class="alinear-derecha boton boton-azul">
+        </div>
     </form>
 </main>
 
