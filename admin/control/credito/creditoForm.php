@@ -1,6 +1,6 @@
 <?php
-require '../../includes/app.php';
-require '../../includes/data/productos.php';
+require '../../../includes/app.php';
+//require '../../includes/data/productos.php';
 require '../../includes/data/clientes.php';
 
 $db = conectarDB();

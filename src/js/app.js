@@ -3,6 +3,7 @@
 document.addEventListener('DOMContentLoaded', () => {
 
     activarUser() ? insertAdmin() : insertCliente();
+    guardarPosicion();
     obtenerDatosUsuario();
 
     const campoBuscar = document.getElementById('campo-buscar');
@@ -137,6 +138,25 @@ function activarUser() {
 
 } // Fin activarAdmin()
 
+
+function guardarPosicion() {
+    // JavaScript
+    window.addEventListener('beforeunload', () => {
+        // Guarda la posición actual de scroll vertical
+        sessionStorage.setItem('scrollpos', window.scrollY);
+    });
+
+    window.addEventListener('load', () => {
+        // Recupera la posición guardada
+        const scrollpos = sessionStorage.getItem('scrollpos');
+        if (scrollpos) {
+            // Desplaza la ventana a esa posición
+            window.scrollTo(0, parseInt(scrollpos));
+            // Opcional: Elimina el valor para que no afecte futuras cargas sin recarga
+            sessionStorage.removeItem('scrollpos');
+        }
+    });
+}
 
 /** USAR AJAX PARA OBTENER LA IMAGEN DEL ADMINISTRADOR **/
 // function obtenerFotoAdmin() {

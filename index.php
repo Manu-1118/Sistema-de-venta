@@ -33,7 +33,7 @@ incluirTemplate('header', true);
 
 <section class="imagen-lista principal menu-secundario sombra">
     <h2>Realice su lista de compras antes de salir de su casa</h2>
-    <p>Seleccione todos los productos que necesite para crear su lista de compras y calcular su total</p>
+    <p>Seleccione todos los productos que necesite para crear su lista de compras</p>
     <a href="lista.php" class="boton-azul">¡Crea tu lista!</a>
 </section> <!--.Acceder al carrito virtual-->
 
