@@ -60,16 +60,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 } // Fin if POST
 
+$resultado_mensaje = $_GET['resultado'] ?? null;
 incluirTemplate('header', true);
 ?>
 <main class="principal main-login fondo" id="main">
 
-    <!-- <div class="contador-login">
-        <span><?php echo $_SESSION['intentos']; ?></span>
-    </div> -->
 
     <h1>Iniciar Sesión</h1>
 
+    <?php if (intval($resultado_mensaje) === 1): ?>
+        <p class="alerta exito">Revise la bandeja de su correo</p>
+    <?php elseif (intval($resultado_mensaje) === 2): ?>
+        <p class="alerta exito">Su contraseña se restableció correctamente</p>
+    <?php endif; ?>
 
     <?php foreach ($errores as $error): ?>
         <div class="alerta error">
@@ -90,7 +93,7 @@ incluirTemplate('header', true);
         </fieldset>
 
         <div class="inferior-login">
-            <a href="/recuperacion.php">¿Olvidó su contraseña?</a>
+            <a href="/security/recuperacion.php">¿Olvidó su contraseña?</a>
             <input type="submit" value="Iniciar Sesión" class="alinear-derecha boton boton-azul">
         </div>
     </form>

@@ -37,36 +37,36 @@ function obtenerDatosUsuario() {
         .catch(e => console.error('Error: ', e));
 }
 
-function busquedaProductos() {
+// function busquedaProductos() {
 
-    // document.getElementById('txtProducto').addEventListener('keyup', () => {
+//     // document.getElementById('txtProducto').addEventListener('keyup', () => {
 
-    let contenido = document.getElementById('lista-productos');
-    let busqueda = document.getElementById('buscar-producto').value;
+//     let contenido = document.getElementById('lista-productos');
+//     let busqueda = document.getElementById('buscar-producto').value;
 
-    if (busqueda != '') {
+//     if (busqueda != '') {
 
-        let URL = '/data/productos/listado.php';
-        let datos = new FormData();
-        datos.append('buscar-producto', busqueda);
+//         let URL = '/data/productos/listado.php';
+//         let datos = new FormData();
+//         datos.append('buscar-producto', busqueda);
 
-        fetch(URL, {
-            method: "POST",
-            body: datos,
-            // mode: "cors"
-        })
-            .then(response => response.json())
-            .then(info => {
-                contenido.style.display = 'block';
-                contenido.innerHTML = JSON.parse(info);
+//         fetch(URL, {
+//             method: "POST",
+//             body: datos,
+//             // mode: "cors"
+//         })
+//             .then(response => response.json())
+//             .then(info => {
+//                 contenido.style.display = 'block';
+//                 contenido.innerHTML = JSON.parse(info);
 
-            })
-            .catch(e => console.log("Error: ", e));
+//             })
+//             .catch(e => console.log("Error: ", e));
 
-    } else {
-        contenido.style.display = 'none';
-        contenido.innerHTML = '';
-    }
+//     } else {
+//         contenido.style.display = 'none';
+//         contenido.innerHTML = '';
+//     }
 
-    // });
-}
+//     // });
+// }

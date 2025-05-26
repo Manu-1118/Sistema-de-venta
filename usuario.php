@@ -22,3 +22,5 @@ $mensaje = "Usuario registrado correctamente. REDIRECCIONANDO ...";
 echo $mensaje;
 sleep(3);
 header('Location: /');
+
+# contraseña de aplicacion(zetassj78): kssm brcl peyt ftwe 

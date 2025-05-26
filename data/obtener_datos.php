@@ -60,7 +60,7 @@ if ($num_filas > 0) {
             } else {
 
                 $HTML_tabla .= '<td>' . $fila[$columnas[$i]] . '</td>';
-            }
+            }   
         }
 
         // la siguiente linea es el boton de 'accion', enlace[0] es la pagina a donde se dirige y enlace[1] es el identificador de la tabla que se esta consultando

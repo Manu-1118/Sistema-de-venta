@@ -4,6 +4,26 @@ estaAutenticado(); //verificar que $_SESSION sea true
 $db = conectarDB(); //Conectar la bd
 require '../../../data/cliente/insertar.php';
 
+//echo "<script>console.log('hola mundo');</script>";
+
+
+$query = "SELECT * FROM Cliente";
+$resultado = mysqli_query($db, $query); // Obtener resultado
+
+// Convertir el resultado en un array para poder imprimirlo en consola con JavaScript
+$clientes = [];
+while ($fila = mysqli_fetch_assoc($resultado)) {
+    $clientes[] = $fila;
+}
+
+// Codificar a JSON para imprimir en consola
+$clientesJSON = json_encode($clientes);
+
+// Imprimir en consola
+echo "<script>console.table($clientesJSON);</script>";
+?>
+
+
 
 incluirTemplate('header');
 incluirTemplate('slidebar');

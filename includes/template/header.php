@@ -17,6 +17,11 @@ $auth = $_SESSION['login'] ?? false;
     <link rel="stylesheet" href="/build/css/app.css">
     <title>Pulperia El Pilar</title>
     <link rel="icon" href="/build/img/i1.ico" type="image/x-icon">
+    <!-- para autocompletado de credito-->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.0/themes/smoothness/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
+
 </head>
 
 <body>

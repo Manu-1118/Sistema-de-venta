@@ -2,19 +2,21 @@
  * cargue el DOM el HTML para evitar problemas de carga **/
 document.addEventListener('DOMContentLoaded', () => {
 
-    activarUser() ? insertAdmin() : insertCliente();
-    guardarPosicion();
-    obtenerDatosUsuario();
+    activarUser() ? insertAdmin() : insertCliente(); // verificar si estamos en la interfaz de cliente o de administrador
 
+    // mantener la posicion en la pagina de creacion de listas (para el PDF)
+    window.location.pathname.includes('lista.php') ? guardarPosicion() : window.scrollTo(0, 0);
+
+    obtenerDatosUsuario(); // funcion para obtener los datos al iniciar la sesion (como la foto, nombre, etc)
+
+    // filtrar datos mediante la barra de busqueda con fetch
     const campoBuscar = document.getElementById('campo-buscar');
     obtenerDatos();
     campoBuscar.addEventListener('input', obtenerDatos);
 
-    activarModal();
-
-    const listaProducto = document.getElementById('buscar-producto');
-    busquedaProductos();
-    listaProducto.addEventListener('keyup', busquedaProductos);
+    // const listaProducto = document.getElementById('buscar-producto');
+    // busquedaProductos();
+    // listaProducto.addEventListener('keyup', busquedaProductos);
 
 }); // Fin loadDOM
 
@@ -156,7 +158,7 @@ function guardarPosicion() {
             sessionStorage.removeItem('scrollpos');
         }
     });
-}
+} // Fin guardarPosicion()
 
 /** USAR AJAX PARA OBTENER LA IMAGEN DEL ADMINISTRADOR **/
 // function obtenerFotoAdmin() {

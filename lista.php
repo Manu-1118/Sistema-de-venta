@@ -61,7 +61,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && !empty($_GET)) { // verificar que no
 
     $encontrarProducto = mysqli_fetch_assoc(mysqli_query($db, "SELECT * FROM Producto WHERE codigo_producto = $codigo"));
     $_SESSION['lista_productos'][] = $encontrarProducto;
-
 }
 $ListaProductos = $_SESSION['lista_productos'];
 
@@ -106,7 +105,7 @@ incluirTemplate('header', true);
 
     </div>
     <div class="botones alinear-derecha">
-        <a class="boton-verde">Generar Lista</a>
+        <a class="boton-verde" href="PDF.php?productos=<?php echo urlencode(json_encode($ListaProductos)); ?>">Generar Lista</a>
         <a class="boton-rojo" href="lista.php?borrar=1">Borrar Lista</a>
     </div>
 
