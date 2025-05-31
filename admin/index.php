@@ -3,6 +3,7 @@ require '../includes/app.php';
 estaAutenticado();
 $db = conectarDB(); // Conectarse a la bd
 require '../data/dashboard.php';
+//  debuguear($ultimos_dias);
 
 incluirTemplate('header');
 incluirTemplate('slidebar');
@@ -22,34 +23,44 @@ incluirTemplate('slidebar');
                     <span>Productos totales</span>
                 </div>
             </div>
-    </a>
-    <div class="vista vista-verde">
-        <div class="contenedor-icono verde">
-            <img src="/build/img/icons/dinero.png" alt="Capital del día">
+    </a><!--.vista total productos-->
+
+    <a href="/admin/control/contado/contado.php">
+        <div class="vista vista-verde">
+            <div class="contenedor-icono verde">
+                <img src="/build/img/icons/dinero.png" alt="Capital del día">
+            </div>
+            <div class="contenido-descripcion">
+                <span class="total-descripcion"><?php echo 'C$ ' . $total_dia['total']; ?></span>
+                <span>Capital total</span>
+            </div>
         </div>
-        <div class="contenido-descripcion">
-            <span class="total-descripcion">C$ 5745</span>
-            <span>Capital total</span>
+    </a><!--.vista capital del dia-->
+
+    <a href="/admin/control/contado/contado.php">
+        <div class="vista vista-verde">
+            <div class="contenedor-icono verde">
+                <img src="/build/img/icons/contado.png" alt="Ventas">
+            </div>
+            <div class="contenido-descripcion">
+                <span class="total-descripcion"><?php echo $total_ventas['total']; ?></span>
+                <span>Ventas del día</span>
+            </div>
         </div>
-    </div>
-    <div class="vista vista-verde">
-        <div class="contenedor-icono verde">
-            <img src="/build/img/icons/contado.png" alt="Ventas">
+    </a><!--.vista total ventas contado-->
+
+    <a href="/admin/control/credito/creditos.php">
+        <div class="vista vista-roja">
+            <div class="contenedor-icono rojo">
+                <img src="/build/img/icons/credito.png" alt="Créditos">
+            </div>
+            <div class="contenido-descripcion">
+                <span class="total-descripcion"><?php echo $total_creditos['total']; ?></span>
+                <span>Créditos pendientes</span>
+            </div>
         </div>
-        <div class="contenido-descripcion">
-            <span class="total-descripcion">52</span>
-            <span>Ventas del día</span>
-        </div>
-    </div>
-    <div class="vista vista-roja">
-        <div class="contenedor-icono rojo">
-            <img src="/build/img/icons/credito.png" alt="Créditos">
-        </div>
-        <div class="contenido-descripcion">
-            <span class="total-descripcion">10</span>
-            <span>Créditos totales</span>
-        </div>
-    </div>
+    </a><!--.vista total creditos pendientes-->
+
     </div>
 </main><!--.main (Descripcion general)-->
 
@@ -67,9 +78,5 @@ incluirTemplate('slidebar');
         <div class="grafico3"></div>
     </div>
 </section><!--.Ultimos 7 dias-->
-
-<section>
-
-</section><!--.Producto mas y menos vendido-->
 
 <?php incluirTemplate('footer'); ?>

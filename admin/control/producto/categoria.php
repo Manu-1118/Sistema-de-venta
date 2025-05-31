@@ -1,8 +1,8 @@
 <?php
 require '../../../includes/app.php';
-// require '../../includes/data/productos.php';
 estaAutenticado(); //verificar que $_SESSION sea true
-
+$db = conectarDB();
+require '../../../data/productos/categoria.php';
 incluirTemplate('header');
 incluirTemplate('slidebar');
 ?>
@@ -14,7 +14,7 @@ incluirTemplate('slidebar');
         </div>
     <?php endforeach; ?>
 
-    <form method="POST" class="formulario">
+    <form method="POST" class="formulario" enctype="multipart/form-data">
         <fieldset>
             <legend>Agregar Nueva Categoría</legend>
 
@@ -22,7 +22,7 @@ incluirTemplate('slidebar');
             <input type="text" name="txtNombre" placeholder="Lacteos" id="txtNombre" value="<?php echo $nombre; ?>">
 
             <label for="imagen">Imagen:</label>
-            <input type="file" name="imagen" id="imagen" accept="image/jpeg, image/png" disabled class="disabled">
+            <input type="file" name="imagen" id="imagen" accept="image/jpeg, image/png">
 
             <label for="txtDescripcion">Descripción</label>
             <input type="text" name="txtDescripcion" placeholder="Leches, Cremas, ..." id="txtDescripcion" value="<?php echo $descripcion; ?>">

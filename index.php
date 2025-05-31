@@ -1,7 +1,5 @@
 <?php
 require 'includes/app.php';
-// estaAutenticado(true);
-// $_SESSION['intentos'] = 3;
 incluirTemplate('header', true);
 ?>
 

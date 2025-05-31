@@ -18,7 +18,7 @@ $resultados = mysqli_query($db, $consulta);
 
         <!--codigo php para mostrar las cat de la bd-->
         <div class="categoria">
-            <img loading="lazy" src="/categorias/<?php echo $categoria['imagen'] ?>" alt="categoria">
+            <img loading="lazy" src="/img/categorias/<?php echo $categoria['imagen'] ?>" alt="categoria">
 
             <div class="contenido-categoria">
                 <h3><?php echo $categoria['nombre']; ?></h3>

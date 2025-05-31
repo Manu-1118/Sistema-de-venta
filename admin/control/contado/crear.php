@@ -2,9 +2,7 @@
 require '../../../includes/app.php';
 estaAutenticado(); //verificar que $_SESSION sea true
 $db = conectarDB();
-require '../../../data/credito/insertar.php';
-
-//$resultado_mensaje = $_GET['resultado'];
+require '../../../data/contado/insertar.php';
 
 incluirTemplate('header');
 incluirTemplate('slidebar');
@@ -19,29 +17,17 @@ incluirTemplate('slidebar');
 
     <form method="POST" class="formulario">
         <fieldset>
-            <legend>Detalles Credito</legend>
 
-            <label for="txtCliente">Cliente:</label>
-            <select class="form-control" name="txtCliente" placeholder="Nombre del cliente" id="txtCliente" value="<?php echo $cliente; ?>">
-            </select>
+            <legend>Detalles de la Venta</legend>
+
             <div id="fecha-container">
                 <label for="fecha-actual">Fecha:</label>
                 <input type="text" id="fecha-actual" readonly>
             </div>
-            <div id="fecha-cancelacion-container">
-                <label for="fecha-cancelacion">Días Hábiles:</label>
-                <input type="date" id="fecha-cancelacion">
-            </div>
             <div>
-                <label for="totalCompra">Total de Crédito:</label>
+                <label for="totalCompra">Total de Venta:</label>
                 <input type="text" id="totalCompra" name="totalCompra" readonly>
-
             </div>
-        </fieldset>
-
-        <fieldset>
-            <legend>Datos del Credito</legend>
-
             <label for="txtProductos">Productos</label>
             <input type="text" name="txtProductos" id="txtProductos" autocomplete="off" placeholder="Escribe para buscar...">
             <ul id="productoSuggestions" style="display: none; position: absolute; background-color: white; border: 1px solid #ccc; width: 95%; list-style: none; padding: 0; margin: 0; z-index: 10;"></ul>
@@ -67,22 +53,19 @@ incluirTemplate('slidebar');
 
             </div>
         </fieldset>
-
         <div class="alinear-derecha separar-margin">
 
-            <a class="boton-rojo" href="creditos.php">
+            <a class="boton-rojo" href="contado.php">
                 <span>Cancelar</span>
             </a>
 
-            <button type="submit" id="generarCredito" class="boton-azul">Agregar Crédito</button>
+            <button type="submit" id="generarCredito" class="boton-azul">Generar Venta</button>
 
         </div>
     </form>
 </main>
 
-
 <script>
-    //fecha no modificable
     function mostrarFechaActual() {
         const fechaInput = document.getElementById('fecha-actual');
         const fecha = new Date();
@@ -93,34 +76,9 @@ incluirTemplate('slidebar');
         };
         fechaInput.value = fecha.toLocaleDateString(undefined, opciones);
     }
+    mostrarFechaActual();
 
-    function configurarFechaCancelacion() {
-        const fechaCancelacionInput = document.getElementById('fecha-cancelacion');
-
-        // Calcular la fecha actual + 7 días
-        const hoy = new Date();
-        const fechaPorDefecto = new Date(hoy);
-        fechaPorDefecto.setDate(hoy.getDate() + 7);
-
-        // Formatear la fecha para el input 
-        const year = fechaPorDefecto.getFullYear();
-        const month = String(fechaPorDefecto.getMonth() + 1).padStart(2, '0'); // Meses son 0-11
-        const day = String(fechaPorDefecto.getDate()).padStart(2, '0');
-        const fechaFormateada = `${year}-${month}-${day}`;
-
-        fechaCancelacionInput.value = fechaFormateada;
-
-        // Establecer la fecha mínima (hoy) 
-        const minYear = hoy.getFullYear();
-        const minMonth = String(hoy.getMonth() + 1).padStart(2, '0');
-        const minDay = String(hoy.getDate()).padStart(2, '0');
-        const minFechaFormateada = `${minYear}-${minMonth}-${minDay}`;
-        fechaCancelacionInput.min = minFechaFormateada;
-    }
-
-    //autocompletado de productos
     let productos = [];
-    const clientesData = <?php echo $clientesJSON; ?>;
     const productosData = <?php echo $productos; ?>;
 
     const productoInput = document.getElementById('txtProductos');
@@ -229,51 +187,36 @@ incluirTemplate('slidebar');
         });
     });
 
+    function renderProductosTable() {
+        const tabla = document.getElementById('tablaProductos');
+        tabla.innerHTML = '';
+        let total = 0;
 
-    //dropdown cliente
-    document.addEventListener("DOMContentLoaded", function() {
+        productos.forEach(p => {
+            const fila = document.createElement('tr');
+            fila.innerHTML = `
+                <td>${p.nombre}</td>
+                <td>${p.cantidad}</td>
+                <td>${p.total.toFixed(2)}</td>
+            `;
+            tabla.appendChild(fila);
+            total += p.total;
+        });
 
-        mostrarFechaActual();
-        configurarFechaCancelacion();
+        document.getElementById('totalCompra').value = total.toFixed(2);
+    }
 
-        const clienteSelect = document.getElementById('txtCliente');
-        if (clientesData && Array.isArray(clientesData)) {
-
-
-            clientesData.forEach(cliente => {
-                const option = document.createElement('option');
-                option.value = cliente.id_cliente;
-                option.textContent = `${cliente.id_cliente} - ${cliente.nombre} ${cliente.apellido}`;
-                clienteSelect.appendChild(option);
-
-            });
-        } else {
-            console.error("clientesData no es un array válido:", clientesData);
-        }
+    document.querySelector('form').addEventListener('submit', function(e) {
+        const inputHidden = document.getElementById('productosSeleccionados');
+        inputHidden.value = JSON.stringify(productos);
     });
-
-    //enviar formulario
     document.getElementById('generarCredito').addEventListener('click', function(e) {
         e.preventDefault();
 
-        const clienteID = document.getElementById('txtCliente').value;
-        if (!clienteID) {
-            Swal.fire('Atención', 'Por favor selecciona un cliente de la lista.', 'info');
-            return;
-        }
-
         const total = productos.reduce((acc, p) => acc + p.total, 0);
-        const fechaCancelacion = document.getElementById('fecha-cancelacion').value;
-
         const form = document.createElement('form');
         form.method = 'POST';
         form.action = '';
-
-        const inputCliente = document.createElement('input');
-        inputCliente.type = 'hidden';
-        inputCliente.name = 'txtCliente';
-        inputCliente.value = clienteID;
-        form.appendChild(inputCliente);
 
         const inputTotal = document.createElement('input');
         inputTotal.type = 'hidden';
@@ -286,16 +229,8 @@ incluirTemplate('slidebar');
         inputProductosSeleccionados.name = 'productosSeleccionados';
         inputProductosSeleccionados.value = JSON.stringify(productos);
         form.appendChild(inputProductosSeleccionados);
-
-        const inputFechaCancelacion = document.createElement('input');
-        inputFechaCancelacion.type = 'hidden';
-        inputFechaCancelacion.name = 'fecha_cancelacion'; // EL MISMO NOMBRE QUE PHP ESPERA
-        inputFechaCancelacion.value = fechaCancelacion;
-        form.appendChild(inputFechaCancelacion);
-
         document.body.appendChild(form);
         form.submit();
     });
 </script>
-
 <?php incluirTemplate('footer'); ?>

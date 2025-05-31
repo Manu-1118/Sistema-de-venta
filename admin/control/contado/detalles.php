@@ -1,27 +1,17 @@
 <?php
-require '../../includes/app.php';
-require '../../includes/data/productos.php';
-estaAutenticado(); //verificar que $_SESSION sea true
-
-// if ($_SERVER['REQUEST_METHOD'] === 'GET' && $_GET['cancelado'] == true) {
-
-//     if (isset($_SESSION['lista_productos'])) {
-//         $_SESSION['lista_productos'] = [];
-//     }
-// }
-
-//Conectar la bd
+require '../../../includes/app.php';
+estaAutenticado();
 $db = conectarDB();
+require '../../../data/contado/detalles.php';
 
 //escribir el query
-$query_mostrar_detalle = "SELECT p.nombre, p.precio_unitario, dc.cantidad, p.precio_unitario*dc.cantidad as 'subtotal' FROM Contado c join DetalleContado dc on c.id = dc.id_contado join Producto p on dc.codigo_producto = p.codigo WHERE c.id = {$_GET['id']}";
-//debuguear($query_mostrar_detalle);
+$query_mostrar_detalle = "SELECT p.nombre, p.precio_unitario, dc.cantidad, p.precio_unitario*dc.cantidad as 'subtotal' FROM Contado c join DetalleContado dc on c.id_contado = dc.id_contado join Producto p on dc.codigo_producto = p.codigo_producto WHERE c.id_contado = {$_GET['id']}";
+// debuguear($query_mostrar_detalle);
 $resultado_mostrar_detalle = mysqli_query($db, $query_mostrar_detalle);
-
 $total = 0;
-
-// //consultar la bd y obtener resultado
+// consultar la bd y obtener resultado
 // $resultado_mostrar = mysqli_query($db, $query_mostrar);
+// debuguear(mysqli_fetch_assoc($resultado_mostrar_detalle));
 
 // $resultado_mensaje = $_GET['resultado'] ?? null;
 
@@ -58,8 +48,8 @@ incluirTemplate('slidebar');
 
         </div> -->
 
-        <div class="tabla-containe">
-            <table class="tabla-productos">
+        <div class="contenedor-tabla-datos">
+            <table class="tabla-plantilla">
                 <thead>
                     <tr>
                         <th>#</th>
@@ -69,7 +59,7 @@ incluirTemplate('slidebar');
                         <th>Subtotal</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="cuerpo-tabla">
                     <?php $i = 1;
                     while ($detalles = mysqli_fetch_assoc($resultado_mostrar_detalle)): ?>
                         <tr>

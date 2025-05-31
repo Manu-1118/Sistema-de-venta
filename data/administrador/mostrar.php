@@ -4,7 +4,7 @@ $encabezados = ['Foto', 'Cod. Identif.', 'Nombre', 'Apellido', 'Correo'];
 
 $columnas = ['imagen', 'id_administrador', 'nombre', 'apellido', 'correo'];
 $tabla[] = 'Administrador';
-$btn_texto = 'Editar';
+$btn_texto = 'Ver perfil';
 $ruta_imagen = 'img/administradores/';
 
 $_SESSION['encabezados'] = $encabezados;
