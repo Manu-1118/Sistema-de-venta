@@ -9,7 +9,7 @@ incluirTemplate('slidebar');
 ?>
 
 <main id="main" class="main admin main-admin menu-toggle">
-    
+
 </main>
 
-<?php incluirTemplate('footer'); ?>
+<?php incluirTemplate('footer', true); ?>

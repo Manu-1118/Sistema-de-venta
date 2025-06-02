@@ -42,8 +42,8 @@ incluirTemplate('slidebar');
 
     <div class="contenedor-productos">
 
-        <div class="tabla-containe">
-            <table class="tabla-productos">
+        <div class="contenedor-tabla-datos">
+            <table class="tabla-plantilla">
                 <thead>
                     <tr>
                         <th>#</th>
@@ -53,7 +53,7 @@ incluirTemplate('slidebar');
                         <th>Subtotal</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="cuerpo-tabla">
                     <?php
                     $i = 1;
                     if (!empty($resultado_mostrar_detalle_array)) {
@@ -122,4 +122,4 @@ incluirTemplate('slidebar');
     </form>
 </main>
 
-<?php incluirTemplate('footer'); ?>
+<?php incluirTemplate('footer', true); ?>

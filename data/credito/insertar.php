@@ -2,7 +2,7 @@
 
 
 $db = conectarDB();
-$query = "SELECT * FROM Producto LIMIT 5";
+$query = "SELECT * FROM Producto";
 $resultado = mysqli_query($db, $query);
 while ($producto = mysqli_fetch_assoc($resultado)) {
 

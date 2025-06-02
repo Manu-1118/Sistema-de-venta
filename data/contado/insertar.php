@@ -1,7 +1,7 @@
 <?php
 
 $db = conectarDB();
-$query = "SELECT * FROM Producto LIMIT 5";
+$query = "SELECT * FROM Producto";
 $resultado = mysqli_query($db, $query);
 while ($producto = mysqli_fetch_assoc($resultado)) {
 
@@ -15,7 +15,7 @@ date_default_timezone_set('America/Managua');
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     $total = mysqli_real_escape_string($db, $_POST['totalCompra'] ?? '');
-    $productosContado = json_decode($_POST['productosSeleccionados'] ?? '[]', true); 
+    $productosContado = json_decode($_POST['productosSeleccionados'] ?? '[]', true);
 
     if (empty($total) || !is_numeric($total) || $total <= 0) {
         $errores[] = "El total debe ser un número mayor que cero.";
@@ -32,9 +32,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         fecha_contado,total) VALUES ('$fechaContado', $total)";
         $resultadoContado = mysqli_query($db, $queryCredito);
         if (!$resultadoContado) {
-            $errores[] = "Error al registrar el crédito: " . mysqli_error($db);      
-        }
-        else {
+            $errores[] = "Error al registrar el crédito: " . mysqli_error($db);
+        } else {
             $idContado = mysqli_insert_id($db);
 
             foreach ($productosContado as $producto) {
@@ -45,7 +44,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     if (!is_numeric($cantidad) || $cantidad <= 0) {
                         $errores[] = "La cantidad del producto '$codigoProducto' no es válida.";
                     }
-                    continue; 
+                    continue;
                 }
 
                 $queryDetalle = "INSERT INTO DetalleContado (cantidad, codigo_producto, id_contado) VALUES ($cantidad, '$codigoProducto', $idContado)";
@@ -64,6 +63,3 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         }
     }
 }
-
-
-?>

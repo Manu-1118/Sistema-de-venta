@@ -71,5 +71,5 @@ incluirTemplate('header', true);
 </main>
 
 <?php
-incluirTemplate('footer');
+incluirTemplate('footer', true);
 ?>

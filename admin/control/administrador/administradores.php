@@ -6,6 +6,7 @@ $db = conectarDB(); //Conectar la bd
 include '../../../data/administrador/mostrar.php';
 
 $resultado_mensaje = $_GET['resultado'] ?? null;
+
 incluirTemplate('header');
 incluirTemplate('slidebar');
 ?>
@@ -15,7 +16,7 @@ incluirTemplate('slidebar');
     <?php if (intval($resultado_mensaje) === 1): ?>
         <p class="alerta exito">El administrador se creó correctamente</p>
     <?php elseif (intval($resultado_mensaje) === 2): ?>
-        <p class="alerta exito">El producto se modificó correctamente</p>
+        <p class="alerta exito">El administrador se modificó correctamente</p>
     <?php endif; ?>
 
     <div class="contenedor-admin">
@@ -26,4 +27,4 @@ incluirTemplate('slidebar');
     </div>
 </main>
 
-<?php incluirTemplate('footer'); ?>
+<?php incluirTemplate('footer', true); ?>

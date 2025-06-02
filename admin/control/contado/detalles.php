@@ -30,24 +30,6 @@ incluirTemplate('slidebar');
 
     <div class="contenedor-productos">
 
-        <!-- <div class="contenedor-herramientas">
-
-            <div class="contenedor-busqueda">
-
-                <form method="POST" class="formulario busqueda">
-                    <label for="campo">Buscar</label>
-                    <input type="text" name="campo" id="campo" placeholder="Productos dañados...">
-                </form>
-
-            </div>
-
-            <a href="devueltos_crear.php" class="btn-agregar boton-azul">
-                <img src="/build/img/icons/agregar.png" alt="+" class="icono-principal">
-                <span>Nuevo</span>
-            </a>
-
-        </div> -->
-
         <div class="contenedor-tabla-datos">
             <table class="tabla-plantilla">
                 <thead>
@@ -91,4 +73,4 @@ incluirTemplate('slidebar');
     </div>
 </main>
 
-<?php incluirTemplate('footer'); ?>
+<?php incluirTemplate('footer', true); ?>

@@ -58,4 +58,4 @@ incluirTemplate('slidebar');
     </form>
 </main>
 
-<?php incluirTemplate('footer'); ?>
+<?php incluirTemplate('footer', true); ?>

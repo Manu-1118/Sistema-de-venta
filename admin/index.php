@@ -64,10 +64,19 @@ incluirTemplate('slidebar');
     </div>
 </main><!--.main (Descripcion general)-->
 
-<section class="graficos menu-secundario menu-toggle admin">
+<section class="menu-secundario menu-toggle admin graficos">
     <div class="contenedor-grafico fondo" id="barras_ventas_semana">
         <h2>Totales de ventas de la ultima semana</h2>
         <div class="grafico1"></div>
+    </div>
+
+</section><!--.Ultimos 7 dias-->
+
+<section class="graficos menu-secundario menu-toggle admin">
+
+    <div class="contenedor-grafico fondo" id="barra_clientes">
+        <h2>Totales de ventas de la ultima semana</h2>
+        <div class="grafico4"></div>
     </div>
     <div class="contenedor-grafico fondo" id="pie_mas_vendido">
         <h2>Productos más vendidos</h2>
@@ -77,6 +86,6 @@ incluirTemplate('slidebar');
         <h2>Productos menos vendidos</h2>
         <div class="grafico3"></div>
     </div>
-</section><!--.Ultimos 7 dias-->
+</section>
 
-<?php incluirTemplate('footer'); ?>
+<?php incluirTemplate('footer', true); ?>

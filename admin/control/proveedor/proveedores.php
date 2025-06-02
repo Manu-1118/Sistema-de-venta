@@ -20,11 +20,11 @@ incluirTemplate('slidebar');
 
     <div class="contenedor-admin">
         <div class="alinear-derecha CA1">
-        <a href="crear.php" class="boton-azul">Nuevo Proveedor</a>
+            <a href="crear.php" class="boton-azul">Nuevo Proveedor</a>
         </div>
         <?php incluirTemplate('tabla_datos'); ?>
     </div>
 
 </main>
 
-<?php incluirTemplate('footer'); ?>
+<?php incluirTemplate('footer', true); ?>

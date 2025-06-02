@@ -34,10 +34,10 @@ if ($campo != null) {
 
 if (count($tabla) === 1) {
 
-    $consulta = "SELECT " . implode(', ', $columnas) . " FROM $tabla[0] $where";
+    $consulta = "SELECT " . implode(', ', $columnas) . " FROM $tabla[0] $where LIMIT 10";
 } else {
 
-    $consulta = "SELECT " . implode(', ', $columnas) . " FROM $inner $where";
+    $consulta = "SELECT " . implode(', ', $columnas) . " FROM $inner $where LIMIT 10";
 }
 
 

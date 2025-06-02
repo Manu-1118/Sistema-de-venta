@@ -30,4 +30,4 @@ incluirTemplate('slidebar');
 
 </main>
 
-<?php incluirTemplate('footer'); ?>
+<?php incluirTemplate('footer', true); ?>

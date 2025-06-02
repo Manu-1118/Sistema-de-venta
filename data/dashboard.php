@@ -23,9 +23,10 @@ if ($total_ventas['total'] === NULL) {
 
 /** DATOS PARA LOS GRAFICOS **/
 $ultimos7_Dias = mysqli_query($db, "SELECT fecha_contado, SUM(total) as 'total' FROM Contado GROUP BY fecha_contado HAVING fecha_contado BETWEEN CURDATE() - INTERVAL 7 DAY AND CURDATE()");
-$masVendidos = mysqli_query($db, "SELECT p.nombre, p.descripcion, SUM(dc.cantidad) as 'cantidad' FROM Producto p JOIN DetalleContado dc on p.codigo_producto = dc.codigo_producto GROUP BY p.nombre, p.descripcion ORDER BY SUM(dc.cantidad) DESC LIMIT 3;");
-$menosVendidos = mysqli_query($db, "SELECT p.nombre, p.descripcion, SUM(dc.cantidad) as 'cantidad' FROM Producto p JOIN DetalleContado dc on p.codigo_producto = dc.codigo_producto GROUP BY p.nombre, p.descripcion ORDER BY SUM(dc.cantidad) ASC LIMIT 3;");
-// hacer mañana la validacion si es null el dato es cero
+$deudasClientes = mysqli_query($db, "SELECT ct.nombre, SUM(c.monto_pendiente) AS 'deudaTotal' FROM Credito c JOIN Cliente ct on c.id_cliente = ct.id_cliente GROUP BY ct.nombre ORDER BY SUM(c.monto_pendiente) DESC LIMIT 5;");
+$masVendidos = mysqli_query($db, "SELECT p.nombre, p.descripcion, SUM(dc.cantidad) as 'cantidad' FROM Producto p JOIN DetalleContado dc on p.codigo_producto = dc.codigo_producto GROUP BY p.nombre, p.descripcion ORDER BY SUM(dc.cantidad) DESC LIMIT 5;");
+$menosVendidos = mysqli_query($db, "SELECT p.nombre, p.descripcion, SUM(dc.cantidad) as 'cantidad' FROM Producto p JOIN DetalleContado dc on p.codigo_producto = dc.codigo_producto GROUP BY p.nombre, p.descripcion ORDER BY SUM(dc.cantidad) ASC LIMIT 5;");
+
 ?>
 
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
@@ -45,8 +46,8 @@ $menosVendidos = mysqli_query($db, "SELECT p.nombre, p.descripcion, SUM(dc.canti
         ]);
 
         const config = {
-            width: 500,
-            height: 400,
+            width: 1005,
+            height: 300,
             backgroundColor: 'transparent', // Quita el fondo del gráfico
             hAxis: {
                 textStyle: {
@@ -80,6 +81,47 @@ $menosVendidos = mysqli_query($db, "SELECT p.nombre, p.descripcion, SUM(dc.canti
         chart.draw(data, config);
     }
 
+    function total_creditos_cliente() {
+
+        var data = new google.visualization.arrayToDataTable([
+            ['Cliente', 'Deuda acumulada'],
+            <?php
+            while ($deudas = mysqli_fetch_assoc($deudasClientes)) {
+                echo "['" . $deudas['nombre'] . "', " . $deudas['deudaTotal'] . "],";
+            }
+            ?>
+        ]);
+
+        var options = {
+
+            width: 500,
+            height: 400,
+            legend: {
+                position: 'none'
+            },
+            backgroundColor: 'transparent',
+            axes: {
+                x: {
+                    0: {
+                        side: 'bottom',
+                        label: 'Cliente'
+                    }
+                },
+                y: {
+                    0: {
+                        side: 'left',
+                        label: 'Total deuda'
+                    }
+                }
+            },
+
+        };
+
+        var chart = new google.charts.Bar(document.querySelector('.grafico4'));
+        // Convert the Classic options to Material options.
+        chart.draw(data, google.charts.Bar.convertOptions(options));
+    }
+
     function p_mas_vendidos() {
         const data = new google.visualization.DataTable();
 
@@ -95,8 +137,8 @@ $menosVendidos = mysqli_query($db, "SELECT p.nombre, p.descripcion, SUM(dc.canti
         ]);
 
         const config = {
-            width: 300,
-            height: 150,
+            width: 400,
+            height: 180,
             backgroundColor: 'transparent', // Quita el fondo del gráfico
             legend: {
                 textStyle: {
@@ -126,7 +168,7 @@ $menosVendidos = mysqli_query($db, "SELECT p.nombre, p.descripcion, SUM(dc.canti
 
         const config = {
             width: 400,
-            height: 150,
+            height: 180,
             backgroundColor: 'transparent', // Quita el fondo del gráfico
             legend: {
                 textStyle: {
@@ -141,13 +183,14 @@ $menosVendidos = mysqli_query($db, "SELECT p.nombre, p.descripcion, SUM(dc.canti
     }
 
     google.charts.load("current", {
-        packages: ["corechart"]
+        packages: ['corechart', 'bar']
     });
 
     google.charts.setOnLoadCallback(() => {
         // updateColor(); // Establecer el color inicial
+        total_ventas_semanal();
         p_mas_vendidos();
         p_menos_vendidos();
-        total_ventas_semanal();
+        total_creditos_cliente();
     });
 </script>

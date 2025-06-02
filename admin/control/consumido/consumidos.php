@@ -44,4 +44,4 @@ incluirTemplate('slidebar');
     </div>
 </div> <!-- copiar para todos los archivos "insertar y luego ponerles sus text y darle funcionalidad" -->
 
-<?php incluirTemplate('footer'); ?>
+<?php incluirTemplate('footer', true); ?>

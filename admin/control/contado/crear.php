@@ -37,8 +37,8 @@ incluirTemplate('slidebar');
             <input type="number" name="txtCantidadPr" id="txtCantidadPr" min="0">
             <button name="lista" id="agregarProducto" type="button" class="boton-azul">Agregar</button>
 
-            <div class="row-lista">
-                <table class="tabla-productos">
+            <div class="row-lista contenedor-tabla-datos">
+                <table class="tabla-productos tabla-plantilla">
                     <thead>
                         <tr>
                             <th>Producto</th>
@@ -46,7 +46,7 @@ incluirTemplate('slidebar');
                             <th>Total</th>
                         </tr>
                     </thead>
-                    <tbody id="tablaProductos">
+                    <tbody id="tablaProductos" class="contenedor-tabla-datos">
 
                     </tbody>
                 </table>
@@ -233,4 +233,4 @@ incluirTemplate('slidebar');
         form.submit();
     });
 </script>
-<?php incluirTemplate('footer'); ?>
+<?php incluirTemplate('footer', true); ?>
