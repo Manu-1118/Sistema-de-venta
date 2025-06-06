@@ -1,29 +1,16 @@
 <?php
-require '../../includes/app.php';
-require '../../includes/data/productos.php';
+require '../../../includes/app.php';
+//require '../../includes/data/productos.php';
 estaAutenticado(); //verificar que $_SESSION sea true
-
-// if ($_SERVER['REQUEST_METHOD'] === 'GET' && $_GET['cancelado'] == true) {
-
-//     if (isset($_SESSION['lista_productos'])) {
-//         $_SESSION['lista_productos'] = [];
-//     }
-// }
 
 //Conectar la bd
 $db = conectarDB();
+require '../../../data/consumido/detalles.php';
+$query_mostrar_detalle = "SELECT p.nombre, p.precio_unitario, dc.cantidad, p.precio_unitario*dc.cantidad as 'subtotal' FROM Consumido c join DetalleConsumido dc on c.id_consumido = dc.id_consumido join Producto p on dc.codigo_producto = p.codigo_producto WHERE c.id_consumido = {$_GET['id']}";
 
-//escribir el query
-$query_mostrar_detalle = "SELECT p.nombre, p.precio_unitario, dc.cantidad, p.precio_unitario*dc.cantidad as 'subtotal' FROM Compra c join DetalleCompra dc on c.id = dc.id_compra join Producto p on dc.codigo_producto = p.codigo WHERE c.id = {$_GET['id']}";
-// sdebuguear($query_mostrar_detalle);
 $resultado_mostrar_detalle = mysqli_query($db, $query_mostrar_detalle);
-
 $total = 0;
 
-// //consultar la bd y obtener resultado
-// $resultado_mostrar = mysqli_query($db, $query_mostrar);
-
-// $resultado_mensaje = $_GET['resultado'] ?? null;
 
 incluirTemplate('header');
 incluirTemplate('slidebar');
@@ -40,26 +27,8 @@ incluirTemplate('slidebar');
 
     <div class="contenedor-productos">
 
-        <!-- <div class="contenedor-herramientas">
-
-            <div class="contenedor-busqueda">
-
-                <form method="POST" class="formulario busqueda">
-                    <label for="campo">Buscar</label>
-                    <input type="text" name="campo" id="campo" placeholder="Productos dañados...">
-                </form>
-
-            </div>
-
-            <a href="devueltos_crear.php" class="btn-agregar boton-azul">
-                <img src="/build/img/icons/agregar.png" alt="+" class="icono-principal">
-                <span>Nuevo</span>
-            </a>
-
-        </div> -->
-
-        <div class="tabla-containe">
-            <table class="tabla-productos">
+        <div class="contenedor-tabla-datos">
+            <table class="tabla-plantilla">
                 <thead>
                     <tr>
                         <th>#</th>
@@ -69,7 +38,7 @@ incluirTemplate('slidebar');
                         <th>Subtotal</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="cuerpo-tabla">
                     <?php $i = 1;
                     while ($detalles = mysqli_fetch_assoc($resultado_mostrar_detalle)): ?>
                         <tr>
@@ -92,7 +61,7 @@ incluirTemplate('slidebar');
                     <input disabled type="text" value="<?php echo $total ?>">
                 </div>
 
-                <a class="boton-rojo" href="compras.php">
+                <a class="boton-rojo" href="consumidos.php">
                     <span>Retroceder</span>
                 </a>
 

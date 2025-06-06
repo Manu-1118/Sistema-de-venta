@@ -35,6 +35,18 @@
     margin-top: 1rem;
     gap: 2rem;
 
+    // @include tablet {
+    //     &.grupal {
+    //         max-width: 80rem;
+    //         min-width: 80rem;
+    //     }
+    // }
+
+    // @include tablet {
+    //     max-width: 100rem;
+    //     min-width: 80rem;
+    // }
+
     .grafico4,
     .grafico2,
     .grafico3 {

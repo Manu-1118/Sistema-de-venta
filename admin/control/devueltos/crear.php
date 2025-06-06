@@ -1,87 +1,9 @@
 <?php
-require '../../includes/app.php';
-require '../../includes/data/productos.php';
-estaAutenticado(); //verificar que $_SESSION sea true
-
-if (!isset($_SESSION['lista_productos'])) {
-    $_SESSION['lista_productos'] = [];
-}
-
-//Conectar la bd
+require '../../../includes/app.php';
+estaAutenticado(); 
 $db = conectarDB();
-$errores = [];
+require '../../../data/devueltos/insertar.php';
 
-/** RELLENANDO PARA LA TABLA CONTADO **/
-//obtener fecha actual y generar el numero de la factura
-$fecha_actual = date("Y-m-d");
-$query_cantidad_facturas = mysqli_fetch_assoc(mysqli_query($db, "SELECT COUNT(id) as 'cantidad' FROM Dañado;"));
-$num_factura = intval($query_cantidad_facturas['cantidad']) + 1;
-/** FIN TABLA CONTADO **/
-
-/** MOSTRANDO DATOS DE LA TABLA PRODUCTOS **/
-//escribir el query
-$query_obtener_productos = "SELECT * FROM Producto;";
-//consultar la bd y obtener resultado
-$resultado_obtener_productos = mysqli_query($db, $query_obtener_productos);
-/** FIN TABLA PRODUCTOS **/
-$total = 0;
-
-if ($_SERVER['REQUEST_METHOD'] === 'GET' && $_GET['lista'] == 'true') {
-
-    $buscar_producto = "SELECT nombre, descripcion, categoria, precio_unitario FROM Producto WHERE codigo = {$_GET['cbProductos']};";
-    $resultado_busqueda = mysqli_fetch_assoc(mysqli_query($db, $buscar_producto));
-
-    if ($resultado_busqueda) {
-        $resultado_busqueda['codigo'] = $_GET['cbProductos'];
-        $resultado_busqueda['cantidad'] = $_GET['txtCantidad'];
-        $_SESSION['lista_productos'][] = $resultado_busqueda;
-        header('location: /admin/control/devueltos_crear.php');
-    }
-}
-
-$lista_productos = $_SESSION['lista_productos'];
-
-foreach ($lista_productos as $producto) {
-    $total += $producto['cantidad'] * $producto['precio_unitario'];
-}
-
-// verificar que se mando informacion al post
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-    // si el arreglo de errores esta vacio, hacer la insercion
-    if (empty($errores)) {
-
-        /**INSERTAR DATOS EN LA TABLA CONTADO**/
-        $query_insertar_devuelto = "INSERT INTO Dañado (id, descripcion, fecha_registro, total) VALUES ('$num_factura', '{$_POST['txtDesc']}', '$fecha_actual', '$total');";
-        $resultado_devuelto = mysqli_query($db, $query_insertar_devuelto);
-        /**FIN DE LA TABLA CONTADO**/
-
-        /** INSERTAR DATOS EN LA TABLA DETALLE **/
-        $query_insertar_detalle = "INSERT INTO DetalleDañado (cantidad, estado_devolucion, codigo_producto, id_dañado) VALUES ";
-        $datos_value = "";
-        $contador = 0;
-        $total_productos = count($lista_productos);
-
-        foreach ($lista_productos as $producto) {
-
-            $contador++;
-            $datos_value = $datos_value . "({$producto['cantidad']}, '0', {$producto['codigo']}, $num_factura)";
-            if ($contador < $total_productos) {
-                $datos_value .= ", ";
-            } else {
-                $datos_value .= ";";
-            }
-        }
-        $query_insertar_detalle = $query_insertar_detalle . $datos_value;
-        $resultado_detalle = mysqli_query($db, $query_insertar_detalle);
-        /** FIN TABLA DETALLE **/
-
-        // si el resultado devolvio una fila modificada mostrar que si se inserto
-        if ($resultado_devuelto && $resultado_detalle) {
-            header('Location: /admin/control/devueltos.php?resultado=1');
-        }
-    }
-}
 
 incluirTemplate('header');
 incluirTemplate('slidebar');
@@ -94,87 +16,218 @@ incluirTemplate('slidebar');
         </div>
     <?php endforeach; ?>
 
-    <form method="GET" class="formulario" action="devueltos_crear.php">
+    <form method="POST" class="formulario">
         <fieldset>
-
             <legend>Detalles de los productos devueltos</legend>
 
-            <label for="cbProductos">Producto</label>
-            <select name="cbProductos" id="cbProductos">
-                <option disabled selected value="">-- Seleccionar Producto --</option>
-                <?php while ($producto = mysqli_fetch_assoc($resultado_obtener_productos)): ?>
-                    <option value="<?php echo $producto['codigo']; ?>"> <?php echo $producto['nombre']; ?> </option>
-                <?php endwhile; ?>
-            </select>
-
-            <label for="txtCantidad">Cantidad</label>
-            <input type="number" name="txtCantidad" id="txtCantidad" value="<?php echo $nombre; ?>" min="1">
-
-            <button name="lista" value="true" type="submit" class="boton-azul">Añadir a la lista</button>
-
+            <div id="fecha-container">
+                <label for="fecha-actual">Fecha Devolución:</label>
+                <input type="text" id="fecha-actual" readonly>
+            </div>
+            <div>
+                <label for="totalDevuelto">Total :</label>
+                <input type="text" id="totalDevuelto" name="totalDevuelto" readonly>
+            </div>
+            <div >
+                <label for="descripcion">Descripción :</label>
+                <textarea type="text" id="descripcion" name="descripcion"></textarea>
+            </div>
         </fieldset>
-    </form>
-
-    <form method="POST" class="formulario" action="devueltos_crear.php">
         <fieldset>
-            <legend>Registro devueltos</legend>
+            <legend>Datos </legend>
+            <label for="txtProductos">Productos</label>
+            <input type="text" name="txtProductos" id="txtProductos" autocomplete="off" placeholder="Escribe para buscar...">
+            <ul id="productoSuggestions" style="display: none; position: absolute; background-color: white; border: 1px solid #ccc; width: 95%; list-style: none; padding: 0; margin: 0; z-index: 10;"></ul>
+            <input type="hidden" name="productosSeleccionados" id="productosSeleccionados">
 
-            <label for="txtId">Número de registro</label>
-            <input type="text" name="txtId" id="txtId" value="<?php echo $num_factura; ?>">
+            <label for="txtCantidadPr">Cantidad</label>
+            <input type="number" name="txtCantidadPr" id="txtCantidadPr" min="0">
+            <button name="lista" id="agregarProducto" type="button" class="boton-azul">Agregar</button>
 
-            <label for="dtRegistro">Fecha de registro</label>
-            <input type="date" name="dtRegistro" id="dtRegistro" value="<?php echo $fecha_actual; ?>">
+            <div class="row-lista contenedor-tabla-datos">
+                <table class="tabla-productos tabla-plantilla">
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th>Cantidad</th>
+                            <th>Total</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaProductos" class="contenedor-tabla-datos">
 
-            <label for="txtTotal">Total</label>
-            <input type="number" name="txtTotal" id="txtTotal" value="<?php echo $total; ?>">
+                    </tbody>
+                </table>
 
-            <label for="txtDesc">Descripción:</label>
-            <textarea name="txtDesc" id="txtDesc"></textarea>
-
+            </div>
         </fieldset>
 
         <div class="alinear-derecha separar-margin">
 
-            <a class="boton-rojo" href="devueltos.php?cancelado='true'">
+            <a class="boton-rojo" href="creditos.php">
                 <span>Cancelar</span>
             </a>
 
-            <input type="submit" value="Agregar" class="boton-azul">
+            <button type="submit" id="generarCredito" class="boton-azul">Agregar Devolución</button>
 
         </div>
+        </fieldset>
+
     </form>
-
-    <div class="tabla-containe">
-        <table class="tabla-productos">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Nombre</th>
-                    <th>Descripción</th>
-                    <th>Cantidad</th>
-                    <th>Categoría</th>
-                    <th>Precio</th>
-                    <th>Subtotal</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php $i = 1;
-                foreach ($lista_productos as $producto): ?>
-                    <tr>
-                        <td><?php echo $i ?></td>
-                        <td><?php echo $producto['nombre']; ?></td>
-                        <td><?php echo $producto['descripcion']; ?></td>
-                        <td><?php echo $producto['cantidad']; ?></td>
-                        <td><?php echo $producto['categoria']; ?></td>
-                        <td><?php echo $producto['precio_unitario']; ?></td>
-                        <td><?php echo ($producto['cantidad'] * $producto['precio_unitario']) ?></td>
-                    </tr>
-                <?php $i++;
-                endforeach; ?>
-            </tbody>
-        </table>
-    </div>
-
 </main>
+<script>
+    function mostrarFechaActual() {
+        const fechaInput = document.getElementById('fecha-actual');
+        const fecha = new Date();
+        const opciones = {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        };
+        fechaInput.value = fecha.toLocaleDateString(undefined, opciones);
+    }
+    mostrarFechaActual();
 
+       let productos = [];
+    const productosData = <?php echo $productos; ?>;
+
+    const productoInput = document.getElementById('txtProductos');
+    const productoSuggestionsList = document.getElementById('productoSuggestions');
+
+    productoInput.addEventListener('input', function () {
+        const inputValue = this.value.toLowerCase();
+        productoSuggestionsList.innerHTML = '';
+
+        if (inputValue.length > 0) {
+            const filtered = productosData.filter(p =>
+                p.nombre.toLowerCase().includes(inputValue) || p.codigo_producto.toLowerCase().includes(inputValue)
+            );
+            if (filtered.length > 0) {
+                filtered.forEach(p => {
+                    const li = document.createElement('li');
+                    li.textContent = `${p.nombre} - ${p.descripcion} - ${p.precio_unitario}`;
+                    li.style.padding = '5px';
+                    li.style.cursor = 'pointer';
+                    li.dataset.codigo = p.codigo_producto;
+                    li.dataset.precio = p.precio_unitario;
+                    li.dataset.nombre = p.nombre;
+                    li.addEventListener('click', function () {
+                        productoInput.value = this.dataset.nombre;
+                        productoInput.dataset.codigo = this.dataset.codigo;
+                        productoInput.dataset.precio = this.dataset.precio;
+                        productoSuggestionsList.style.display = 'none';
+                    });
+                    productoSuggestionsList.appendChild(li);
+                });
+                productoSuggestionsList.style.display = 'block';
+            } else {
+                productoSuggestionsList.style.display = 'none';
+            }
+        } else {
+            productoSuggestionsList.style.display = 'none';
+        }
+    });
+
+    document.addEventListener('click', function (e) {
+        if (!productoSuggestionsList.contains(e.target) && e.target !== productoInput) {
+            productoSuggestionsList.style.display = 'none';
+        }
+    });
+
+    document.getElementById('agregarProducto').addEventListener('click', function (e) {
+        e.preventDefault();
+
+        const codigo = productoInput.dataset.codigo;
+        const nombre = productoInput.value;
+        const precio = parseFloat(productoInput.dataset.precio);
+        const cantidad = parseInt(document.getElementById('txtCantidadPr').value);
+
+        if (!codigo || isNaN(cantidad) || cantidad <= 0) {
+            Swal.fire('Error', 'Selecciona un producto válido y una cantidad mayor a 0.', 'warning');
+            return;
+        }
+
+        const existingProductIndex = productos.findIndex(p => p.codigo === codigo);
+        if (existingProductIndex > -1) {
+            productos[existingProductIndex].cantidad += cantidad;
+            productos[existingProductIndex].total = productos[existingProductIndex].cantidad * precio;
+        } else {
+            productos.push({
+                codigo,
+                nombre,
+                cantidad,
+                total: precio * cantidad
+            });
+        }
+
+        renderProductosTable();
+        productoInput.value = '';
+        productoInput.dataset.codigo = '';
+        productoInput.dataset.precio = '';
+        document.getElementById('txtCantidadPr').value = '';
+    });
+
+    function renderProductosTable() {
+        const tabla = document.getElementById('tablaProductos');
+        tabla.innerHTML = '';
+        let total = 0;
+
+        productos.forEach(p => {
+            const fila = document.createElement('tr');
+            fila.innerHTML = `
+                <td>${p.nombre}</td>
+                <td>${p.cantidad}</td>
+                <td>${p.total.toFixed(2)}</td>
+                <td><button class="boton-rojo eliminar-producto" onclick="eliminarProducto('${p.codigo}')">Eliminar</button></td>
+            `;
+            tabla.appendChild(fila);
+            total += p.total;
+        });
+
+        document.getElementById('totalDevuelto').value = total.toFixed(2);
+    }
+    function eliminarProducto(codigo) {
+        productos = productos.filter(p => p.codigo !== codigo);
+        renderProductosTable();
+    }
+
+    document.querySelectorAll('form').forEach(form => {
+        form.addEventListener('submit', function (e) {
+            const inputProductos = document.getElementById('productosSeleccionados');
+            inputProductos.value = JSON.stringify(productos);
+        });
+    });
+
+    document.getElementById('generarCredito').addEventListener('click', function (e) {
+        e.preventDefault();
+
+        const total = productos.reduce((acc, p) => acc + p.total, 0);
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = '';
+
+        const inputTotal = document.createElement('input');
+        inputTotal.type = 'hidden';
+        inputTotal.name = 'totalDevuelto';
+        inputTotal.value = total;
+        form.appendChild(inputTotal);
+
+        const inputProductosSeleccionados = document.createElement('input');
+        inputProductosSeleccionados.type = 'hidden';
+        inputProductosSeleccionados.name = 'productosSeleccionados';
+        inputProductosSeleccionados.value = JSON.stringify(productos);
+        form.appendChild(inputProductosSeleccionados);
+
+        const descripcion = document.getElementById('descripcion').value; // Get the value from the textarea
+        const inputDescripcion = document.createElement('input');
+        inputDescripcion.type = 'hidden';
+        inputDescripcion.name = 'descripcion'; // This name should match what you expect in PHP ($_POST['descripcion'])
+        inputDescripcion.value = descripcion;
+        form.appendChild(inputDescripcion);
+
+        document.body.appendChild(form);
+        form.submit();
+    });
+    
+</script>
 <?php incluirTemplate('footer', true); ?>

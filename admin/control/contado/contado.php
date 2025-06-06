@@ -1,7 +1,6 @@
 <?php
 require '../../../includes/app.php';
 estaAutenticado();
-$db = conectarDB();
 require '../../../data/contado/mostrar.php';
 
 $resultado_mensaje = $_GET['resultado'] ?? null;
@@ -21,7 +20,6 @@ incluirTemplate('slidebar');
 
     <div class="contenedor-admin">
         <div class="alinear-derecha CA1">
-            <!--<button id='btn-abrir-modal' class="boton-azul">Registrar venta al contado</button> -->
             <a href="crear.php" class="boton-azul">Registrar venta al contado</a>
 
         </div>

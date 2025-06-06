@@ -65,17 +65,25 @@ incluirTemplate('slidebar');
 </main><!--.main (Descripcion general)-->
 
 <section class="menu-secundario menu-toggle admin graficos">
-    <div class="contenedor-grafico fondo" id="barras_ventas_semana">
-        <h2>Totales de ventas de la ultima semana</h2>
+    <div class="contenedor-grafico fondo unitario" id="barras_ventas_semana">
+        <h2>Totales de ventas de los últimos 7 días</h2>
         <div class="grafico1"></div>
     </div>
 
-</section><!--.Ultimos 7 dias-->
+</section><!--.Ultimos 7 dias ventas-->
 
-<section class="graficos menu-secundario menu-toggle admin">
+<section class="menu-secundario menu-toggle admin graficos">
+    <div class="contenedor-grafico fondo unitario" id="barras_ventas_semana">
+        <h2>Totales de compras de los últimos 7 días</h2>
+        <div class="grafico5"></div>
+    </div>
+
+</section><!--.Ultimos 7 dias compras-->
+
+<section class="graficos menu-secundario menu-toggle admin grupal">
 
     <div class="contenedor-grafico fondo" id="barra_clientes">
-        <h2>Totales de ventas de la ultima semana</h2>
+        <h2>Créditos de los clientes</h2>
         <div class="grafico4"></div>
     </div>
     <div class="contenedor-grafico fondo" id="pie_mas_vendido">

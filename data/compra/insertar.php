@@ -1,87 +1,86 @@
 <?php
+$db = conectarDB();
 
-// if (!isset($_SESSION['lista_productos'])) {
-//     $_SESSION['lista_productos'] = [];
-// }
 
-// $errores = [];
+$query = "SELECT * FROM Producto";
+$resultado = mysqli_query($db, $query);
+$productos = []; 
+while ($producto = mysqli_fetch_assoc($resultado)) {
+    $productos[] = $producto;
+}
 
-// /** RELLENANDO PARA LA TABLA CONTADO **/
-// //obtener fecha actual y generar el numero de la factura
-// $fecha_actual = date("Y-m-d");
-// $query_cantidad_facturas = mysqli_fetch_assoc(mysqli_query($db, "SELECT COUNT(id) as 'cantidad' FROM Compra;"));
-// $num_factura = intval($query_cantidad_facturas['cantidad']) + 1;
-// /** FIN TABLA CONTADO **/
+$query2 = "SELECT * FROM Proveedor";
+$resultado2 = mysqli_query($db, $query2);
+$proveedores = []; 
+while ($proveedor = mysqli_fetch_assoc($resultado2)) {
+    $proveedores[] = $proveedor;
+}
 
-// /** MOSTRANDO DATOS DE LA TABLA PRODUCTOS **/
-// //escribir el query
-// $query_obtener_productos = "SELECT * FROM Producto;";
-// //consultar la bd y obtener resultado
-// $resultado_obtener_productos = mysqli_query($db, $query_obtener_productos);
-// /** FIN TABLA PRODUCTOS **/
+$proveedoresJSON = json_encode($proveedores);
+$productosJSON = json_encode($productos); 
 
-// /** MOSTRAR DATOS DE LA TABLA PROVEEDORES**/
-// $query_obtener_proveedores = "SELECT * FROM Proveedor;";
-// $resultado_obtener_proveedores = mysqli_query($db, $query_obtener_proveedores);
-// /** FIN DE LA TABLA PROVEEDORES**/
+$errores = [];
+$mensaje = '';
 
-// $total = 0;
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
-// if ($_SERVER['REQUEST_METHOD'] === 'GET' && $_GET['lista'] == 'true') {
+    $idProveedor = mysqli_real_escape_string($db, $_POST['txtProveedor'] ?? '');
+    $total = mysqli_real_escape_string($db, $_POST['totalCompra'] ?? '');
+    $productosCompra = json_decode($_POST['productosSeleccionados'] ?? '[]', true);
 
-//     $buscar_producto = "SELECT nombre, descripcion, categoria, precio_unitario FROM Producto WHERE codigo = {$_GET['cbProductos']};";
-//     $resultado_busqueda = mysqli_fetch_assoc(mysqli_query($db, $buscar_producto));
+    if (empty($idProveedor)) {
+        $errores[] = "Debes seleccionar el proveedor.";
+    } elseif (!is_numeric($idProveedor)) {
+        $errores[] = "El ID del Proveedor no es válido.";
+    }
+    if (empty($total) || !is_numeric($total) || $total <= 0) {
+        $errores[] = "El total debe ser un número mayor que cero.";
+    }
+    if (empty($productosCompra)) {
+        $errores[] = "Debes agregar al menos un producto.";
+    }
 
-//     if ($resultado_busqueda) {
-//         $resultado_busqueda['codigo'] = $_GET['cbProductos'];
-//         $resultado_busqueda['cantidad'] = $_GET['txtCantidad'];
-//         $_SESSION['lista_productos'][] = $resultado_busqueda;
-//         header('location: /admin/control/compras_crear.php');
-//     }
-// }
+    if (empty($errores)) {
 
-// $lista_productos = $_SESSION['lista_productos'];
+        $fechaCompra = date('Y-m-d H:i:s');
 
-// foreach ($lista_productos as $producto) {
-//     $total += $producto['cantidad'] * $producto['precio_unitario'];
-// }
+        $queryCompra = "INSERT INTO Compra (fecha_compra, total, codigo_RUC) VALUES ('$fechaCompra', $total, '$idProveedor')";
+        $resultadoCompra = mysqli_query($db, $queryCompra);
 
-// // verificar que se mando informacion al post
-// if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        if (!$resultadoCompra) {
+            $errores[] = "Error al registrar la compra " . mysqli_error($db);
+        } else {
+            $idCompra = mysqli_insert_id($db);
 
-//     // si el arreglo de errores esta vacio, hacer la insercion
-//     if (empty($errores)) {
+            foreach ($productosCompra as $producto) {
+                $codigoProducto = mysqli_real_escape_string($db, $producto['codigo_producto'] ?? ''); // <--- ¡CAMBIO AQUÍ!
+                $cantidad = mysqli_real_escape_string($db, $producto['cantidad'] ?? 0);
 
-//         /**INSERTAR DATOS EN LA TABLA Compra**/
-//         $query_insertar_contado = "INSERT INTO Compra (id, fecha, total, id_proveedor) VALUES ('$num_factura', '$fecha_actual', '$total', '{$_POST['cbProveedor']}');";
-//         // debuguear($query_insertar_contado);
-//         $resultado_contado = mysqli_query($db, $query_insertar_contado);
-//         /**FIN DE LA TABLA CONTADO**/
+                if (empty($codigoProducto) || !is_numeric($cantidad) || $cantidad <= 0) {
+                    $errores[] = "La cantidad del producto '$codigoProducto' no es válida o no tiene código.";
+                    continue;
+                }
 
-//         /** INSERTAR DATOS EN LA TABLA DETALLE **/
-//         $query_insertar_detalle = "INSERT INTO DetalleCompra (cantidad, codigo_producto, id_compra) VALUES ";
-//         $datos_value = "";
-//         $contador = 0;
-//         $total_productos = count($lista_productos);
+                $queryDetalle = "INSERT INTO DetalleCompra (cantidad, codigo_producto, id_compra) VALUES ($cantidad, '$codigoProducto', $idCompra)";
+                $resultadoDetalle = mysqli_query($db, $queryDetalle);
 
-//         foreach ($lista_productos as $producto) {
+                if (!$resultadoDetalle) {
+                    $errores[] = "Error al insertar el detalle para el producto '$codigoProducto': " . mysqli_error($db);
+                } else {
+                    $queryActualizarProducto = "UPDATE Producto SET cantidad = cantidad + $cantidad WHERE codigo_producto = '$codigoProducto'"; // <--- ¡CAMBIO AQUÍ!
+                    $resultadoActualizar = mysqli_query($db, $queryActualizarProducto);
 
-//             $contador++;
-//             $datos_value = $datos_value . "({$producto['cantidad']}, {$producto['codigo']}, $num_factura)";
-//             if ($contador < $total_productos) {
-//                 $datos_value .= ", ";
-//             } else {
-//                 $datos_value .= ";";
-//             }
-//         }
-//         $query_insertar_detalle = $query_insertar_detalle . $datos_value;
-//         // debuguear($query_insertar_detalle);
-//         $resultado_detalle = mysqli_query($db, $query_insertar_detalle);
-//         /** FIN TABLA DETALLE **/
-
-//         // si el resultado devolvio una fila modificada mostrar que si se inserto
-//         if ($resultado_contado && $resultado_detalle) {
-//             header('Location: /admin/control/compras.php?resultado=1');
-//         }
-//     }
-// }
+                    if (!$resultadoActualizar) {
+                        $errores[] = "Error al actualizar la cantidad del producto '$codigoProducto': " . mysqli_error($db);
+                    }
+                }
+            }
+            if (empty($errores)) {
+                $mensaje = "Compra registrado correctamente.";
+            } else {
+                $errores[] = "Compra principal registrado, pero hubo errores al registrar algunos detalles.";
+            }
+        }
+    }
+}
+?>

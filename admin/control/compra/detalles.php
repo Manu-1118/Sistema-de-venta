@@ -1,30 +1,15 @@
 <?php
-require '../../includes/app.php';
-require '../../includes/data/productos.php';
-estaAutenticado(); //verificar que $_SESSION sea true
-
-// if ($_SERVER['REQUEST_METHOD'] === 'GET' && $_GET['cancelado'] == true) {
-
-//     if (isset($_SESSION['lista_productos'])) {
-//         $_SESSION['lista_productos'] = [];
-//     }
-// }
-
-//Conectar la bd
+require '../../../includes/app.php';
 $db = conectarDB();
+require '../../../data/compra/detalles.php';
+estaAutenticado();
 
-//escribir el query
-$query_mostrar_detalle = "SELECT p.nombre, p.precio_unitario, dd.cantidad, p.precio_unitario*dd.cantidad as 'subtotal' FROM Dañado d join DetalleDañado dd on d.id = dd.id_dañado join Producto p on dd.codigo_producto = p.codigo WHERE d.id = {$_GET['id']}";
 
+$query_mostrar_detalle = "SELECT p.nombre, p.precio_compra, dc.cantidad, p.precio_compra*dc.cantidad as 'subtotal' FROM Compra c join DetalleCompra dc on c.id_compra = dc.id_compra join Producto p on dc.codigo_producto = p.codigo_producto WHERE c.id_compra = {$_GET['id']}";
+// sdebuguear($query_mostrar_detalle);
 $resultado_mostrar_detalle = mysqli_query($db, $query_mostrar_detalle);
 
-//debuguear(mysqli_fetch_assoc($resultado_mostrar_detalle));
 $total = 0;
-
-// //consultar la bd y obtener resultado
-// $resultado_mostrar = mysqli_query($db, $query_mostrar);
-
-// $resultado_mensaje = $_GET['resultado'] ?? null;
 
 incluirTemplate('header');
 incluirTemplate('slidebar');
@@ -39,44 +24,27 @@ incluirTemplate('slidebar');
     <?php endif;
             $_SESSION['lista_productos'] = []; ?> -->
 
-    <div class="contenedor-productos">
-
-        <!-- <div class="contenedor-herramientas">
-
-            <div class="contenedor-busqueda">
-
-                <form method="POST" class="formulario busqueda">
-                    <label for="campo">Buscar</label>
-                    <input type="text" name="campo" id="campo" placeholder="Productos dañados...">
-                </form>
-
-            </div>
-
-            <a href="devueltos_crear.php" class="btn-agregar boton-azul">
-                <img src="/build/img/icons/agregar.png" alt="+" class="icono-principal">
-                <span>Nuevo</span>
-            </a>
-
-        </div> -->
-
-        <div class="tabla-containe">
-            <table class="tabla-productos">
+        <div class="contenedor-productos">
+            
+            <div class="contenedor-tabla-datos">
+            <table class="tabla-plantilla">
                 <thead>
                     <tr>
                         <th>#</th>
                         <th>Producto</th>
-                        <th>Precio unitario</th>
+                        <th>Precio de Compra</th>
                         <th>Cantidad</th>
                         <th>Subtotal</th>
                     </tr>
                 </thead>
                 <tbody>
+                    <tbody class="cuerpo-tabla">
                     <?php $i = 1;
                     while ($detalles = mysqli_fetch_assoc($resultado_mostrar_detalle)): ?>
                         <tr>
                             <td><?php echo $i ?></td>
                             <td><?php echo $detalles['nombre']; ?></td>
-                            <td><?php echo $detalles['precio_unitario']; ?></td>
+                            <td><?php echo $detalles['precio_compra']; ?></td>
                             <td><?php echo $detalles['cantidad']; ?></td>
                             <td><?php echo $detalles['subtotal']; ?></td>
                         </tr>
@@ -93,7 +61,7 @@ incluirTemplate('slidebar');
                     <input disabled type="text" value="<?php echo $total ?>">
                 </div>
 
-                <a class="boton-rojo" href="devueltos.php">
+                <a class="boton-rojo" href="compras.php">
                     <span>Retroceder</span>
                 </a>
 

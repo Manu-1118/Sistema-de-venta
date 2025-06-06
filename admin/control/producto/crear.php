@@ -27,6 +27,9 @@ incluirTemplate('slidebar');
             <label for="txtPrecio">Precio unitario</label>
             <input type="number" autocomplete="off" name="txtPrecio" placeholder="40.00" id="txtPrecio" value="<?php echo $precio; ?>">
 
+            <label for="txtPrecioCompra">Precio de compra</label>
+            <input type="number" autocomplete="off" name="txtPrecioCompra" placeholder="38.00" id="txtPrecioCompra" value="<?php echo $precio_compra; ?>">
+
             <label for="imagen">Imagen:</label>
             <input type="file" autocomplete="off" name="imagen" id="imagen" accept="image/jpeg, image/png">
 

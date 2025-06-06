@@ -21,27 +21,11 @@ incluirTemplate('slidebar');
 
     <div class="contenedor-admin">
         <div class="alinear-derecha CA1">
-            <button id='btn-abrir-modal' class="boton-azul">Registrar compra</button>
+            <a href="crear.php" class="boton-azul">Registrar consumidos</a>
         </div>
         <?php incluirTemplate('tabla_datos'); ?>
     </div>
 
 </main>
-
-<div class="contenedor-modal">
-    <div class="modal fondo">
-        <form action="" class="formulario">
-            <fieldset>
-                <legend>Registrar Productos Consumidos</legend>
-
-
-            </fieldset>
-        </form>
-        <div class="alinear-derecha botones-modal">
-            <button id="btn-cerrar-modal" class="boton-rojo">Cerrar</button>
-            <button id="" class="boton-azul">Agregar</button>
-        </div>
-    </div>
-</div> <!-- copiar para todos los archivos "insertar y luego ponerles sus text y darle funcionalidad" -->
 
 <?php incluirTemplate('footer', true); ?>

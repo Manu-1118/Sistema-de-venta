@@ -1,6 +1,7 @@
 <?php
 require '../../../includes/app.php';
 estaAutenticado(); //verificar que $_SESSION sea true
+$db = conectarDB();
 require '../../../data/compra/mostrar.php';
 
 $resultado_mensaje = $_GET['resultado'] ?? null;
@@ -8,8 +9,6 @@ $resultado_mensaje = $_GET['resultado'] ?? null;
 incluirTemplate('header');
 incluirTemplate('slidebar');
 ?>
-
-<!-- class="main admin menu-toggle" -->
 
 <main id="main" class="main admin main-admin menu-toggle">
 

@@ -2,7 +2,6 @@
 
 $encabezados = ['Codigo', 'Fecha trans.', 'Total'];
 
-// variables para añadirlas al archivo "/data/obtener_datos.php"
 $columnas = ['id_contado', 'fecha_contado', 'total'];
 $tabla[] = 'Contado';
 $btn_texto = 'Detalles';

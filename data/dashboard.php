@@ -23,6 +23,7 @@ if ($total_ventas['total'] === NULL) {
 
 /** DATOS PARA LOS GRAFICOS **/
 $ultimos7_Dias = mysqli_query($db, "SELECT fecha_contado, SUM(total) as 'total' FROM Contado GROUP BY fecha_contado HAVING fecha_contado BETWEEN CURDATE() - INTERVAL 7 DAY AND CURDATE()");
+$ultimos7_Compras = mysqli_query($db, "SELECT fecha_compra, SUM(total) as 'total' FROM Compra GROUP BY fecha_compra HAVING fecha_compra BETWEEN CURDATE() - INTERVAL 7 DAY AND CURDATE()");
 $deudasClientes = mysqli_query($db, "SELECT ct.nombre, SUM(c.monto_pendiente) AS 'deudaTotal' FROM Credito c JOIN Cliente ct on c.id_cliente = ct.id_cliente GROUP BY ct.nombre ORDER BY SUM(c.monto_pendiente) DESC LIMIT 5;");
 $masVendidos = mysqli_query($db, "SELECT p.nombre, p.descripcion, SUM(dc.cantidad) as 'cantidad' FROM Producto p JOIN DetalleContado dc on p.codigo_producto = dc.codigo_producto GROUP BY p.nombre, p.descripcion ORDER BY SUM(dc.cantidad) DESC LIMIT 5;");
 $menosVendidos = mysqli_query($db, "SELECT p.nombre, p.descripcion, SUM(dc.cantidad) as 'cantidad' FROM Producto p JOIN DetalleContado dc on p.codigo_producto = dc.codigo_producto GROUP BY p.nombre, p.descripcion ORDER BY SUM(dc.cantidad) ASC LIMIT 5;");
@@ -35,7 +36,7 @@ $menosVendidos = mysqli_query($db, "SELECT p.nombre, p.descripcion, SUM(dc.canti
         const data = new google.visualization.DataTable();
 
         data.addColumn('string', 'Días');
-        data.addColumn('number', 'Total');
+        data.addColumn('number', 'Total Ventas');
 
         data.addRows([
             <?php
@@ -46,7 +47,7 @@ $menosVendidos = mysqli_query($db, "SELECT p.nombre, p.descripcion, SUM(dc.canti
         ]);
 
         const config = {
-            width: 1005,
+            width: 1008,
             height: 300,
             backgroundColor: 'transparent', // Quita el fondo del gráfico
             hAxis: {
@@ -81,6 +82,56 @@ $menosVendidos = mysqli_query($db, "SELECT p.nombre, p.descripcion, SUM(dc.canti
         chart.draw(data, config);
     }
 
+    function total_compras_semanal() {
+        const data = new google.visualization.DataTable();
+
+        data.addColumn('string', 'Días');
+        data.addColumn('number', 'Total Compras');
+
+        data.addRows([
+            <?php
+            while ($dias = mysqli_fetch_assoc($ultimos7_Compras)) {
+                echo "['" . $dias['fecha_compra'] . "', " . $dias['total'] . "],";
+            }
+            ?>
+        ]);
+
+        const config = {
+            width: 1008,
+            height: 300,
+            backgroundColor: 'transparent', // Quita el fondo del gráfico
+            hAxis: {
+                textStyle: {
+                    color: color, // Color de la fuente del eje horizontal
+                    fontSize: 12,
+                },
+                title: 'Total compras',
+                titleTextStyle: {
+                    color: color,
+                }
+            },
+            vAxis: {
+                textStyle: {
+                    color: color, // Color de la fuente del eje vertical
+                    fontSize: 12,
+                },
+                title: 'Días de la semana',
+                titleTextStyle: {
+                    color: color,
+                }
+            },
+            legend: {
+                textStyle: {
+                    color: color, // Cambia el color de las etiquetas de la leyenda a rojo
+                    fontSize: 12, // Cambia el tamaño de la fuente de la leyenda
+                }
+            },
+        };
+
+        const chart = new google.visualization.BarChart(document.querySelector('.grafico5'));
+        chart.draw(data, config);
+    }
+
     function total_creditos_cliente() {
 
         var data = new google.visualization.arrayToDataTable([
@@ -94,7 +145,7 @@ $menosVendidos = mysqli_query($db, "SELECT p.nombre, p.descripcion, SUM(dc.canti
 
         var options = {
 
-            width: 500,
+            width: '100%',
             height: 400,
             legend: {
                 position: 'none'
@@ -137,7 +188,7 @@ $menosVendidos = mysqli_query($db, "SELECT p.nombre, p.descripcion, SUM(dc.canti
         ]);
 
         const config = {
-            width: 400,
+            width: '100%',
             height: 180,
             backgroundColor: 'transparent', // Quita el fondo del gráfico
             legend: {
@@ -167,7 +218,7 @@ $menosVendidos = mysqli_query($db, "SELECT p.nombre, p.descripcion, SUM(dc.canti
         ]);
 
         const config = {
-            width: 400,
+            width: '100%',
             height: 180,
             backgroundColor: 'transparent', // Quita el fondo del gráfico
             legend: {
@@ -189,6 +240,7 @@ $menosVendidos = mysqli_query($db, "SELECT p.nombre, p.descripcion, SUM(dc.canti
     google.charts.setOnLoadCallback(() => {
         // updateColor(); // Establecer el color inicial
         total_ventas_semanal();
+        total_compras_semanal();
         p_mas_vendidos();
         p_menos_vendidos();
         total_creditos_cliente();

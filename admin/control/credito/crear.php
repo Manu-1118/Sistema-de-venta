@@ -1,4 +1,4 @@
-<?php
+ <?php
 require '../../../includes/app.php';
 estaAutenticado(); //verificar que $_SESSION sea true
 $db = conectarDB();
@@ -58,6 +58,7 @@ incluirTemplate('slidebar');
                             <th>Producto</th>
                             <th>Cantidad</th>
                             <th>Total</th>
+                            <th>Acciones</th>
                         </tr>
                     </thead>
                     <tbody id="tablaProductos" class="contenedor-tabla-datos">
@@ -126,7 +127,7 @@ incluirTemplate('slidebar');
     const productoInput = document.getElementById('txtProductos');
     const productoSuggestionsList = document.getElementById('productoSuggestions');
 
-    productoInput.addEventListener('input', function() {
+    productoInput.addEventListener('input', function () {
         const inputValue = this.value.toLowerCase();
         productoSuggestionsList.innerHTML = '';
 
@@ -143,7 +144,7 @@ incluirTemplate('slidebar');
                     li.dataset.codigo = p.codigo_producto;
                     li.dataset.precio = p.precio_unitario;
                     li.dataset.nombre = p.nombre;
-                    li.addEventListener('click', function() {
+                    li.addEventListener('click', function () {
                         productoInput.value = this.dataset.nombre;
                         productoInput.dataset.codigo = this.dataset.codigo;
                         productoInput.dataset.precio = this.dataset.precio;
@@ -157,20 +158,16 @@ incluirTemplate('slidebar');
             }
         } else {
             productoSuggestionsList.style.display = 'none';
-
         }
-
     });
 
-
-    document.addEventListener('click', function(e) {
+    document.addEventListener('click', function (e) {
         if (!productoSuggestionsList.contains(e.target) && e.target !== productoInput) {
             productoSuggestionsList.style.display = 'none';
         }
     });
 
-
-    document.getElementById('agregarProducto').addEventListener('click', function(e) {
+    document.getElementById('agregarProducto').addEventListener('click', function (e) {
         e.preventDefault();
 
         const codigo = productoInput.dataset.codigo;
@@ -202,50 +199,54 @@ incluirTemplate('slidebar');
 
         productoInput.value = '';
         productoInput.dataset.codigo = '';
-        productoInput.dataset.precio = ''; // Clear this as well
-        document.getElementById('txtCantidadPr').value = ''; // Corrected ID to txtCantidadPr
+        productoInput.dataset.precio = '';
+        document.getElementById('txtCantidadPr').value = '';
     });
 
     function renderProductosTable() {
         const tablaProductosBody = document.getElementById('tablaProductos');
         tablaProductosBody.innerHTML = '';
 
-        productos.forEach(p => {
+        productos.forEach((p, index) => {
             const fila = document.createElement('tr');
             fila.innerHTML = `
-            <td>${p.nombre}</td>
-            <td>${p.cantidad}</td>
-            <td>${p.total.toFixed(2)}</td>
-        `;
+                <td>${p.nombre}</td>
+                <td>${p.cantidad}</td>
+                <td>${p.total.toFixed(2)}</td>
+                <td><button type="button" class="boton-rojo eliminar-producto" onclick="eliminarProducto(${index})">Eliminar</button></td>
+            `;
             tablaProductosBody.appendChild(fila);
         });
     }
 
+    function eliminarProducto(index) {
+        productos.splice(index, 1);
+        renderProductosTable();
+
+        const totalCompra = productos.reduce((acc, p) => acc + p.total, 0);
+        document.getElementById('totalCompra').value = totalCompra.toFixed(2);
+    }
+
     //tomas los campos del formulario de productos
     document.querySelectorAll('form').forEach(form => {
-        form.addEventListener('submit', function(e) {
+        form.addEventListener('submit', function (e) {
             const inputProductos = document.getElementById('productosSeleccionados');
-            inputProductos.value = JSON.stringify(productos); // array de productos en JSON
+            inputProductos.value = JSON.stringify(productos);
         });
     });
 
-
     //dropdown cliente
-    document.addEventListener("DOMContentLoaded", function() {
-
+    document.addEventListener("DOMContentLoaded", function () {
         mostrarFechaActual();
         configurarFechaCancelacion();
 
         const clienteSelect = document.getElementById('txtCliente');
         if (clientesData && Array.isArray(clientesData)) {
-
-
             clientesData.forEach(cliente => {
                 const option = document.createElement('option');
                 option.value = cliente.id_cliente;
                 option.textContent = `${cliente.id_cliente} - ${cliente.nombre} ${cliente.apellido}`;
                 clienteSelect.appendChild(option);
-
             });
         } else {
             console.error("clientesData no es un array válido:", clientesData);
@@ -253,7 +254,7 @@ incluirTemplate('slidebar');
     });
 
     //enviar formulario
-    document.getElementById('generarCredito').addEventListener('click', function(e) {
+    document.getElementById('generarCredito').addEventListener('click', function (e) {
         e.preventDefault();
 
         const clienteID = document.getElementById('txtCliente').value;
@@ -289,7 +290,7 @@ incluirTemplate('slidebar');
 
         const inputFechaCancelacion = document.createElement('input');
         inputFechaCancelacion.type = 'hidden';
-        inputFechaCancelacion.name = 'fecha_cancelacion'; // EL MISMO NOMBRE QUE PHP ESPERA
+        inputFechaCancelacion.name = 'fecha_cancelacion';
         inputFechaCancelacion.value = fechaCancelacion;
         form.appendChild(inputFechaCancelacion);
 

@@ -8,6 +8,7 @@ $errores = []; // arreglo para almacenar los errores
 $codigo = '';
 $nombre = '';
 $precio = '';
+$precio_compra = '';
 $descripcion = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -17,6 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $codigo = mysqli_real_escape_string($db, $_POST['txtCodigo']);
     $nombre = mysqli_real_escape_string($db, $_POST['txtNombre']);
     $precio = mysqli_real_escape_string($db, $_POST['txtPrecio']);
+    $precio_compra = mysqli_real_escape_string($db, $_POST['txtPrecioCompra']);
     $descripcion = mysqli_real_escape_string($db, $_POST['txtDescripcion']);
     $categoria = $_POST['cbCategoria'];
 
@@ -25,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     //debuguear($imagen['name']);
 
     // si un campo esta vacio, mandar error
-    if (!$codigo || !$nombre || !$precio || !$descripcion || !$categoria) {
+    if (!$codigo || !$nombre || !$precio || !$precio_compra || !$descripcion || !$categoria) {
         $errores[] = "Favor rellene todos los campos y con su formato correspondiente";
     }
 
@@ -51,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         *   1: se inserto correctamente
         *   -1: hubo un error al insertar en la bd
         */
-        $insertar_producto = "INSERT INTO Producto (codigo_producto, nombre, precio_unitario, descripcion, id_categoria, imagen) VALUES ('$codigo', '$nombre', '$precio', '$descripcion', '$categoria', '$nombre_imagen');";
+        $insertar_producto = "INSERT INTO Producto (codigo_producto, nombre, precio_unitario, descripcion, id_categoria, imagen, precio_compra) VALUES ('$codigo', '$nombre', '$precio', '$descripcion', '$categoria', '$nombre_imagen', '$precio_compra');";
         $resultado_insertar = mysqli_query($db, $insertar_producto);
 
         if ($resultado_insertar) {

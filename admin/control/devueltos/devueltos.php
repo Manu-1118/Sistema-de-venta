@@ -21,7 +21,7 @@ incluirTemplate('slidebar');
 
     <div class="contenedor-admin">
         <div class="alinear-derecha CA1">
-            <button id='btn-abrir-modal' class="boton-azul">Registrar compra</button>
+            <a href="crear.php" class="boton-azul">Registrar daño</a>
         </div>
         <?php incluirTemplate('tabla_datos'); ?>
     </div>

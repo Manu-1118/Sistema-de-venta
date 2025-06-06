@@ -2,7 +2,7 @@
 require '../../../includes/app.php';
 estaAutenticado(); //verificar que $_SESSION sea true
 $db = conectarDB();
-require '../../../data/contado/insertar.php';
+require '../../../data/consumido/insertar.php';
 
 incluirTemplate('header');
 incluirTemplate('slidebar');
@@ -18,16 +18,21 @@ incluirTemplate('slidebar');
     <form method="POST" class="formulario">
         <fieldset>
 
-            <legend>Detalles de la Venta</legend>
+            <legend>Detalles de los productos consumidos</legend>
 
             <div id="fecha-container">
                 <label for="fecha-actual">Fecha:</label>
                 <input type="text" id="fecha-actual" readonly>
             </div>
             <div>
-                <label for="totalCompra">Total de Venta:</label>
-                <input type="text" id="totalCompra" name="totalCompra" readonly>
-            </div>
+                <label for="totalCompra">Total de Compra:</label>
+                <input type="text" id="totalCompra" name="totalCompra" readonly value="0.00"> </div>
+
+        </fieldset>
+
+        <fieldset>
+            <legend>Registro Consumidos</legend>
+
             <label for="txtProductos">Productos</label>
             <input type="text" name="txtProductos" id="txtProductos" autocomplete="off" placeholder="Escribe para buscar...">
             <ul id="productoSuggestions" style="display: none; position: absolute; background-color: white; border: 1px solid #ccc; width: 95%; list-style: none; padding: 0; margin: 0; z-index: 10;"></ul>
@@ -44,8 +49,7 @@ incluirTemplate('slidebar');
                             <th>Producto</th>
                             <th>Cantidad</th>
                             <th>Total</th>
-                            <th>Acciones</th>
-                        </tr>
+                            <th>Acciones</th> </tr>
                     </thead>
                     <tbody id="tablaProductos" class="contenedor-tabla-datos">
 
@@ -54,19 +58,19 @@ incluirTemplate('slidebar');
 
             </div>
         </fieldset>
+
         <div class="alinear-derecha separar-margin">
 
-            <a class="boton-rojo" href="contado.php">
-                <span>Cancelar</span>
+            <a class="boton-rojo" href="consumidos.php"> <span>Cancelar</span>
             </a>
 
-            <button type="submit" id="generarCredito" class="boton-azul">Generar Venta</button>
+            <button type="submit" id="generarCompra" class="boton-azul">Agregar</button>
 
         </div>
     </form>
 </main>
-
 <script>
+//fecha no modificable
     function mostrarFechaActual() {
         const fechaInput = document.getElementById('fecha-actual');
         const fecha = new Date();
@@ -77,34 +81,33 @@ incluirTemplate('slidebar');
         };
         fechaInput.value = fecha.toLocaleDateString(undefined, opciones);
     }
-    mostrarFechaActual();
-
-    let productos = [];
-    const productosData = <?php echo $productos; ?>;
+    //autocompletado de productos
+    let productosEnCompra = []; 
+    const productosDisponibles = <?php echo $productosJSON; ?>; 
 
     const productoInput = document.getElementById('txtProductos');
     const productoSuggestionsList = document.getElementById('productoSuggestions');
 
-    productoInput.addEventListener('input', function () {
+    productoInput.addEventListener('input', function() {
         const inputValue = this.value.toLowerCase();
         productoSuggestionsList.innerHTML = '';
 
         if (inputValue.length > 0) {
-            const filtered = productosData.filter(p =>
-                p.nombre.toLowerCase().includes(inputValue) || p.codigo_producto.toLowerCase().includes(inputValue)
+            const filtered = productosDisponibles.filter(p =>
+                p.nombre.toLowerCase().includes(inputValue) || (p.codigo_producto && p.codigo_producto.toLowerCase().includes(inputValue))
             );
             if (filtered.length > 0) {
                 filtered.forEach(p => {
                     const li = document.createElement('li');
-                    li.textContent = `${p.nombre} - ${p.descripcion} - ${p.precio_unitario}`;
+                    li.textContent = `${p.nombre} - ${p.descripcion || ''} - $${parseFloat(p.precio_unitario).toFixed(2)}`;
                     li.style.padding = '5px';
                     li.style.cursor = 'pointer';
-                    li.dataset.codigo = p.codigo_producto;
+                    li.dataset.codigo_producto = p.codigo_producto;
                     li.dataset.precio = p.precio_unitario;
                     li.dataset.nombre = p.nombre;
-                    li.addEventListener('click', function () {
+                    li.addEventListener('click', function() {
                         productoInput.value = this.dataset.nombre;
-                        productoInput.dataset.codigo = this.dataset.codigo;
+                        productoInput.dataset.codigo_producto = this.dataset.codigo_producto;
                         productoInput.dataset.precio = this.dataset.precio;
                         productoSuggestionsList.style.display = 'none';
                     });
@@ -119,99 +122,94 @@ incluirTemplate('slidebar');
         }
     });
 
-    document.addEventListener('click', function (e) {
+    document.addEventListener('click', function(e) {
         if (!productoSuggestionsList.contains(e.target) && e.target !== productoInput) {
             productoSuggestionsList.style.display = 'none';
         }
     });
 
-    document.getElementById('agregarProducto').addEventListener('click', function (e) {
+    document.getElementById('agregarProducto').addEventListener('click', function(e) {
         e.preventDefault();
 
-        const codigo = productoInput.dataset.codigo;
+        const codigoProducto = productoInput.dataset.codigo_producto;
         const nombre = productoInput.value;
         const precio = parseFloat(productoInput.dataset.precio);
         const cantidad = parseInt(document.getElementById('txtCantidadPr').value);
 
-        if (!codigo || isNaN(cantidad) || cantidad <= 0) {
-            Swal.fire('Error', 'Selecciona un producto válido y una cantidad mayor a 0.', 'warning');
+        if (!codigoProducto || isNaN(cantidad) || cantidad <= 0) {
+            Swal.fire('Error', 'Selecciona un producto válido del autocompletado y una cantidad mayor a 0.', 'warning');
             return;
         }
+        const existingProductIndex = productosEnCompra.findIndex(p => p.codigo_producto === codigoProducto);
 
-        const existingProductIndex = productos.findIndex(p => p.codigo === codigo);
         if (existingProductIndex > -1) {
-            productos[existingProductIndex].cantidad += cantidad;
-            productos[existingProductIndex].total = productos[existingProductIndex].cantidad * precio;
+            productosEnCompra[existingProductIndex].cantidad += cantidad;
+            productosEnCompra[existingProductIndex].total = productosEnCompra[existingProductIndex].cantidad * precio;
         } else {
-            productos.push({
-                codigo,
+            productosEnCompra.push({
+                codigo_producto: codigoProducto,
                 nombre,
                 cantidad,
                 total: precio * cantidad
             });
         }
-
         renderProductosTable();
+        updateTotalCompra(); // Actualiza el total
+
         productoInput.value = '';
-        productoInput.dataset.codigo = '';
+        productoInput.dataset.codigo_producto = '';
         productoInput.dataset.precio = '';
         document.getElementById('txtCantidadPr').value = '';
     });
 
     function renderProductosTable() {
-        const tabla = document.getElementById('tablaProductos');
-        tabla.innerHTML = '';
-        let total = 0;
+        const tablaProductosBody = document.getElementById('tablaProductos');
+        tablaProductosBody.innerHTML = '';
 
-        productos.forEach(p => {
+        productosEnCompra.forEach((p, index) => {
             const fila = document.createElement('tr');
             fila.innerHTML = `
-                <td>${p.nombre}</td>
-                <td>${p.cantidad}</td>
-                <td>${p.total.toFixed(2)}</td>
-                <td><button class="boton-rojo eliminar-producto" onclick="eliminarProducto('${p.codigo}')">Eliminar</button></td>
-            `;
-            tabla.appendChild(fila);
-            total += p.total;
+            <td>${p.nombre}</td>
+            <td>${p.cantidad}</td>
+            <td>${p.total.toFixed(2)}</td>
+            <td><button type="button" class="boton-rojo eliminar-producto" data-index="${index}">Eliminar</button></td>
+        `;
+            tablaProductosBody.appendChild(fila);
         });
 
-        document.getElementById('totalCompra').value = total.toFixed(2);
-    }
-
-    function eliminarProducto(codigo) {
-        productos = productos.filter(p => p.codigo !== codigo);
-        renderProductosTable();
-    }
-
-    document.querySelectorAll('form').forEach(form => {
-        form.addEventListener('submit', function (e) {
-            const inputProductos = document.getElementById('productosSeleccionados');
-            inputProductos.value = JSON.stringify(productos);
+        document.querySelectorAll('.eliminar-producto').forEach(button => {
+            button.addEventListener('click', function() {
+                const indexToRemove = parseInt(this.dataset.index);
+                productosEnCompra.splice(indexToRemove, 1);
+                renderProductosTable();
+                updateTotalCompra();
+            });
         });
-    });
+    }
 
-    document.getElementById('generarCredito').addEventListener('click', function (e) {
-        e.preventDefault();
+    function updateTotalCompra() {
+        const totalCompra = productosEnCompra.reduce((acc, p) => acc + p.total, 0);
+        document.getElementById('totalCompra').value = totalCompra.toFixed(2);
+    }
+    document.addEventListener("DOMContentLoaded", function() {
+    mostrarFechaActual(); // Call the function when the DOM is loaded
 
-        const total = productos.reduce((acc, p) => acc + p.total, 0);
-        const form = document.createElement('form');
-        form.method = 'POST';
-        form.action = '';
+    // You can also place other initializations here if needed
+    // For example, if you had a function to load initial products or customers.
+});
 
-        const inputTotal = document.createElement('input');
-        inputTotal.type = 'hidden';
-        inputTotal.name = 'totalCompra';
-        inputTotal.value = total;
-        form.appendChild(inputTotal);
 
-        const inputProductosSeleccionados = document.createElement('input');
-        inputProductosSeleccionados.type = 'hidden';
-        inputProductosSeleccionados.name = 'productosSeleccionados';
-        inputProductosSeleccionados.value = JSON.stringify(productos);
-        form.appendChild(inputProductosSeleccionados);
+    // Enviar formulario
+    document.querySelector('.formulario').addEventListener('submit', function(e) {
+        if (productosEnCompra.length === 0) {
+            Swal.fire('Atención', 'Debes agregar al menos un producto a la compra.', 'info');
+            e.preventDefault(); 
+            return;
+        }
 
-        document.body.appendChild(form);
-        form.submit();
+        const inputProductos = document.getElementById('productosSeleccionados');
+        inputProductos.value = JSON.stringify(productosEnCompra);
     });
 </script>
+
 <?php incluirTemplate('footer', true); ?>

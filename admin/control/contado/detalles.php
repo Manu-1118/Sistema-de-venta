@@ -9,12 +9,6 @@ $query_mostrar_detalle = "SELECT p.nombre, p.precio_unitario, dc.cantidad, p.pre
 // debuguear($query_mostrar_detalle);
 $resultado_mostrar_detalle = mysqli_query($db, $query_mostrar_detalle);
 $total = 0;
-// consultar la bd y obtener resultado
-// $resultado_mostrar = mysqli_query($db, $query_mostrar);
-// debuguear(mysqli_fetch_assoc($resultado_mostrar_detalle));
-
-// $resultado_mensaje = $_GET['resultado'] ?? null;
-
 incluirTemplate('header');
 incluirTemplate('slidebar');
 ?>
@@ -24,7 +18,6 @@ incluirTemplate('slidebar');
 <main id="main" class="main admin main-admin menu-toggle">
 
     <!-- <?php if (intval($resultado_mensaje) === 1): ?>
-        <p class="alerta exito">Los productos dañados se agendaron con exito</p>
     <?php endif;
             $_SESSION['lista_productos'] = []; ?> -->
 
