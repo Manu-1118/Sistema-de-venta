@@ -1,90 +1,118 @@
 <?php
-
-require './includes/app.php';
-incluirTemplate('header', true);
-
-//Conectar la bd
+require 'includes/app.php';
+estaAutenticado(true); //verificar que $_SESSION sea true
 $db = conectarDB();
 
-//escribir el query
-$query = "SELECT nombre, descripcion, precio_unitario FROM Producto limit 10;";
+$encabezados = ['Imagen', 'Código', 'Nombre', 'Descripción', 'Disponible', 'Precio']; //encabezados de la tabla correspondiente
+// variables para añadirlas al archivo "/data/obtener_datos.php"
+$columnas = ['imagen', 'codigo_producto', 'nombre', 'descripcion', 'cantidad', 'precio_unitario'];
+$tabla[] = 'Producto';
+$btn_texto = 'Añadir';
+$ruta_imagen = 'img/productos/';
+$enlace = ['lista.php?id=', 'codigo_producto'];
+$_SESSION['encabezados'] = $encabezados;
+$_SESSION['columnas'] = $columnas;
+$_SESSION['tabla'] = $tabla;
+$_SESSION['btn_texto'] = $btn_texto;
+$_SESSION['ruta'] = $ruta_imagen;
+$_SESSION['enlace'] = $enlace;
 
-//consultar la bd y obtener resultado
-$resultadoConsulta = mysqli_query($db, $query);
 
-//debuguear(mysqli_fetch_assoc($resultadoConsulta));
+// Verficar que exista el arreglo para almacenar los productos que llevara el cliente
+if (!isset($_SESSION['lista_productos'])) {
+    $_SESSION['lista_productos'] = []; // si no existe se crea
+}
 
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && !empty($_GET)) { // verificar que no este vacio el metodo get
+
+    // debuguear($_GET);
+    $codigo = filter_var($_GET['id'], FILTER_VALIDATE_INT); // obtener el codigo del producto a editar y verificar que sea un valor correcto
+    $borrar = filter_var($_GET['borrar'], FILTER_VALIDATE_INT);
+    $eliminar = filter_var($_GET['eliminar_id'], FILTER_VALIDATE_INT);
+
+    if (!$codigo) { // verificar que el valor del metodo get no sea diferente a un codigo int
+        header('Location: lista.php'); // redirigir a la pagina si no se digita algo correcto
+    }
+
+    if (!$eliminar) { // verificar si se selecciono la eliminacion de un elemento seleccionado
+        header('Location: lista.php'); // redirigir a la pagina si no se digita algo correcto
+    } else {
+
+        $contador = 0; //contador para eliminar la posicion del elemento del arreglo
+        foreach ($_SESSION['lista_productos'] as $producto) { // recorrer los elementos
+            if ($producto['codigo_producto'] != $eliminar) {
+
+                $contador++;
+            } else {
+                unset($_SESSION['lista_productos'][$contador]); // eliminar el producto
+                $_SESSION['lista_productos'] = array_values($_SESSION['lista_productos']); // reordenar el arreglo
+            }
+        }
+    }
+
+    if (!$borrar) { // verificar que el valor del metodo get no sea diferente a un codigo int
+
+        header('Location: lista.php'); // redirigir a la pagina si no se digita algo correcto
+    } else if ($borrar === 1) {
+        $_SESSION['lista_productos'] = [];
+    } else {
+        header('Location: lista.php'); // redirigir a la pagina si no se digita algo correcto
+    }
+
+    $encontrarProducto = mysqli_fetch_assoc(mysqli_query($db, "SELECT * FROM Producto WHERE codigo_producto = $codigo"));
+    $_SESSION['lista_productos'][] = $encontrarProducto;
+}
+$ListaProductos = $_SESSION['lista_productos'];
+
+// debuguear($ListaProductos);
+
+incluirTemplate('header', true);
 ?>
 
 <section class="imagen-lista-compras">
     <img src="/build/img/banner-lista-compra.png" alt="Banner encabezado">
 </section>
 
-<main id="main" class="principal fondo">
+<main id="main" class="principal fondo crear-lista">
 
-    <div class="contenedor-busqueda">
-        <form action="" method="POST" class="formulario busqueda">
-            <label for="campo">Buscar producto</label>
-            <input type="text" name="campo" id="campo" placeholder="Producto...">
-        </form>
+    <div class="contenedor-lista">
+        <?php incluirTemplate('tabla_datos'); ?>
     </div>
-    <div class="tabla-container">
-        <table class="tabla-productos">
-            <thead>
-                <tr>
-                    <!-- <th>Imagen</th> -->
-                    <th>Nombre</th>
-                    <th>Descripción</th>
-                    <th>Precio</th>
-                    <th>Acción</th>
-                </tr>
-            </thead>
 
-            <tbody>
-                <?php while ($producto = mysqli_fetch_assoc($resultadoConsulta)): ?>
-                    <tr>
-                        <td><?php echo $producto['nombre']; ?></td>
-                        <td><?php echo $producto['descripcion']; ?></td>
-                        <td><?php echo $producto['precio_unitario']; ?></td>
-                        <td>
-                            <a href="#" class="boton boton-azul">
-                                <span>Añadir</span>
-                                <!-- <img class="icono-principal-inverso" src="/build/img/icons/compra.png" alt="compra"> -->
+    <div class="contenedor-seleccionados">
+        <h2>Productos Seleccionados</h2>
+        <div class="productos-seleccionados">
+            <ul>
+
+                <?php foreach ($ListaProductos as $producto): ?>
+                    <div class="row-lista">
+                        <li class="row">
+
+                            <a class="producto" href="lista.php?eliminar_id=<?php echo $producto['codigo_producto']; ?>">
+                                <span> <img src="/build/img/icons/delete.svg" alt="X- "><?php echo $producto['nombre']; ?></span>
                             </a>
-                        </td>
-                    </tr>
-                <?php endwhile; ?>
-            </tbody>
-        </table>
-    </div>
-</main>
 
-<section class="principal menu-secundario fondo">
-    <h3>Productos Seleccionados</h3>
-    <div class="tabla-container">
-        <table class="tabla-productos">
-            <thead>
-                <tr>
-                    <th>Imagen</th>
-                    <th>Nombre</th>
-                    <th>Descripción</th>
-                    <th>Cantidad</th>
-                    <th>Precio</th>
-                    <th>Acción</th>
-                </tr>
-            </thead>
-            <tbody>
-            </tbody>
-        </table>
+                            <div class="input-cantidad">
+                                <input type="number" name="txtCantidad" id="txtCantidad" min='1' placeholder="cant.">
+                            </div>
+
+                        </li>
+                    </div>
+                <?php endforeach; ?>
+            </ul>
+
+        </div>
+
     </div>
-    <div class="alinear-derecha">
-        <a href="" class="boton-verde btn-generar-lista">
-            <img src="/build/img/icons/pdf.png" alt="pdf">
-            <span>Generar lista</span>
+    <div class="botones alinear-derecha">
+        <a class="boton-verde btn-pdf" href="PDF.php?productos=<?php echo urlencode(json_encode($ListaProductos)); ?>">
+            <img src="/build/img/icons/pdf.png" alt="PDF">
+            <span>Generar Lista</span>
         </a>
+        <a class="boton-rojo" href="lista.php?borrar=1">Borrar Lista</a>
     </div>
 
-</section>
+</main>
 
 <?php
 incluirTemplate('footer');

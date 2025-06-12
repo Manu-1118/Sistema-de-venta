@@ -1,19 +1,26 @@
+/** mostar las categorias **/
 .contenedor-categorias {
     @include grid(3, 2rem);
 }
 
 .categoria {
 
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     border-radius: 1rem;
     background-color: lighten($beige_claro, 8);
     border: 1px solid darken($beige_claro, 10);
-    margin-bottom: 2rem;
-    
+    margin-bottom: 2rem;    
+
     .contenido-categoria {
+        
         display: flex;
         flex-direction: column;
+        // height: 50rem;
         align-items: center;
         padding: 1.5rem;
+        justify-content: space-between;
     }
 
     h3,
@@ -21,8 +28,33 @@
         text-align: center;
         margin: 0 0 .5rem 0;
     }
+
     img {
         margin: 1.5rem auto 0 auto;
         width: 50%;
+    }
+}
+
+/** productos de las categorias **/
+.contenedor-producto-categoria {
+
+    @include grid(5, 2rem);
+
+    .contenedor-producto {
+
+        border: 1px solid darken($beige_claro, 30);
+        background-color: lighten($beige_claro, 5);
+        text-align: center;
+
+        p,
+        h3 {
+            margin: 1rem 0;
+        }
+
+        img {
+
+            margin: 2rem auto;
+            width: 70%;
+        }
     }
 }

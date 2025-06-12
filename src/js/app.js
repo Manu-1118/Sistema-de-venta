@@ -2,81 +2,80 @@
  * cargue el DOM el HTML para evitar problemas de carga **/
 document.addEventListener('DOMContentLoaded', () => {
 
-    // darkmode();
-    activarUser() ? insertAdmin() : insertCliente();
-    // slidebar();
+    activarUser() ? insertAdmin() : insertCliente(); // verificar si estamos en la interfaz de cliente o de administrador
+
+    // mantener la posicion en la pagina de creacion de listas (para el PDF)
+    window.location.pathname.includes('lista.php') ? guardarPosicion() : window.scrollTo(0, 0);
+
+    obtenerDatosUsuario(); // funcion para obtener los datos al iniciar la sesion (como la foto, nombre, etc)
+
+    // filtrar datos mediante la barra de busqueda con fetch
+    const campoBuscar = document.getElementById('campo-buscar');
+    obtenerDatos();
+    campoBuscar.addEventListener('input', obtenerDatos);
+
+    // const listaProducto = document.getElementById('buscar-producto');
+    // busquedaProductos();
+    // listaProducto.addEventListener('keyup', busquedaProductos);
 
 }); // Fin loadDOM
-
-//renderizarGraficos();
-/* Agrega el icono que despliega el menu de opciones del administrador */
-function slidebar() {
-    const menu = document.querySelector('.menu');
-    const sidebar = document.getElementById('sidebar');
-    const main = document.getElementById('main');
-    const footer = document.getElementById('footer');
-    const graficos_admin = document.querySelector('.graficos');
-
-    // Obtener el estado del menú desde localStorage (si existe)
-    let menuActivo = localStorage.getItem('menuActivo') === 'true';
-
-    // Aplicar el estado inicial
-    if (menuActivo) {
-        sidebar.classList.add('menu-toggle');
-        menu.classList.add('menu-toggle');
-        main.classList.add('menu-toggle');
-        footer.classList.add('menu-toggle');
-        graficos_admin.classList.add('menu-toggle');
-    }
-
-    menu.addEventListener('click', () => {
-        menuActivo = !menuActivo; // Invertir el estado
-
-        if (menuActivo) {
-            sidebar.classList.add('menu-toggle');
-            menu.classList.add('menu-toggle');
-            main.classList.add('menu-toggle');
-            footer.classList.add('menu-toggle');
-            graficos_admin.classList.add('menu-toggle');
-
-        } else {
-            sidebar.classList.remove('menu-toggle');
-            menu.classList.remove('menu-toggle');
-            main.classList.remove('menu-toggle');
-            footer.classList.remove('menu-toggle');
-            graficos_admin.classList.remove('menu-toggle');
-        }
-
-        // Guardar el estado en localStorage
-        localStorage.setItem('menuActivo', menuActivo);
-    });
-} // Fin slidebar()
 
 function insertAdmin() {
 
     //Cambiar el enlace del logo
     const btnHome = document.querySelector('.enlace-logo');
     btnHome.href = "/admin";
-    // variables para seleccionar contenedores principales
-    var contenedor_derecho = document.querySelector('.contenido-derecha'); // contenedor derecha del menu superior
-    var btnDarkMode = document.querySelector('.btnDarkMode'); // boton del darkmode
 
-    /** INICIO IMAGEN PERFIL (luego se hara con php)**/
-    const perfil = document.createElement('IMG');
-    perfil.src = '/build/img/usuario-default.png';
-    perfil.classList.add('usuario');
-    perfil.alt = 'Foto user';
+    // variables para seleccionar contenedores principales
+    var contenedor_derecho = document.querySelector('.contenido-derecha'); // contenedor derecha del menu superi
+    const boton_ayuda = document.querySelector('.btn-Ayuda');
+
+    /** BOTON REPORTES **/
+
+    const img_pdf = document.createElement('IMG');
+    img_pdf.src = '/build/img/icons/pdf.png';
+
+    const textbtn = document.createElement('SPAN');
+    textbtn.textContent = "Generar Reporte";
+
+    const btn_reporte = document.createElement('A');
+    btn_reporte.classList.add('boton-verde');
+    btn_reporte.classList.add('btn-pdf');
+    btn_reporte.classList.add('btn-admin');
+    btn_reporte.href = '/admin/reportes.php';
+
+    btn_reporte.appendChild(img_pdf);
+    btn_reporte.appendChild(textbtn);
+
+    contenedor_derecho.appendChild(btn_reporte);
+    contenedor_derecho.insertBefore(btn_reporte, boton_ayuda);
+
+    /** FIN BOTON REPORTES **/
+
+    /** INICIO PERFIL**/
+    const contenedor_perfil = document.createElement('DIV');
+    contenedor_perfil.classList.add('perfil');
+
+    const img_perfil = document.createElement('IMG');
+    img_perfil.classList.add('usuario');
+    img_perfil.alt = 'Foto user';
+
+    const nombre_usuario = document.createElement('SPAN');
+    nombre_usuario.classList.add('usuario-nombre');
     // añadir la foto al menu superior derecho
-    contenedor_derecho.appendChild(perfil);
-    /** FIN IMAGEN PERFIL **/
+    contenedor_perfil.appendChild(nombre_usuario);
+    contenedor_perfil.appendChild(img_perfil);
+
+    contenedor_derecho.appendChild(contenedor_perfil);
+    /** FIN PERFIL **/
+
 
 } // Fin insertAdmin()
 
 function insertCliente() {
 
     var contenedor_derecho = document.querySelector('.contenido-derecha');
-
-    var btnDarkMode = document.querySelector('.btnDarkMode'); // boton del darkmode
+    const boton_ayuda = document.querySelector('.btn-Ayuda');
 
     /** HEADER **/
     /** BOTON LISTA PRODUCTOS **/
@@ -99,7 +98,7 @@ function insertCliente() {
 
     // Insertar el boton lista
     contenedor_derecho.appendChild(btn_lista); // al contenedor derecho del menu superior
-    //contenedor_derecho.insertBefore(btn_lista, btnDarkMode); // antes del boton darkmode
+    contenedor_derecho.insertBefore(btn_lista, boton_ayuda); // antes del boton darkmode
 
     /** FIN BOTON LISTA PRODUCTOS**/
 
@@ -114,7 +113,7 @@ function insertCliente() {
     btn_nosotros.href = "nosotros.php";
     btn_nosotros.appendChild(texto_nosotros);
     contenedor_derecho.appendChild(btn_nosotros); // al contenedor derecho del menu superior
-    //contenedor_derecho.insertBefore(btn_nosotros, btnDarkMode); // despues del boton de lista
+    contenedor_derecho.insertBefore(btn_nosotros, boton_ayuda); // despues del boton de lista
 
     /** FIN BOTON SOBRE NOSOTROS **/
     //Verificar si no estamos en el login:
@@ -126,6 +125,7 @@ function insertCliente() {
         btn_sesion.classList.add('boton');
         btn_sesion.classList.add('boton-verde');
         btn_sesion.classList.add('btn-inicio');
+        // btn_sesion.classList.add('desactivado'); // agregando la clase desactivado en el boton desaparece
         btn_sesion.textContent = 'Iniciar Sesión';
         btn_sesion.href = "login.php";
 
@@ -164,50 +164,56 @@ function activarUser() {
 
 } // Fin activarAdmin()
 
-// Activa el modo segun las preferencias del sistema y tambien segun la opcion que se seleccione
-function darkmode() {
-    // Obtener la preferencias del tema del navegador
-    const preferencia = window.matchMedia('(prefers-color-scheme: dark)');
-    const btnDarkMode = document.querySelector('.btnDarkMode');
-    const icon = document.querySelector('.moon');
 
-    // Obtener el estado del modo oscuro desde localStorage (si existe)
-    let darkModeActivo = localStorage.getItem('darkModeActivo') === 'true';
-
-    // Aplicar el estado inicial
-    if (darkModeActivo) {
-        document.body.classList.add('dark-mode');
-        icon.src = "/build/img/icons/sun.png";
-    } else {
-        document.body.classList.remove('dark-mode');
-        icon.src = "/build/img/icons/moon.png";
-    }
-
-    preferencia.addEventListener('change', function () {
-        if (preferencia.matches) {
-            document.body.classList.add('dark-mode');
-            icon.src = "/build/img/icons/sun.png";
-            darkModeActivo = true;
-        } else {
-            document.body.classList.remove('dark-mode');
-            icon.src = "/build/img/icons/moon.png";
-            darkModeActivo = false;
-        }
-        localStorage.setItem('darkModeActivo', darkModeActivo);
+function guardarPosicion() {
+    // JavaScript
+    window.addEventListener('beforeunload', () => {
+        // Guarda la posición actual de scroll vertical
+        sessionStorage.setItem('scrollpos', window.scrollY);
     });
 
-    btnDarkMode.addEventListener('click', () => {
-        darkModeActivo = !darkModeActivo; // Invertir el estado
-
-        if (darkModeActivo) {
-            document.body.classList.add('dark-mode');
-            icon.src = "/build/img/icons/sun.png";
-        } else {
-            document.body.classList.remove('dark-mode');
-            icon.src = "/build/img/icons/moon.png";
+    window.addEventListener('load', () => {
+        // Recupera la posición guardada
+        const scrollpos = sessionStorage.getItem('scrollpos');
+        if (scrollpos) {
+            // Desplaza la ventana a esa posición
+            window.scrollTo(0, parseInt(scrollpos));
+            // Opcional: Elimina el valor para que no afecte futuras cargas sin recarga
+            sessionStorage.removeItem('scrollpos');
         }
-
-        // Guardar el estado en localStorage
-        localStorage.setItem('darkModeActivo', darkModeActivo);
     });
-} // Fin darkmode()
+} // Fin guardarPosicion()
+
+/** USAR AJAX PARA OBTENER LA IMAGEN DEL ADMINISTRADOR **/
+// function obtenerFotoAdmin() {
+
+//     fetch('login.php')
+//         .then(response => response.json())
+//         .then(data => {
+//             const nombre = data.nombre;
+//             const foto = data.imagen;
+//             const estado = data.login;
+
+//             if (estado) {
+//                 const contenedor_derecho = document.querySelector('.contenido-derecha'); // contenedor derecha del menu superior
+
+//                 /** INICIO IMAGEN PERFIL (luego se hara con php)**/
+//                 const perfil = document.createElement('IMG');
+//                 perfil.src = '/fotos-perfil/' + foto;
+//                 perfil.classList.add('usuario');
+//                 perfil.alt = 'Foto user';
+//                 // añadir la foto al menu superior derecho
+//                 contenedor_derecho.appendChild(perfil);
+//             }
+//         })
+//         .catch(error => {
+//             console.error("Error al obtener los datos de la sesion: ", error);
+//         });
+// }
+
+/** EL OBJETIVO ES IDENTIFICAR EN LA RUTA QUE SE ENCUENTRA EL USUARIO Y ASIGNAR EL DOCUMENTO AL
+ * IFRAME DE HTML PARA QUE SE VEA ESE
+ * **/
+function mostrarAyuda() {
+
+}

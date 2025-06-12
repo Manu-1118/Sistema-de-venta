@@ -5,25 +5,22 @@
 
 @import 'base/globales';
 @import 'base/utilidades';
-@import 'base/darkmode';
 @import 'base/botones';
 
 //layout
-@import 'layout/header';
-@import 'layout/footer';
 @import 'layout/categorias';
-@import 'layout/lista';
-@import 'layout/inferior';
+@import 'layout/footer';
 @import 'layout/formulario';
 @import 'layout/graficos';
-@import 'layout/productos';
-@import 'layout/cliente';
-@import 'layout/contado';
-@import 'layout/proveedor';
+@import 'layout/header';
+@import 'layout/inferior';
+@import 'layout/lista';
 @import 'layout/nosotros';
 
 //internas
-@import 'internas/sidebar';
 @import 'internas/admin';
 @import 'internas/dashboard';
+@import 'internas/data';
 @import 'internas/main';
+@import 'internas/modal';
+@import 'internas/sidebar';

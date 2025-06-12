@@ -2,12 +2,12 @@
 
     transition: margin-left .5s ease;
 
-    
+
     margin-bottom: 0;
     height: auto;
     text-align: center;
-    padding: $separacion /2 0; 
-    
+    padding: calc($separacion /2) 0;
+
     p {
         font-size: 1.5rem;
     }
@@ -15,4 +15,10 @@
     &.menu-toggle {
         margin-left: 30rem;
     }
+}
+
+.footer-admin {
+
+    margin-left: 24rem;
+    width: 112.5rem;
 }

@@ -3,6 +3,10 @@
     margin-top: 8rem;
 }
 
+.sombra {
+    box-shadow: 0px 0px 20px 0px rgba(40, 82, 128, 1);
+}
+
 #main,
 .menu-secundario {
 
@@ -14,7 +18,7 @@
     width: 95%;
     //box-shadow: 0px 5px 15px 0px rgba(112, 112, 112, 1);
     //rgba(181, 216, 255, 0.83);
-    box-shadow: 0px 0px 20px 0px rgba(40, 82, 128, 1);
+    // box-shadow: 0px 0px 20px 0px rgba(40, 82, 128, 1);
 
     &.contenido-usuario {
         margin: 8rem auto 0 auto;
@@ -40,8 +44,18 @@
         min-width: 108.5rem;
         margin: 7rem 0 0 26rem;
 
+        // @include tablet {
+        //     max-width: 100rem;
+        //     min-width: 80rem;
+        // }
+
         &.graficos {
-            margin-top: 2.5rem;
+            margin-top: .1rem;
+
+            // @include tablet {
+            //     width: 100rem;
+            //     min-width: 80rem;
+            // }
         }
     }
 
@@ -50,4 +64,19 @@
 
 .fondo {
     background-color: $blanco_ahumado;
+    box-shadow: 0px 0px 20px 0px rgba(40, 82, 128, 1);
+}
+
+/** LOGIN **/
+.inferior-login {
+
+    display: flex;
+    padding: 0 2rem;
+    justify-content: space-between;
+    align-items: center;
+
+    a {
+        font-size: 1.8rem;
+        color: $azul_marino_oscuro;
+    }
 }

@@ -1,0 +1,94 @@
+// .contenedor-modal {
+
+//     &.activo {
+//         display: grid;
+//     }
+
+//     display: none;
+//     z-index: 200;
+//     position: fixed;
+//     inset: 0;
+//     background-color: rgba($negro, 0.8);
+//     place-items: center;
+//     animation: fadeIn ease-in 0.5s;
+
+// }
+.modal-dialog {
+    max-width: 90%;
+    height: 100%;
+    // margin: rem auto;
+
+}
+
+.modal-content {
+    height: 90%
+}
+
+// .modal {
+//     border-radius: .5rem;
+//     width: 80rem;
+//     padding: 1rem;
+//     min-height: 55rem;
+
+//     h2 {
+//         font-size: 2rem;
+//         text-align: center;
+//         margin: 0;
+//     }
+
+//     .botones-modal {
+//         column-gap: 1.5rem;
+//         margin-top: 1rem;
+//     }
+// }
+
+// clase para los formularios que impliquen 2 tablas
+// .contenedor-modal {
+
+//     .superior {
+
+
+//         // para unatabla
+//         &.una-tabla {
+//             @include grid(2, 3rem);
+
+//             label {
+//                 margin-top: 1rem;
+//                 //grid-row: 1;
+//             }
+
+//             input {
+//                 //grid-row: 2;
+//             }
+//         }
+
+//         &.dos-tablas {
+
+//             @include grid(3, 2rem);
+
+//             label {
+//                 margin-top: 1rem;
+//                 grid-row: 1;
+//             }
+
+//             input {
+//                 grid-row: 2;
+//             }
+//         }
+//     }
+
+//     // Barra de busqueda de los productos y seleccion
+//     .seleccion-producto {
+//         display: grid;
+//         grid-template-columns: 2fr 1.5fr;
+//         column-gap: 3rem;
+
+//         label {
+//             grid-row: 1;
+//         }
+
+//         input {
+//             grid-row: 2;
+//         }
+//     }
+// }

@@ -22,6 +22,10 @@
     &#barras_ventas_semana {
         grid-row: 1 / 3;
     }
+
+    &#barra_clientes {
+        grid-row: 1 / 3;
+    }
 }
 
 .graficos {
@@ -31,7 +35,19 @@
     margin-top: 1rem;
     gap: 2rem;
 
-    .grafico1,
+    // @include tablet {
+    //     &.grupal {
+    //         max-width: 80rem;
+    //         min-width: 80rem;
+    //     }
+    // }
+
+    // @include tablet {
+    //     max-width: 100rem;
+    //     min-width: 80rem;
+    // }
+
+    .grafico4,
     .grafico2,
     .grafico3 {
         svg {

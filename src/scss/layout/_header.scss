@@ -51,14 +51,16 @@ body {
         }
     }
 
-    .usuario {
-        width: 4rem;
-        margin: 0;
-        border-radius: 50%;
+    .btn-inicio {
+
+        &.desactivado {
+            display: none;
+        }
     }
 
     .btn-lista,
-    .btn-nosotros {
+    .btn-nosotros,
+    .btn-Ayuda {
         img {
             margin: 0;
         }
@@ -121,21 +123,24 @@ body {
         margin-left: .4rem;
         transition: all .2s ease-in-out;
     }
+}
 
-    /** Animacion de menu **/
-    &.menu-toggle {
+.perfil {
+    display: flex;
+    column-gap: 3rem;
+    align-items: center;
+    justify-content: space-between;
 
-        div {
+    .usuario {
 
-            &:first-child {
-                width: 40%;
-                transform: rotate(-35deg) translate(-30%, 250%);
-            }
+        width: 4rem;
+        margin: 0;
+        border-radius: 50%;
+    }
 
-            &:last-child {
-                width: 40%;
-                transform: rotate(35deg) translate(-30%, -250%);
-            }
-        }
+    .usuario-nombre {
+
+        font-weight: $bold;
+        font-size: 2.5rem;
     }
 }
