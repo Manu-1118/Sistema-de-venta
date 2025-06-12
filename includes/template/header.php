@@ -14,7 +14,11 @@ $auth = $_SESSION['login'] ?? false;
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
+    <!-- locale -->
     <link rel="stylesheet" href="/build/css/app.css">
+
     <title>Pulperia El Pilar</title>
     <link rel="icon" href="/build/img/i1.ico" type="image/x-icon">
     <!-- para autocompletado de credito-->
@@ -39,6 +43,28 @@ $auth = $_SESSION['login'] ?? false;
         </div><!--.contenido-left-->
 
         <div class="contenido-derecha">
+            <!-- Button trigger modal -->
+            <a class="btn-Ayuda" data-bs-toggle="modal" data-bs-target="#btn-Ayuda">
+                <span>Ayuda</span>
+                <img src="/build/img/icons/ayuda.png" class="icono-principal-inverso" alt="buscar">
+            </a>
         </div><!--.contenido-right-->
 
     </header><!--.header-->
+
+    <!-- Modal -->
+    <div class="modal fade" id="btn-Ayuda" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <iframe src="/docs/presentacion.pdf" width="100%" height="100%"></iframe>
+                </div>
+                <div class="modal-footer">
+                    <a class="boton-rojo" data-bs-dismiss="modal">Cerrar ayuda</a>
+                </div>
+            </div>
+        </div>
+    </div>

@@ -64,7 +64,7 @@ incluirTemplate('slidebar');
 
         <div class="alinear-derecha separar-margin">
 
-            <a class="boton-rojo" href="creditos.php">
+            <a class="boton-rojo" href="devueltos.php">
                 <span>Cancelar</span>
             </a>
 
@@ -88,7 +88,7 @@ incluirTemplate('slidebar');
     }
     mostrarFechaActual();
 
-       let productos = [];
+    let productos = [];
     const productosData = <?php echo $productos; ?>;
 
     const productoInput = document.getElementById('txtProductos');

@@ -102,11 +102,16 @@ incluirTemplate('slidebar');
                 <input type="date" id="fecha-cancelacion" value="<?php echo htmlspecialchars($fecha_cancelacion_credito); ?>" readonly>
             </div>
             <div>
+                <div id="fecha-abono-container">
+                    <label for="fecha-abono">Último abono:</label>
+                    <input type="date" id="fecha-abono" value="<?php echo htmlspecialchars($primer_registro['ultimo_abono'] ? date('Y-m-d', strtotime($primer_registro['ultimo_abono'])) : ''); ?>" readonly>
+                </div>
+            <div>
                 <label for="monto-pendiente">Monto pendiente:</label>
                 <input type="number" id="monto-pendiente" value="<?php echo htmlspecialchars($monto_pendiente_actual); ?>" readonly>
             </div>
             <div>
-                <label>Monto a abonar:</label>
+                <label>Monto Pagado:</label>
                 <input type="number" name="txtMontoAbono" id="txtMontoAbono" placeholder="C$0.00" step="0.01">
             </div>
             <div class="alinear-derecha separar-margin">

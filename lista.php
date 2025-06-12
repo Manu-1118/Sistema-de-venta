@@ -105,7 +105,10 @@ incluirTemplate('header', true);
 
     </div>
     <div class="botones alinear-derecha">
-        <a class="boton-verde" href="PDF.php?productos=<?php echo urlencode(json_encode($ListaProductos)); ?>">Generar Lista</a>
+        <a class="boton-verde btn-pdf" href="PDF.php?productos=<?php echo urlencode(json_encode($ListaProductos)); ?>">
+            <img src="/build/img/icons/pdf.png" alt="PDF">
+            <span>Generar Lista</span>
+        </a>
         <a class="boton-rojo" href="lista.php?borrar=1">Borrar Lista</a>
     </div>
 

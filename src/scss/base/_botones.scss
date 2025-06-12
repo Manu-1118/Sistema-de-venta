@@ -1,5 +1,22 @@
 .boton-verde {
     @include boton($verde_dm, inline-block);
+
+    &.btn-pdf {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        column-gap: .5rem;
+
+        img {
+            filter: invert(100);
+            width: 3rem;
+            margin: 0;
+        }
+    }
+
+    &.btn-admin {
+        padding: 1rem;
+    }
 }
 
 .boton-azul-block {

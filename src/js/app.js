@@ -28,6 +28,29 @@ function insertAdmin() {
 
     // variables para seleccionar contenedores principales
     var contenedor_derecho = document.querySelector('.contenido-derecha'); // contenedor derecha del menu superi
+    const boton_ayuda = document.querySelector('.btn-Ayuda');
+
+    /** BOTON REPORTES **/
+
+    const img_pdf = document.createElement('IMG');
+    img_pdf.src = '/build/img/icons/pdf.png';
+
+    const textbtn = document.createElement('SPAN');
+    textbtn.textContent = "Generar Reporte";
+
+    const btn_reporte = document.createElement('A');
+    btn_reporte.classList.add('boton-verde');
+    btn_reporte.classList.add('btn-pdf');
+    btn_reporte.classList.add('btn-admin');
+    btn_reporte.href = '/admin/reportes.php';
+
+    btn_reporte.appendChild(img_pdf);
+    btn_reporte.appendChild(textbtn);
+
+    contenedor_derecho.appendChild(btn_reporte);
+    contenedor_derecho.insertBefore(btn_reporte, boton_ayuda);
+
+    /** FIN BOTON REPORTES **/
 
     /** INICIO PERFIL**/
     const contenedor_perfil = document.createElement('DIV');
@@ -52,6 +75,7 @@ function insertAdmin() {
 function insertCliente() {
 
     var contenedor_derecho = document.querySelector('.contenido-derecha');
+    const boton_ayuda = document.querySelector('.btn-Ayuda');
 
     /** HEADER **/
     /** BOTON LISTA PRODUCTOS **/
@@ -74,7 +98,7 @@ function insertCliente() {
 
     // Insertar el boton lista
     contenedor_derecho.appendChild(btn_lista); // al contenedor derecho del menu superior
-    //contenedor_derecho.insertBefore(btn_lista, btnDarkMode); // antes del boton darkmode
+    contenedor_derecho.insertBefore(btn_lista, boton_ayuda); // antes del boton darkmode
 
     /** FIN BOTON LISTA PRODUCTOS**/
 
@@ -89,7 +113,7 @@ function insertCliente() {
     btn_nosotros.href = "nosotros.php";
     btn_nosotros.appendChild(texto_nosotros);
     contenedor_derecho.appendChild(btn_nosotros); // al contenedor derecho del menu superior
-    //contenedor_derecho.insertBefore(btn_nosotros, btnDarkMode); // despues del boton de lista
+    contenedor_derecho.insertBefore(btn_nosotros, boton_ayuda); // despues del boton de lista
 
     /** FIN BOTON SOBRE NOSOTROS **/
     //Verificar si no estamos en el login:
@@ -186,3 +210,10 @@ function guardarPosicion() {
 //             console.error("Error al obtener los datos de la sesion: ", error);
 //         });
 // }
+
+/** EL OBJETIVO ES IDENTIFICAR EN LA RUTA QUE SE ENCUENTRA EL USUARIO Y ASIGNAR EL DOCUMENTO AL
+ * IFRAME DE HTML PARA QUE SE VEA ESE
+ * **/
+function mostrarAyuda() {
+
+}
