@@ -92,9 +92,9 @@ incluirTemplate('header', true);
                                 <span> <img src="/build/img/icons/delete.svg" alt="X- "><?php echo $producto['nombre']; ?></span>
                             </a>
 
-                            <div class="input-cantidad">
+                            <!-- <div class="input-cantidad">
                                 <input type="number" name="txtCantidad" id="txtCantidad" min='1' placeholder="cant.">
-                            </div>
+                            </div> -->
 
                         </li>
                     </div>
