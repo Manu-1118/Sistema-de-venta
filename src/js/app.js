@@ -2,17 +2,21 @@
  * cargue el DOM el HTML para evitar problemas de carga **/
 document.addEventListener('DOMContentLoaded', () => {
 
+    generarIframePDF(window.location.pathname);
     activarUser() ? insertAdmin() : insertCliente(); // verificar si estamos en la interfaz de cliente o de administrador
 
     // mantener la posicion en la pagina de creacion de listas (para el PDF)
     window.location.pathname.includes('lista.php') ? guardarPosicion() : window.scrollTo(0, 0);
 
-    obtenerDatosUsuario(); // funcion para obtener los datos al iniciar la sesion (como la foto, nombre, etc)
+    window.location.pathname.includes('admin') ? obtenerDatosUsuario() : null; // funcion para obtener los datos al iniciar la sesion (como la foto, nombre, etc)
 
     // filtrar datos mediante la barra de busqueda con fetch
-    const campoBuscar = document.getElementById('campo-buscar');
-    obtenerDatos();
-    campoBuscar.addEventListener('input', obtenerDatos);
+    if (window.location.pathname.includes('admin') || window.location.pathname.includes('lista.php')) {
+
+        const campoBuscar = document.getElementById('campo-buscar');
+        obtenerDatos();
+        campoBuscar.addEventListener('input', obtenerDatos);
+    }
 
     // const listaProducto = document.getElementById('buscar-producto');
     // busquedaProductos();

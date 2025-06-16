@@ -2,7 +2,7 @@ const grafico1 = document.querySelector('.grafico1');
 const grafico2 = document.querySelector('.grafico2');
 const grafico3 = document.querySelector('.grafico3');
 
-const btnDarkMode = document.querySelector('.btnDarkMode');
+// const btnDarkMode = document.querySelector('.btnDarkMode');
 const body = document.querySelector('body');
 let color = 'black'; // Color inicial
 
@@ -131,10 +131,10 @@ function updateColor() {
 // });
 
 // Cambiar el modo al hacer clic en el botón
-btnDarkMode.addEventListener('click', () => {
-    body.classList.toggle('dark-mode');
-    updateColor();
-    p_mas_vendidos(); // Redibujar el gráfico con el nuevo color
-    p_menos_vendidos();
-    total_ventas_semanal();
-});
+// btnDarkMode.addEventListener('click', () => {
+//     body.classList.toggle('dark-mode');
+//     updateColor();
+//     p_mas_vendidos(); // Redibujar el gráfico con el nuevo color
+//     p_menos_vendidos();
+//     total_ventas_semanal();
+// });

@@ -60,7 +60,7 @@ $auth = $_SESSION['login'] ?? false;
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <iframe src="/docs/presentacion.pdf" width="100%" height="100%"></iframe>
+                    <!-- <iframe src="/docs/presentacion.pdf" width="100%" height="100%"></iframe> -->
                 </div>
                 <div class="modal-footer">
                     <a class="boton-rojo" data-bs-dismiss="modal">Cerrar ayuda</a>
